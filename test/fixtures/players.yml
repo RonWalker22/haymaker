@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  username: MyString
+  cash: 
+  bitcoin: 
+  rank: 1
+  email: MyString
+
+two:
+  username: MyString
+  cash: 
+  bitcoin: 
+  rank: 1
+  email: MyString

@@ -17,26 +17,16 @@
   </div>
 
   <div class="field">
-    <%= form.label :cash %>
-    <%= form.text_field :cash, id: :player_cash %>
-  </div>
-
-  <div class="field">
-    <%= form.label :bitcoin %>
-    <%= form.text_field :bitcoin, id: :player_bitcoin %>
-  </div>
-
-  <div class="field">
-    <%= form.label :rank %>
-    <%= form.number_field :rank, id: :player_rank %>
-  </div>
-
-  <div class="field">
     <%= form.label :email %>
     <%= form.text_field :email, id: :player_email %>
   </div>
 
+  <div class="field">
+    <%= form.label :password %>
+    <%= form.password_field :password, id: :player_password %>
+  </div>
+
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit "Submit"%>
   </div>
 <% end %>

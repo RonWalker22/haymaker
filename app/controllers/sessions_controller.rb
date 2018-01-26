@@ -13,6 +13,8 @@ class SessionsController < ApplicationController
     end
   end
 
-  def destory
+  def destroy
+    log_out
+    redirect_to players_path
   end
 end

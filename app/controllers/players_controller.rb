@@ -27,7 +27,7 @@ class PlayersController < ApplicationController
   def create
     @player = Player.new(player_params)
     respond_to do |format|
-      if valid_player? &&  @player.save
+      if @player.save
         flash[:notice] = 'Player was successfully created.'
         format.html { redirect_to @player}
         format.json { render :show, status: :created, location: @player }
@@ -44,7 +44,7 @@ class PlayersController < ApplicationController
   # PATCH/PUT /players/1.json
   def update
     respond_to do |format|
-      if valid_player? && @player.update(player_params)
+      if @player.update(player_params)
         flash[:notice] = 'Player was successfully updated.'
         format.html { redirect_to @player}
         format.json { render :show, status: :ok, location: @player }
@@ -71,11 +71,6 @@ class PlayersController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_player
       @player = Player.find(params[:id])
-    end
-
-    def valid_player?
-      !@player.username.empty? && !@player.email.empty? &&
-        !@player.password.empty?
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

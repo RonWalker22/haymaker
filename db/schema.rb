@@ -10,20 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180124212933) do
+ActiveRecord::Schema.define(version: 20180125233053) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "players", force: :cascade do |t|
     t.string "username", null: false
-    t.string "password", null: false
     t.money "cash", scale: 2, default: "100000.0"
     t.decimal "bitcoin", default: "0.0"
     t.integer "rank", default: -1
     t.string "email", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "password_digest"
   end
 
 end

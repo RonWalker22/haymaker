@@ -1,21 +1,26 @@
 <header>
   <% if logged_in? %>
-    <table align="right" id="player_info">
-      <tr>
-        <th><%= current_player.username%> <%= link_to "(Log out)", logout_path,
-      method: :delete %></th>
-        <th>Cash</th>
-        <th>Bitcoin</th>
-        <th>Rank</th>
-      </tr>
-      <tr>
-        <td></td>
-        <td><%= current_player.cash %></td>
-        <td><%= current_player.bitcoin %></td>
-        <td><%= current_player.rank %></td>
-      </tr>
-    </table>
+    <div align="right" id="dashboard_and_login">
+        <table align="right" id="player_dashboard">
+        <tr>
+          <th><%= current_player.username%> <%= link_to "(Log out)", logout_path,
+        method: :delete %></th>
+          <th>Cash</th>
+          <th>Bitcoin</th>
+          <th>Rank</th>
+        </tr>
+        <tr>
+          <td calss="dashboard_values"></td>
+          <td calss="dashboard_values"><%= current_player.cash %></td>
+          <td calss="dashboard_values"><%= current_player.bitcoin %></td>
+          <td calss="dashboard_values"><%= current_player.rank %></td>
+        </tr>
+      </table>
   <% else %>
-  <p align="right" class="links"><%= link_to "Login", login_path %></p> 
+      <p align="right" id="login">
+        <%= link_to "Login", login_path %> | |
+        <%= link_to 'Sign up', new_player_path %>
+      </p> 
+    </div>
   <% end %>
 </header>

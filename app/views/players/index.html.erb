@@ -1,26 +1,26 @@
 <p id="notice"><%= flash[:notice] %></p>
 
-<h1>Leaderboard</h1>
+<h1 id="leaderboard_title">Leaderboard</h1>
 
-<table>
+<table id="leaderboard">
   <thead>
     <tr>
-      <th>Username</th>
-      <th>Cash</th>
-      <th>Bitcoin</th>
-      <th>Rank</th>
-      <th>Email</th>
+      <th class="leaderboard_titles">Username</th>
+      <th class="leaderboard_titles">Cash</th>
+      <th class="leaderboard_titles">Bitcoin</th>
+      <th class="leaderboard_titles">Rank</th>
+      <th class="leaderboard_titles">Email</th>
     </tr>
   </thead>
 
   <tbody>
     <% @players.each do |player| %>
       <tr>
-        <td><%= player.username %></td>
-        <td><%= player.cash %></td>
-        <td><%= player.bitcoin %></td>
-        <td><%= player.rank %></td>
-        <td><%= player.email %></td>
+        <td class="leaderboard_values"><%= player.username %></td>
+        <td class="leaderboard_values"><%= player.cash %></td>
+        <td class="leaderboard_values"><%= player.bitcoin %></td>
+        <td class="leaderboard_values"><%= player.rank %></td>
+        <td class="leaderboard_values"><%= player.email %></td>
         <td><%= link_to 'Show', player %></td>
         <td><%= link_to 'Edit', edit_player_path(player) %></td>
         <td><%= link_to 'Destroy', player, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -31,6 +31,3 @@
 
 <br>
 
-<%= link_to 'New Player', new_player_path %>
-<br>
-<%= link_to 'Login', login_path %>

@@ -26,17 +26,13 @@ class PlayersController < ApplicationController
   # POST /players.json
   def create
     @player = Player.new(player_params)
-    respond_to do |format|
-      if @player.save
-        flash[:notice] = 'Player was successfully created.'
-        format.html { redirect_to @player}
-        format.json { render :show, status: :created, location: @player }
-      else
-        flash.now[:notice] = 'Player not created. All fields are required.'
-        format.html { render :new }
-        format.json { render json: @player.errors, status:
-         :unprocessable_entity }
-      end
+    if @player.save
+      log_in @player
+      flash[:notice] = 'Player was successfully created.'
+      redirect_to leaderboards_path
+    else
+      flash.now[:notice] = 'Player not created. All fields are required.'
+      render :new
     end
   end
 

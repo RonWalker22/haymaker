@@ -14,6 +14,7 @@ module SessionsHelper
   end
 
   def log_out
-    session[:player_id] = nil
+    session.delete(:player_id)
+    @current_player = nil
   end
 end

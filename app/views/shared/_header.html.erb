@@ -1,13 +1,21 @@
-<header align="right">
+<header>
   <% if logged_in? %>
-    <ul>
-      <li>Player:<%= current_player.username%></li>
-      <li>Cash:<%= current_player.cash%></li>
-      <li>Bitcoin: <%= current_player.bitcoin %></li>
-      <li>Rank: <%= current_player.rank %></li>
-      <li><%= link_to "Log out", logout_path, method: :delete %></li>
-    </ul>
+    <table align="right" id="player_info">
+      <tr>
+        <th><%= current_player.username%> <%= link_to "(Log out)", logout_path,
+      method: :delete %></th>
+        <th>Cash</th>
+        <th>Bitcoin</th>
+        <th>Rank</th>
+      </tr>
+      <tr>
+        <td></td>
+        <td><%= current_player.cash %></td>
+        <td><%= current_player.bitcoin %></td>
+        <td><%= current_player.rank %></td>
+      </tr>
+    </table>
   <% else %>
-    <%= link_to "Login", login_path %>
+  <p align="right" class="links"><%= link_to "Login", login_path %></p> 
   <% end %>
 </header>

@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
     player = Player.find_by(email: params[:session][:email])
     if player && player.authenticate(params[:session][:password])
       log_in(player)
-      redirect_to player
+      redirect_to leaderboards_path
     else
       flash.now[:notice] = "That email and or password is invaild."
       render 'new'
@@ -15,6 +15,6 @@ class SessionsController < ApplicationController
 
   def destroy
     log_out
-    redirect_to players_path
+    redirect_to leaderboards_path
   end
 end

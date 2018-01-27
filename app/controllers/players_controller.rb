@@ -31,7 +31,6 @@ class PlayersController < ApplicationController
       flash[:notice] = 'Player was successfully created.'
       redirect_to leaderboards_path
     else
-      flash.now[:notice] = 'Player not created. All fields are required.'
       render :new
     end
   end

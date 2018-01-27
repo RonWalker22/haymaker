@@ -2,3 +2,19 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.new_player_fields {
+  margin-bottom: 10px;
+}
+
+#new_player_username_field{
+  margin-right: 59px;
+} 
+#new_player_email_field{
+  margin-right: 85px;
+}
+#new_player_password_field{
+  margin-right: 61px;
+}
+#new_player_confirm_password_field{
+  margin-right: 5px;
+}

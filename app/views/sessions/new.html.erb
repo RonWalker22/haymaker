@@ -5,11 +5,15 @@
 
 <%= form_for(:session, url: login_path) do |f| %>
   
-  <%= f.label :email %>
-  <%= f.email_field :email %>
+  <span class="login_form_titles">
+    <%= f.label :email %>
+    <%= f.email_field :email %>
+  </span>
 
-  <%= f.label :password %>
-  <%= f.password_field :password %>
+  <span class="login_form_titles">
+    <%= f.label :password %>
+    <%= f.password_field :password %>
+  </span>
 
   <br>
   <br>

@@ -11,23 +11,31 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :username %>
+  <div class="new_player_fields">
+    <span id="new_player_username_field">
+      <%= form.label :username %>
+    </span>
     <%= form.text_field :username, id: :player_username %>
   </div>
 
-  <div class="field">
-    <%= form.label :email %>
+  <div class="new_player_fields">
+    <span id="new_player_email_field">
+      <%= form.label :email %>
+    </span>
     <%= form.email_field :email, id: :player_email %>
   </div>
 
-  <div class="field">
-    <%= form.label :password %>
+  <div class="new_player_fields">
+    <span id="new_player_password_field">
+      <%= form.label :password %>
+    </span>
     <%= form.password_field :password, id: :player_password %>
   </div> 
 
-  <div class="field">
-    <%= form.label :confirm_password %>
+  <div class="new_player_fields">
+    <span id="new_player_confirm_password_field">
+      <%= form.label :Confirm_password %>
+    </span>
     <%= form.password_field :password_confirmation, id:
     :player_password_confirmation %>
   </div>

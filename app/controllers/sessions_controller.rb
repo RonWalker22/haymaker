@@ -5,7 +5,8 @@ class SessionsController < ApplicationController
   def create
     player = Player.find_by(email: params[:session][:email])
     if player && player.authenticate(params[:session][:password])
-      log_in(player)
+      log_in player
+      params[:session][:remember_me] == '1' ? remember(player) : forget(player)
       redirect_to leaderboards_path
     else
       flash.now[:notice] = "That email and or password is invaild."
@@ -14,7 +15,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    log_out
+    log_out if logged_in?
     redirect_to leaderboards_path
   end
 end

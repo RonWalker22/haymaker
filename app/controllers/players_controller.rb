@@ -2,6 +2,8 @@
 class PlayersController < ApplicationController
   before_action :set_player, only: [:show, :edit, :update, :destroy]
 
+  before_action :logged_in_user, only: [:edit, :update, :destroy]
+
   # GET /players
   # GET /players.json
   def index
@@ -72,5 +74,12 @@ class PlayersController < ApplicationController
     def player_params
       params.require(:player).permit(:username, :password,
         :password_confirmation, :email)
+    end
+
+    def logged_in_user
+      unless logged_in?
+        flash[:notice] = 'Please log in.'
+        redirect_to login_path
+      end
     end
 end

@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
     if player && player.authenticate(params[:session][:password])
       log_in player
       params[:session][:remember_me] == '1' ? remember(player) : forget(player)
-      redirect_to leaderboards_path
+      redirect_back_or leaderboards_path
     else
       flash.now[:notice] = "That email and or password is invaild."
       render 'new'

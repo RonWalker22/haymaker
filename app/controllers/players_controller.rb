@@ -78,6 +78,7 @@ class PlayersController < ApplicationController
 
     def check_permissions
       if !logged_in?
+        store_location
         flash[:notice] = 'Please log in.'
         redirect_to login_path
       elsif !current_player?(@player)

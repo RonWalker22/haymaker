@@ -4,6 +4,8 @@ class PlayersController < ApplicationController
 
   before_action :check_permissions, only: [:edit, :update, :destroy]
 
+  before_action :admin_user, only: :destroy
+
   # GET /players
   # GET /players.json
   def index
@@ -85,5 +87,9 @@ class PlayersController < ApplicationController
         flash[:notice] = "You have not been granted access to that section."
         redirect_to leaderboards_path
       end
+    end
+
+    def admin_user
+      redirect_to(leaderboards_path) unless current_player.admin?
     end
 end

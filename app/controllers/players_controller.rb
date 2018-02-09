@@ -2,7 +2,7 @@
 class PlayersController < ApplicationController
   before_action :set_player, only: [:show, :edit, :update, :destroy]
 
-  before_action :logged_in_user, only: [:edit, :update, :destroy]
+  before_action :check_permissions, only: [:edit, :update, :destroy]
 
   # GET /players
   # GET /players.json
@@ -76,10 +76,13 @@ class PlayersController < ApplicationController
         :password_confirmation, :email)
     end
 
-    def logged_in_user
-      unless logged_in?
+    def check_permissions
+      if !logged_in?
         flash[:notice] = 'Please log in.'
         redirect_to login_path
+      elsif !current_player?(@player)
+        flash[:notice] = "You have not been granted access to that section."
+        redirect_to leaderboards_path
       end
     end
 end

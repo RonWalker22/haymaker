@@ -20,6 +20,10 @@ module SessionsHelper
     !current_player.nil?
   end
 
+  def current_player?(player)
+    player == current_player
+  end
+
   def remember(player)
     player.remember
     cookies.permanent.signed[:player_id] = player.id

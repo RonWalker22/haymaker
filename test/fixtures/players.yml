@@ -1,5 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
+sam:
+  username: sam
+  email: sam@gmail.com
+  password_digest: <%= Player.digest('123') %>
+  rank: 2
+
 one:
   username: MyString
   cash: 

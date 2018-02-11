@@ -46,7 +46,6 @@ end
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
-  gem 'puma', '~> 3.7'
   gem 'web-console', '>= 3.3.0'
   gem 'pry'
   gem 'listen', '>= 3.0.5', '< 3.2'

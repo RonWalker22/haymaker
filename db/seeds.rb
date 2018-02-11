@@ -13,7 +13,14 @@ Player.create!(username: "Ron22",
                admin: true
               )
 
-99.times do |n|
+Player.create!(username: "Tom22",
+               email: "tom@gmail.com",
+               password: "123",
+               password_confirmation: "123",
+               admin: true
+              )
+
+18.times do |n|
   name = Faker::Name.name
   email = "example-#{n+1}@gmail.com"
   password = "123"

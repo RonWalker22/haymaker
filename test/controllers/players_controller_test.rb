@@ -35,8 +35,8 @@ class PlayersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get edit" do
-    post login_path, params: { session: { email: "sam@gmail.com", 
-                                          password: "123"} }
+    # post login_path, params: { session: { email: "sam@gmail.com", 
+    #                                       password: "123"} }
     get edit_player_url(@player)
     assert_response :success
   end

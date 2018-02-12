@@ -5,6 +5,7 @@ sam:
   email: sam@gmail.com
   password_digest: <%= Player.digest('123') %>
   rank: 2
+  remember_digest:
 
 one:
   username: MyString
@@ -12,6 +13,7 @@ one:
   bitcoin: 
   rank: 1
   email: MyString
+  remember_digest:
 
 two:
   username: MyString
@@ -19,3 +21,4 @@ two:
   bitcoin: 
   rank: 1
   email: MyString
+  remember_digest:

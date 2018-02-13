@@ -1,26 +1,66 @@
 <header>
-  <% if logged_in? %>
-    <div align="right" id="dashboard_and_login">
-        <table align="right" id="player_dashboard">
-        <tr>
-          <th><%= current_player.username%> <%= link_to "(Log out)", logout_path,
-        method: :delete %></th>
-          <th>Cash</th>
-          <th>Bitcoin</th>
-          <th>Rank</th>
-        </tr>
-        <tr>
-          <td calss="dashboard_values"></td>
-          <td calss="dashboard_values"><%= current_player.cash %></td>
-          <td calss="dashboard_values"><%= current_player.bitcoin %></td>
-          <td calss="dashboard_values"><%= current_player.rank %></td>
-        </tr>
-      </table>
-  <% else %>
-      <div id="login">
-        <%= link_to "Login", login_path %> | |
-        <%= link_to 'Sign up', new_player_path %>
-      </div> 
-    </div>
-  <% end %>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/leaderboards">HayMakerX</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+            role="button" aria-haspopup="true" aria-expanded="false">Exchanges
+            <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">GDAX</a></li>
+              <li><a href="#">Binance</a></li>
+            </ul>
+          </li>          
+          <li><a href="#">Compete</a></li>
+          <li>
+            <%= link_to 'Leaderboards', leaderboards_path %>
+          </li>
+          <li><a href="#">About</a></li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+          <% unless logged_in?%>
+          <li>
+            <%= link_to "Login", login_path %>
+          </li>
+          <li>
+            <%= link_to 'Sign up', new_player_path %>
+          </li>
+          <% end %>
+          <% if logged_in? %>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+            role="button" aria-haspopup="true"
+            aria-expanded="false"><%= current_player.username %><span
+            class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li>
+                <%= link_to "My Profile", player_path(current_player.id) %>
+              </li>
+              <li><a href="#">Another action</a></li>
+              <li><a href="#">Something else here</a></li>
+              <li role="separator" class="divider"></li>
+              <li>
+                <%= link_to "Log out", logout_path, method: :delete %>
+              </li>
+            </ul>
+          </li>
+          <% end %>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
 </header>

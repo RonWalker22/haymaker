@@ -1,14 +1,16 @@
 Rails.application.routes.draw do
   
+
   root 'players#index'
 
   resources :players
 
-  get '/leaderboards' => 'players#index'
-  get '/signup' => 'players#new'
-  get '/login' =>  'sessions#new'
-  post '/login' => 'sessions#create'
-  delete '/logout' => 'sessions#destroy'
+  get     '/leaderboards'  => 'players#index'
+  get     '/signup'        => 'players#new'
+  get     '/login'         => 'sessions#new'
+  post    '/login'         => 'sessions#create'
+  delete  '/logout'        => 'sessions#destroy'
+
   # get 'profile' => 'players#'
   # get 'profile/edit' => 'players#'
 

@@ -10,14 +10,16 @@ Player.create!(username: "Ron22",
                email: "ron@gmail.com",
                password: "123",
                password_confirmation: "123",
-               admin: true
+               admin: true,
+               rank: 3
               )
 
 Player.create!(username: "Tom22",
                email: "tom@gmail.com",
                password: "123",
                password_confirmation: "123",
-               admin: true
+               admin: true,
+               rank: 4
               )
 
 18.times do |n|
@@ -27,6 +29,7 @@ Player.create!(username: "Tom22",
   Player.create!(username: name,
                  email: email,
                  password: password,
-                 password_confirmation: password
+                 password_confirmation: password,
+                 rank: 5 + n
                 )
 end

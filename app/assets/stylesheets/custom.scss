@@ -1,5 +1,7 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import "font-awesome-sprockets";
+@import "font-awesome";
 
  body {
   color: green;
@@ -10,7 +12,7 @@
 }
 
 a:visited {
-  color:#e6e6ff;
+  color:#ccff66;
 }
 
 a:hover {
@@ -18,8 +20,7 @@ a:hover {
 }
 
 a {
-  color:#e6e6ff;
-  text-decoration: none;
+  color:#ccff66;
 }
 
 ul {

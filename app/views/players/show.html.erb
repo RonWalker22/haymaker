@@ -1,29 +1,31 @@
 <p id="notice"><%= flash[:notice] %></p>
 
-<p>
-  <strong>Username:</strong>
-  <%= @player.username %>
-</p>
+<div id="profile_page">
+  <ul>
+    <li class="pp-username">
+      <%= @player.username %>
+      <% if logged_in? && current_player?(@player) %>
+      <%= link_to 'edit' , edit_player_path(@player) %>
+      <% end %>  
+    </li>
+    <li class="pp-other-data">  
+      <strong>Cash:</strong>
+      <%= @player.cash %>
+    </li> 
+    <li class="pp-other-data">
+      <strong>Bitcoin:</strong>
+      <%= @player.bitcoin %>
+    </li>  
 
-<p>
-  <strong>Cash:</strong>
-  <%= @player.cash %>
-</p>
-
-<p>
-  <strong>Bitcoin:</strong>
-  <%= @player.bitcoin %>
-</p>
-
-<p>
-  <strong>Rank:</strong>
-  <%= @player.rank %>
-</p>
-
-<p>
-  <strong>Email:</strong>
-  <%= @player.email %>
-</p>
-
-<%= link_to 'Edit', edit_player_path(@player) %> |
-<%= link_to 'Back', players_path %>
+    <li class="pp-other-data">
+      <strong>Rank:</strong>
+      <%= @player.rank %>
+    </li>  
+    <% if logged_in? && current_player?(@player) %>
+      <li class="pp-other-data">
+        <strong>Email:</strong>
+        <%= @player.email %>
+      </li>
+    <% end %>  
+  </ul>
+</div>

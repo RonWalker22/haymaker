@@ -1,37 +1,29 @@
-<center>
-  <p id="notice"><%= flash[:notice] %></p>
+<p id="notice"><%= flash[:notice] %></p>
 
-  <h1 id="leaderboard_title">Top Haymakers</h1>
+<h1 id="leaderboard_title">Top Haymakers</h1>
 
-  <table id="leaderboard">
-    <thead>
+<table id="leaderboard">
+  <thead>
+    <tr>
+      <th class="leaderboard_titles">Username</th>
+      <th class="leaderboard_titles">Cash</th>
+      <th class="leaderboard_titles">Bitcoin</th>
+      <th class="leaderboard_titles">Rank</th>
+      <th class="leaderboard_titles">Email</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @players.each do |player| %>
       <tr>
-        <th class="leaderboard_titles">Username</th>
-        <th class="leaderboard_titles">Cash</th>
-        <th class="leaderboard_titles">Bitcoin</th>
-        <th class="leaderboard_titles">Rank</th>
-        <th class="leaderboard_titles">Email</th>
+        <td class="leaderboard_values">
+          <%= link_to player.username, player %>
+        </td>
+        <td class="leaderboard_values"><%= player.cash %></td>
+        <td class="leaderboard_values"><%= player.bitcoin %></td>
+        <td class="leaderboard_values"><%= player.rank %></td>
+        <td class="leaderboard_values"><%= player.email %></td>
       </tr>
-    </thead>
-
-    <tbody>
-      <% @players.each do |player| %>
-        <tr>
-          <td class="leaderboard_values"><%= player.username %></td>
-          <td class="leaderboard_values"><%= player.cash %></td>
-          <td class="leaderboard_values"><%= player.bitcoin %></td>
-          <td class="leaderboard_values"><%= player.rank %></td>
-          <td class="leaderboard_values"><%= player.email %></td>
-          <td><%= link_to 'Show', player %></td>
-          <td><%= link_to 'Edit', edit_player_path(player) %></td>
-          <% if logged_in? && current_player.admin? && !current_player?(player) %>
-            <td>
-              <%= link_to 'Destroy', player, method: :delete, data: { confirm: 'Are you sure?' } %>
-            </td>
-          <% end %>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>  
-</center>
-
+    <% end %>
+  </tbody>
+</table> 

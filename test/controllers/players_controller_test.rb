@@ -45,6 +45,8 @@ class PlayersControllerTest < ActionDispatch::IntegrationTest
     post login_path, params: { session: { email: "sam@gmail.com", 
                                           password: "123"} }
     patch player_url(@player), params: { player: { bitcoin: @player.bitcoin, cash: @player.cash, email: @player.email, rank: @player.rank, username: @player.username } }
+    assert_redirected_to player_path(@player)
+    follow_redirect!
     assert_response :success
   end
 

@@ -19,6 +19,23 @@ class PlayersController < ApplicationController
     @player = Player.new
   end
 
+  def buy
+    cash = current_player.cash - 20000
+    bitcoin = current_player.bitcoin + 1
+    if cash >= 0
+      current_player.update_attributes!({bitcoin: bitcoin, cash: cash})
+    end
+    redirect_to exchanges_gdax_path
+  end
+
+  def sell
+    cash = current_player.cash + 20000
+    bitcoin = current_player.bitcoin - 1
+    if bitcoin >= 0
+      current_player.update_attributes!({bitcoin: bitcoin, cash: cash})
+    end
+    redirect_to exchanges_gdax_path
+  end
   # GET /players/1/edit
   def edit
   end

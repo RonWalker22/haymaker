@@ -1,0 +1,16 @@
+<h1>Gdax</h1>
+
+
+
+<p>Your cash amout: <%= current_player.cash %></p>
+
+<p>Your bitcoin amount: <%= current_player.bitcoin %></p>
+
+<%= form_tag("/buy", method: "post") do %>
+  <%= submit_tag("Buy Bitcoin at $20,000") %>
+<% end %>
+
+<br>
+<%= form_tag("/sell", method: "post") do %>
+  <%= submit_tag("Sell Bitcoin at $20,000") %>
+<% end %>

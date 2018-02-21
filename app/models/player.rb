@@ -1,7 +1,7 @@
 class Player < ApplicationRecord
   attr_accessor :remember_token
 
-  validates :password, presence: true, length: { minimum: 3 }
+  validates :password, presence: false, length: { maximum: 30}
   validates :username, presence: true, length: { maximum: 30 }
   validates :email, presence: true, length: { maximum: 255 }
   has_secure_password

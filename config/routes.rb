@@ -5,12 +5,16 @@ Rails.application.routes.draw do
 
   resources :players
 
-  get     '/leaderboards'  => 'players#index'
-  get     '/signup'        => 'players#new'
-  get     '/login'         => 'sessions#new'
-  post    '/login'         => 'sessions#create'
-  delete  '/logout'        => 'sessions#destroy'
-  get     '/about'         => 'static_pages#about'
+  get     '/leaderboards'         => 'players#index'
+  get     '/signup'               => 'players#new'
+  get     '/login'                => 'sessions#new'
+  post    '/login'                => 'sessions#create'
+  delete  '/logout'               => 'sessions#destroy'
+  get     '/about'                => 'static_pages#about'
+  get     '/exchanges/gdax'       => 'exchanges#gdax'
+  get     '/exchanges/binance'    => 'exchanges#binance'
+  post    '/buy'                  => 'players#buy'
+  post    '/sell'                 => 'players#sell'
 
   # get 'profile' => 'players#'
   # get 'profile/edit' => 'players#'

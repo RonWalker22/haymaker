@@ -20,7 +20,10 @@ class PlayersController < ApplicationController
   end
 
   def buy
-    cash = current_player.cash - 20000
+    btc_price = params[:btc_buy_price].to_i
+    puts "price : #{btc_price}"
+    cash = current_player.cash - btc_price
+    puts "cash #{cash}"
     bitcoin = current_player.bitcoin + 1
     if cash >= 0
       current_player.update_attributes!({bitcoin: bitcoin, cash: cash})
@@ -29,7 +32,10 @@ class PlayersController < ApplicationController
   end
 
   def sell
-    cash = current_player.cash + 20000
+    btc_price = params[:btc_sell_price].to_i
+    puts "price : #{btc_price}"
+    cash = current_player.cash + btc_price
+    puts "cash #{cash}"
     bitcoin = current_player.bitcoin - 1
     if bitcoin >= 0
       current_player.update_attributes!({bitcoin: bitcoin, cash: cash})

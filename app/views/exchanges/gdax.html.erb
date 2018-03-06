@@ -1,16 +1,77 @@
-<h1>Gdax</h1>
+<h1 id="title">Gdax</h1>
 
 
 
-<p>Your cash amout: <%= current_player.cash %></p>
+<p>Total Cash: $<%= current_player.cash %></p>
 
-<p>Your bitcoin amount: <%= current_player.bitcoin %></p>
+<p>Total Bitcoin: <%= current_player.bitcoin %></p>
+<p>
+  <div id="gdax_btc_price" class="spinner">
+    <div class="rect1"></div>
+    <div class="rect2"></div>
+    <div class="rect3"></div>
+    <div class="rect4"></div>
+    <div class="rect5"></div>
+  </div>
+</p>
 
-<%= form_tag("/buy", method: "post") do %>
-  <%= submit_tag("Buy Bitcoin at $20,000") %>
+
+
+
+<%= form_tag("/buy", method: "post", :class => "buy_sell_btn") do %>
+  <%= hidden_field_tag(:btc_buy_price, "5", :class => 'buy_sell_input') %>
+  <%= submit_tag("Buy 1 Bitcoin") %>
 <% end %>
 
 <br>
-<%= form_tag("/sell", method: "post") do %>
-  <%= submit_tag("Sell Bitcoin at $20,000") %>
+
+<%= form_tag("/sell", method: "post", :class => "buy_sell_btn") do %>
+  <%= hidden_field_tag(:btc_sell_price, "5", :class => 'buy_sell_input') %>
+  <%= submit_tag("Sell 1 Bitcoin") %>
 <% end %>
+
+<!-- <script type="text/javascript">
+  var exchangeTab = document.querySelector(".ws_trigger");
+  exchangeTab.addEventListener('click', function () { 
+    var buy_sell_input = document.querySelectorAll(".buy_sell_input");
+    console.log(buy_sell_input);
+    var title = document.querySelector("#title");
+    console.log(title);
+    if(title) {
+      var socket = new WebSocket('wss://ws-feed.gdax.com');
+      socket.onerror = function (error) {
+        console.log("WebSocket Error:");
+      };
+
+      socket.onclose = function (event) {
+        console.log('Disconnected from WebSocket.');
+      };
+
+      socket.onopen = function (event) {
+        console.log('WebSocket is connected!');
+        var request = { "type": "subscribe",  "channels": [{ "name": "ticker",
+        "product_ids": ["BTC-USD"] }]};
+        socket.send(JSON.stringify(request));
+      };
+      
+      socket.onmessage = function (event) { 
+        message = JSON.parse(event.data)
+        price = parseFloat(message["price"]).toFixed(2)
+        if (!isNaN(price)) {
+          try {
+            buy_sell_input[0].setAttribute("value", price);
+            buy_sell_input[1].setAttribute("value", price);
+            document.querySelector("#gdax_btc_price").innerHTML = price;
+            console.log(price);
+          }
+          catch (error) {
+            socket.close();
+          }
+        }
+      }
+    }
+    else {
+      console.log('not ready');
+    }
+  });
+</script> -->

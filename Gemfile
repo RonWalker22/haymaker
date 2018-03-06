@@ -23,9 +23,9 @@ gem 'uglifier', '>= 1.3.0'
 
 gem 'bootstrap-sass', '3.3.7'
 
-gem 'jquery-rails'
-
 gem 'sprockets-rails', :require => 'sprockets/railtie'
+
+gem 'jquery-rails'
 
 gem 'popper_js', '~> 1.12.9'
 

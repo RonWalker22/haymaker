@@ -13,8 +13,7 @@ Rails.application.routes.draw do
   get     '/about'                => 'static_pages#about'
   get     '/exchanges/gdax'       => 'exchanges#gdax'
   get     '/exchanges/binance'    => 'exchanges#binance'
-  post    '/buy'                  => 'players#buy'
-  post    '/sell'                 => 'players#sell'
+  post    '/order'                => 'players#order'
 
   # get 'profile' => 'players#'
   # get 'profile/edit' => 'players#'

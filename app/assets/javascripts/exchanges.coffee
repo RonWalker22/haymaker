@@ -3,8 +3,8 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 tryWebsocket  = ->
-  buy_sell_input = document.querySelectorAll(".buy_sell_input")
-  console.log buy_sell_input
+  dynamic_price = document.querySelector(".dynamic_price")
+  console.log dynamic_price
   title = document.querySelector("#title")
   console.log title
   if title
@@ -27,7 +27,7 @@ tryWebsocket  = ->
       waiting_counter = 0
       if !isNaN(price)
         try
-          input.setAttribute("value", price) for input in buy_sell_input
+          dynamic_price.setAttribute "value", price
           document.querySelector("#gdax_btc_price").innerHTML = 
             "Bitcoin Price $#{price}"
           console.log price

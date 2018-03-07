@@ -19,29 +19,28 @@ class PlayersController < ApplicationController
     @player = Player.new
   end
 
-  def buy
-    btc_price = params[:btc_buy_price].to_i
-    puts "price : #{btc_price}"
-    cash = current_player.cash - btc_price
-    puts "cash #{cash}"
-    bitcoin = current_player.bitcoin + 1
-    if cash >= 0
-      current_player.update_attributes!({bitcoin: bitcoin, cash: cash})
+  def order
+    price = params[:order_price].to_f
+    return "Invaid price" if price < 0.0
+    puts "price : #{price}"
+    coin_quantity = params[:coin_quantity].to_f
+    puts "coin_quantity : #{coin_quantity}"
+    if params[:commit] == "Buy"
+      cash = current_player.cash - (price * coin_quantity)
+      bitcoin = current_player.bitcoin + coin_quantity
+      if cash >= 0.0
+        current_player.update_attributes!({bitcoin: bitcoin, cash: cash})
+      end
+    elsif params[:commit] == "Sell"
+      cash = current_player.cash + (price * coin_quantity)
+      bitcoin = current_player.bitcoin - coin_quantity
+      if bitcoin >= 0.0
+        current_player.update_attributes!({bitcoin: bitcoin, cash: cash})
+      end
     end
     redirect_to exchanges_gdax_path
   end
 
-  def sell
-    btc_price = params[:btc_sell_price].to_i
-    puts "price : #{btc_price}"
-    cash = current_player.cash + btc_price
-    puts "cash #{cash}"
-    bitcoin = current_player.bitcoin - 1
-    if bitcoin >= 0
-      current_player.update_attributes!({bitcoin: bitcoin, cash: cash})
-    end
-    redirect_to exchanges_gdax_path
-  end
   # GET /players/1/edit
   def edit
   end

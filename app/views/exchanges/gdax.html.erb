@@ -18,16 +18,11 @@
 
 
 
-<%= form_tag("/buy", method: "post", :class => "buy_sell_btn") do %>
-  <%= hidden_field_tag(:btc_buy_price, "5", :class => 'buy_sell_input') %>
-  <%= submit_tag("Buy 1 Bitcoin") %>
-<% end %>
-
-<br>
-
-<%= form_tag("/sell", method: "post", :class => "buy_sell_btn") do %>
-  <%= hidden_field_tag(:btc_sell_price, "5", :class => 'buy_sell_input') %>
-  <%= submit_tag("Sell 1 Bitcoin") %>
+<%= form_tag("/order", method: "post", :class => "order_btn") do %>
+  <%= hidden_field_tag :order_price, "-1", class: 'dynamic_price' %> 
+  <%= number_field_tag :coin_quantity, 0.0, step: 0.01%>
+  <%= submit_tag "Buy", id: 'buy_btn' %>
+  <%= submit_tag "Sell", id: 'sell_btn'%>
 <% end %>
 
 <!-- <script type="text/javascript">

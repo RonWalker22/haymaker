@@ -2,22 +2,41 @@
 <p id='trading_pair'>| | BTC / USD | |</p>
 <h1 id="exchange" class="center">Gdax</h1>
 
+<!-- <div></div> -->
+
 <div id="balance">
   <p>Balance</p>
   <ul>
-    <li>USD<span class="balance_pair_values"><%= current_player.cash%></span>
+    <div>
+      <li><span id='coin_0_balance_label'>USD</span>
+        <div class='inline_block_s balance_pair_values_div'>
+          <span id="balance_pair_values_0"class="balance_pair_values"><%=
+      current_player.cash%></span>
+        </div>
+      <span id="after_order_sign_0" class="after_order_sign">+</span> 
+      <span id="after_order_value_0" class="after_order_value">100</span>
+      <span id="ao_equal_sign_0" class="ao_equal_sign">=</span>
+      <span id="after_order_total_0" class="after_order_total">33</span>
     </li>
-    <li>
-      BTC <span class="balance_pair_values"><%= current_player.bitcoin%></span>
+    <li><span id= 'coin_1_balance_label'>BTC</span>
+      <div class='inline_block_s balance_pair_values_div'>
+        <span id="balance_pair_values_1" class="balance_pair_values"><%=current_player.bitcoin%></span>
+      </div>
+      <span id="after_order_sign_1" class="after_order_sign">-</span>
+      <span id="after_order_value_1" class="after_order_value">100</span>
+      <span id="ao_equal_sign_1" class="ao_equal_sign">=</span>
+      <span id="after_order_total_1" class="after_order_total">33</span>
     </li>
+    </div>
   </ul>
 </div>
 </div>
+
 <div class="block_sec" id= "order_sec">
   <div>
     <div class="center" id= 'buy_sell_btns'>
-      <%= button_tag "Buy", id: 'buy_btn'%>
-      <%= button_tag "Sell", id: 'sell_btn'%>
+      <%= button_tag "Buy", id: 'buy_btn', class: 'buy_sell_btns' %>
+      <%= button_tag "Sell", id: 'sell_btn', class: 'buy_sell_btns' %>
     </div>
     <span id='price_label'>Price:</span>
     <div id="coin_price" class="spinner">
@@ -33,7 +52,9 @@
       <%= form_tag("/order", method: "post", :class => "order_form") do %>
       <%= hidden_field_tag :order_price, "-1", class: 'dynamic_price' %>
       <%= label_tag :coin_quantity, 'Amount:', id: 'amount_label'%> 
-      <%= number_field_tag :coin_quantity, 0.0, step: 0.01%>
+      <%= number_field_tag :coin_quantity, nil, placeholder: 0.0000, step:
+      0.00000001,
+      min: 0.01%>
     </div>
     <div id='allocation_box'>
         <span id= "capital_percentage">
@@ -52,5 +73,4 @@
       </div>
     <% end %>
   </span>
-
 </div>

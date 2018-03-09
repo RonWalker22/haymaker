@@ -20,18 +20,19 @@ class PlayersController < ApplicationController
   end
 
   def order
+    puts params
     price = params[:order_price].to_f
     return "Invaid price" if price < 0.0
     puts "price : #{price}"
     coin_quantity = params[:coin_quantity].to_f
     puts "coin_quantity : #{coin_quantity}"
-    if params[:commit] == "Buy"
+    if params[:commit] == "Place Buy Order"
       cash = current_player.cash - (price * coin_quantity)
       bitcoin = current_player.bitcoin + coin_quantity
       if cash >= 0.0
         current_player.update_attributes!({bitcoin: bitcoin, cash: cash})
       end
-    elsif params[:commit] == "Sell"
+    elsif params[:commit] == "Place Sell Order"
       cash = current_player.cash + (price * coin_quantity)
       bitcoin = current_player.bitcoin - coin_quantity
       if bitcoin >= 0.0

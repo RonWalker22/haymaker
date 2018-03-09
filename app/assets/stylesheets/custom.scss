@@ -4,11 +4,22 @@
 @import "font-awesome";
 
  body {
-  color: green;
-    background: #56ab2f;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #a8e063, #56ab2f);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #a8e063, #56ab2f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #56ab2f;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #a8e063, #56ab2f);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #a8e063, #56ab2f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  color: #00802b;
+}
 
+.center {
+  text-align: center;
+}
+
+#inner_body {
+  margin: 4em 10em 4em 10em;
+}
+
+header {
+  background: #d6f5d6;
 }
 
 a:visited {
@@ -50,4 +61,8 @@ ul {
   margin-right: 20px;
   margin-bottom: 10px;
   margin-top: -10px;
+}
+
+.container-fluid {
+  background: #eafaea;
 }

@@ -1,72 +1,56 @@
-<h1 id="title">Gdax</h1>
+<div class="block_sec" >
+<p id='trading_pair'>| | BTC / USD | |</p>
+<h1 id="exchange" class="center">Gdax</h1>
 
-
-
-<p>Total Cash: $<%= current_player.cash %></p>
-
-<p>Total Bitcoin: <%= current_player.bitcoin %></p>
-<p>
-  <div id="gdax_btc_price" class="spinner">
-    <div class="rect1"></div>
-    <div class="rect2"></div>
-    <div class="rect3"></div>
-    <div class="rect4"></div>
-    <div class="rect5"></div>
+<div id="balance">
+  <p>Balance</p>
+  <ul>
+    <li>USD<span class="balance_pair_values"><%= current_player.cash%></span>
+    </li>
+    <li>
+      BTC <span class="balance_pair_values"><%= current_player.bitcoin%></span>
+    </li>
+  </ul>
+</div>
+</div>
+<div class="block_sec" id= "order_sec">
+  <div>
+    <div class="center" id= 'buy_sell_btns'>
+      <%= button_tag "Buy", id: 'buy_btn'%>
+      <%= button_tag "Sell", id: 'sell_btn'%>
+    </div>
+    <span id='price_label'>Price:</span>
+    <div id="coin_price" class="spinner">
+      <div class="rect1"></div>
+      <div class="rect2"></div>
+      <div class="rect3"></div>
+      <div class="rect4"></div>
+      <div class="rect5"></div>
+    </div>
   </div>
-</p>
+  <span>
+    <div>
+      <%= form_tag("/order", method: "post", :class => "order_form") do %>
+      <%= hidden_field_tag :order_price, "-1", class: 'dynamic_price' %>
+      <%= label_tag :coin_quantity, 'Amount:', id: 'amount_label'%> 
+      <%= number_field_tag :coin_quantity, 0.0, step: 0.01%>
+    </div>
+    <div id='allocation_box'>
+        <span id= "capital_percentage">
+          <%= radio_button_tag(:capital_percentage, "25%") %>
+          <%= label_tag(:capital_percentage, "25%") %>
+          <%= radio_button_tag(:capital_percentage, "50%") %>
+          <%= label_tag(:capital_percentage, "50%") %>
+          <%= radio_button_tag(:capital_percentage, "75%") %>
+          <%= label_tag(:capital_percentage, "75%") %>
+          <%= radio_button_tag(:capital_percentage, "100%") %>
+          <%= label_tag(:capital_percentage, "100%") %>
+        </span>
+    </div>
+      <div class="center">
+        <%= submit_tag "Place Buy Order", id: 'order_btn' %>
+      </div>
+    <% end %>
+  </span>
 
-
-
-
-<%= form_tag("/order", method: "post", :class => "order_btn") do %>
-  <%= hidden_field_tag :order_price, "-1", class: 'dynamic_price' %> 
-  <%= number_field_tag :coin_quantity, 0.0, step: 0.01%>
-  <%= submit_tag "Buy", id: 'buy_btn' %>
-  <%= submit_tag "Sell", id: 'sell_btn'%>
-<% end %>
-
-<!-- <script type="text/javascript">
-  var exchangeTab = document.querySelector(".ws_trigger");
-  exchangeTab.addEventListener('click', function () { 
-    var buy_sell_input = document.querySelectorAll(".buy_sell_input");
-    console.log(buy_sell_input);
-    var title = document.querySelector("#title");
-    console.log(title);
-    if(title) {
-      var socket = new WebSocket('wss://ws-feed.gdax.com');
-      socket.onerror = function (error) {
-        console.log("WebSocket Error:");
-      };
-
-      socket.onclose = function (event) {
-        console.log('Disconnected from WebSocket.');
-      };
-
-      socket.onopen = function (event) {
-        console.log('WebSocket is connected!');
-        var request = { "type": "subscribe",  "channels": [{ "name": "ticker",
-        "product_ids": ["BTC-USD"] }]};
-        socket.send(JSON.stringify(request));
-      };
-      
-      socket.onmessage = function (event) { 
-        message = JSON.parse(event.data)
-        price = parseFloat(message["price"]).toFixed(2)
-        if (!isNaN(price)) {
-          try {
-            buy_sell_input[0].setAttribute("value", price);
-            buy_sell_input[1].setAttribute("value", price);
-            document.querySelector("#gdax_btc_price").innerHTML = price;
-            console.log(price);
-          }
-          catch (error) {
-            socket.close();
-          }
-        }
-      }
-    }
-    else {
-      console.log('not ready');
-    }
-  });
-</script> -->
+</div>

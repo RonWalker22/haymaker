@@ -15,6 +15,22 @@ input {
   outline-color: #00802b;
 }
 
+#inner_input_fixed_text {
+  background-color: transparent;
+  color: #ccc;
+  z-index: 1;
+  position: absolute;
+  left: 35em;
+  top: 41.2em;
+  font-size: .6em;
+}
+
+
+#league_info {
+  float: right; 
+}
+
+
 .inline_block_s {
   display: inline-block;
 }
@@ -34,17 +50,18 @@ input {
 #price_label {
 }
 
-.ao span {
+.ao {
+  margin-left: 4em;
 }
 
 #ao_0 span {
-  display: none;
+  visibility: hidden;
   color: rgb(204, 255, 102);
   font-size: 0.6em;
 }
 
 #ao_1 span {
-  display: none;
+  visibility: hidden;
   color: rgb(204, 255, 102);
   font-size: 0.6em;
 }
@@ -138,7 +155,7 @@ input {
 }
 
 #coin_quantity {
-  width: 127px;
+  width: 10em;
   background: #eafaea;
   margin-left: 1em;
 }

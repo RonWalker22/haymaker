@@ -36,8 +36,8 @@ tryWebsocket  = ->
     after_order_fun_reset = ->
       coin_quantity.addEventListener 'input', ->
         if Number(coin_quantity.value) <= 0
-          elm.style.display = 'none' for elm in ao_0
-          elm.style.display = 'none' for elm in ao_1
+          elm.style.visibility = 'hidden' for elm in ao_0
+          elm.style.visibility = 'hidden' for elm in ao_1
 
 
 
@@ -45,13 +45,13 @@ tryWebsocket  = ->
       coin_quantity.addEventListener 'input', ->
         after_order_fun_reset()
         if Number(coin_quantity.value) > 0
-          elm.style.display = 'inline' for elm in ao_0
-          elm.style.display = 'inline' for elm in ao_1
+          elm.style.visibility = 'visible' for elm in ao_0
+          elm.style.visibility = 'visible' for elm in ao_1
           after_order_value_0.innerHTML = Number coin_quantity.value * 
             Number dynamic_price.value
           after_order_value_1.innerHTML = coin_quantity.value
           console.log "amount input hit"
-          after_order_total_0.innerHTML = Number(balance_pair_values_0.innerHTML) + Number(after_order_value_0.innerHTML)
+          after_order_total_0.innerHTML = Number(balance_pair_values_0.innerHTML) - Number(after_order_value_0.innerHTML)
           after_order_total_1.innerHTML = Number(balance_pair_values_1.innerHTML) + Number(after_order_value_1.innerHTML)
 
     buy_btn.addEventListener 'click', ->
@@ -59,20 +59,28 @@ tryWebsocket  = ->
       buy_btn.style.cssText = "background: #ccff66; border-style: inset;"
       order_btn.style.background = "#ccff66"
       order_btn.setAttribute "value", "Place Buy Order"
-      after_order_sign_0.innerHTML = "+"
-      after_order_sign_1.innerHTML = "-"
+      after_order_sign_0.innerHTML = "-"
+      after_order_sign_1.innerHTML = "+"
       elm.style.color = "#ccff66" for elm in ao_0
       elm.style.color = "#ccff66" for elm in ao_1
+      after_order_total_0.innerHTML = Number(balance_pair_values_0.innerHTML) -
+        Number(after_order_value_0.innerHTML)
+      after_order_total_1.innerHTML = Number(balance_pair_values_1.innerHTML) +
+        Number(after_order_value_1.innerHTML)
 
     sell_btn.addEventListener 'click', ->
       sell_btn.style.cssText = "background: #004d00; border-style: inset;"
       buy_btn.style.cssText = "background: transparent; border-style: outset;"
       order_btn.style.background = "#004d00"
       order_btn.setAttribute "value", "Place Sell Order"
-      after_order_sign_0.innerHTML = "-"
-      after_order_sign_1.innerHTML = "+"
+      after_order_sign_0.innerHTML = "+"
+      after_order_sign_1.innerHTML = "-"
       elm.style.color = "rgb(0, 77, 0)" for elm in ao_0
       elm.style.color = "rgb(0, 77, 0)" for elm in ao_1
+      after_order_total_0.innerHTML = Number(balance_pair_values_0.innerHTML) +
+        Number(after_order_value_0.innerHTML)
+      after_order_total_1.innerHTML = Number(balance_pair_values_1.innerHTML) -
+        Number(after_order_value_1.innerHTML)
 
     dynamic_price = document.querySelector(".dynamic_price")
     exchange = document.querySelector("#exchange")

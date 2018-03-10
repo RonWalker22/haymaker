@@ -60,8 +60,8 @@ tryWebsocket  = ->
       order_btn.setAttribute "value", "Place Buy Order"
       after_order_sign_0.innerHTML = "+"
       after_order_sign_1.innerHTML = "-"
-      elm.style.cssText = "color: #ccff66;" for elm in ao_0
-      elm.style.cssText = "color: #ccff66;" for elm in ao_1
+      elm.style.color = "#ccff66" for elm in ao_0
+      elm.style.color = "#ccff66" for elm in ao_1
 
     sell_btn.addEventListener 'click', ->
       sell_btn.style.cssText = "background: #004d00; border-style: inset;"
@@ -70,8 +70,8 @@ tryWebsocket  = ->
       order_btn.setAttribute "value", "Place Sell Order"
       after_order_sign_0.innerHTML = "-"
       after_order_sign_1.innerHTML = "+"
-      elm.style.cssText = "color: rgb(0, 77, 0);" for elm in ao_0
-      elm.style.cssText = "color: rgb(0, 77, 0);" for elm in ao_1
+      elm.style.color = "rgb(0, 77, 0)" for elm in ao_0
+      elm.style.color = "rgb(0, 77, 0)" for elm in ao_1
 
     dynamic_price = document.querySelector(".dynamic_price")
     exchange = document.querySelector("#exchange")

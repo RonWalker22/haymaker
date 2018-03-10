@@ -10,7 +10,6 @@ class ExchangesController < ApplicationController
   def binance
     unless logged_in?
       redirect_to login_path
-      #message
     end
     @player = current_player
   end

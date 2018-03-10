@@ -51,9 +51,13 @@ tryWebsocket  = ->
             Number dynamic_price.value
           after_order_value_1.innerHTML = coin_quantity.value
           console.log "amount input hit"
-          if after_order_total_0.innerHTML == ""
+          console.log order_btn.getAttribute "value"
+          if "#{order_btn.getAttribute 'value'}" == "Place Buy Order"
             after_order_total_0.innerHTML = Number(balance_pair_values_0.innerHTML) - Number(after_order_value_0.innerHTML)
             after_order_total_1.innerHTML = Number(balance_pair_values_1.innerHTML) + Number(after_order_value_1.innerHTML)
+          else if "#{order_btn.getAttribute 'value'}" == "Place Sell Order"
+            after_order_total_0.innerHTML = Number(balance_pair_values_0.innerHTML) + Number(after_order_value_0.innerHTML)
+            after_order_total_1.innerHTML = Number(balance_pair_values_1.innerHTML) - Number(after_order_value_1.innerHTML)
 
     buy_btn.addEventListener 'click', ->
       sell_btn.style.cssText = "background: transparent; border-style: outset;"

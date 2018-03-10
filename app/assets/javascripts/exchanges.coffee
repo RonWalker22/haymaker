@@ -11,6 +11,10 @@ tryWebsocket  = ->
     order_btn = document.querySelector('#order_btn')
     coin_quantity = document.querySelector('#coin_quantity')
     coin_2_quantity =  coin_price.textContent
+
+    balance_pair_values_0 = document.querySelector('#balance_pair_values_0')
+    balance_pair_values_1 = document.querySelector('#balance_pair_values_1')
+
     after_order_sign = document.querySelector('.after_order_sign')
     after_order_sign_0 = document.querySelector('#after_order_sign_0')
     after_order_sign_1 = document.querySelector('#after_order_sign_1')
@@ -20,24 +24,34 @@ tryWebsocket  = ->
     after_order_total = document.querySelector('.after_order_total')
     after_order_total_0 = document.querySelector('#after_order_total_0')
     after_order_total_1 = document.querySelector('#after_order_total_1')
-    balance_pair_values_0 = document.querySelector('#balance_pair_values_0')
-    balance_pair_values_1 = document.querySelector('#balance_pair_values_1')
     ao_equal_sign = document.querySelector('.ao_equal_sign')
     ao_equal_sign_0 = document.querySelector('#ao_equal_sign_0')
     ao_equal_sign_1 = document.querySelector('#ao_equal_sign_1')
+    
+    ao_0 = [after_order_sign_0, after_order_value_0, after_order_total_0,
+            ao_equal_sign_0, ]
+    ao_1 = [after_order_sign_1, after_order_value_1, after_order_total_1,
+            ao_equal_sign_1, ]
 
-    after_oder_fun = ->
+    after_order_fun_reset = ->
       coin_quantity.addEventListener 'input', ->
-        after_order_value.style.display = 'inline'
-        after_order_sign.style.display = 'inline'
-        after_order_total.style.display = 'inline'
-        after_order_value_0.innerHTML = Number coin_quantity.value * 
-          Number dynamic_price.value
-        after_order_value_1.innerHTML = coin_quantity.value
+        if Number(coin_quantity.value) <= 0
+          elm.style.display = 'none' for elm in ao_0
+          elm.style.display = 'none' for elm in ao_1
+          console.log 'hit'
 
-        console.log coin_quantity.valuee
-        console.log dynamic_price.value
 
+
+    after_order_fun = ->
+      coin_quantity.addEventListener 'input', ->
+        after_order_fun_reset()
+        if Number(coin_quantity.value) > 0
+          elm.style.display = 'inline' for elm in ao_0
+          elm.style.display = 'inline' for elm in ao_1
+          after_order_value_0.innerHTML = Number coin_quantity.value * 
+            Number dynamic_price.value
+          after_order_value_1.innerHTML = coin_quantity.value
+          console.log "amount input hit"
 
     buy_btn.addEventListener 'click', ->
       sell_btn.style.cssText = "background: transparent; border-style: outset;"
@@ -46,10 +60,8 @@ tryWebsocket  = ->
       order_btn.setAttribute "value", "Place Buy Order"
       after_order_sign_0.innerHTML = "+"
       after_order_sign_1.innerHTML = "-"
-      after_order_total.style.cssText = "color: #ccff66;"
-      after_order_value.style.cssText = "color: #ccff66;"
-      after_order_sign.style.cssText = "color: #ccff66;"
-      ao_equal_sign.style.cssText = "color: #ccff66;"
+      elm.style.cssText = "color: #ccff66;" for elm in ao_0
+      elm.style.cssText = "color: #ccff66;" for elm in ao_1
 
     sell_btn.addEventListener 'click', ->
       sell_btn.style.cssText = "background: #004d00; border-style: inset;"
@@ -58,12 +70,8 @@ tryWebsocket  = ->
       order_btn.setAttribute "value", "Place Sell Order"
       after_order_sign_0.innerHTML = "-"
       after_order_sign_1.innerHTML = "+"
-      after_order_total.style.cssText = "color: rgb(0, 77, 0);"
-      after_order_value.style.cssText = "color: rgb(0, 77, 0);"
-      after_order_sign.style.cssText = "color: rgb(0, 77, 0);"
-      ao_equal_sign.style.cssText = "color: rgb(0, 77, 0);"
-
-
+      elm.style.cssText = "color: rgb(0, 77, 0);" for elm in ao_0
+      elm.style.cssText = "color: rgb(0, 77, 0);" for elm in ao_1
 
     dynamic_price = document.querySelector(".dynamic_price")
     exchange = document.querySelector("#exchange")
@@ -86,7 +94,7 @@ tryWebsocket  = ->
       socket.onmessage = (event) -> 
         coin_price = document.querySelector("#coin_price")
         message = JSON.parse(event.data)
-        after_oder_fun()
+        after_order_fun()
         price = parseFloat(message["price"]).toFixed(2)
         callback = ->
           coin_price.style.color = "#eafaea"

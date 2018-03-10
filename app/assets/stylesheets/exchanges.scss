@@ -34,6 +34,21 @@ input {
 #price_label {
 }
 
+.ao span {
+}
+
+#ao_0 span {
+  display: none;
+  color: rgb(204, 255, 102);
+  font-size: 0.7em;
+}
+
+#ao_1 span {
+  display: none;
+  color: rgb(0, 77, 0);
+  font-size: 0.7em;
+}
+
 .after_order_sign {
 // display: none;
 // margin-right: 23em;
@@ -43,11 +58,13 @@ input {
 // display: none;
 }
 
+
 .after_order_total {
  // display: none;
 }
 
 .ao_equal_sign {
+  // display: none;
 }
 
 

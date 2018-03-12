@@ -11,6 +11,6 @@ class ExchangesController < ApplicationController
     unless logged_in?
       redirect_to login_path
     end
-    @player = current_player
+      @player = current_player
   end
 end

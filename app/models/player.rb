@@ -1,9 +1,11 @@
 class Player < ApplicationRecord
+  has_many :wallets
   attr_accessor :remember_token
 
   validates :password, presence: false, length: { maximum: 30}
   validates :username, presence: true, length: { maximum: 30 }
   validates :email, presence: true, length: { maximum: 255 }
+  validates_uniqueness_of :username
   has_secure_password
 
   # Returns the hash digest of the given string.

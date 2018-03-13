@@ -20,7 +20,9 @@
     </li>
     <li><span id= 'coin_1_balance_label'>BTC</span>
       <div class='inline_block_s balance_pair_values_div'>
-        <span id="balance_pair_values_1" class="balance_pair_values"><%=current_player.bitcoin%></span>
+        <span id="balance_pair_values_1" class="balance_pair_values">
+         <%=current_player.wallets.find_by({exchange_id:1}).coin_quantity%>
+        </span>
       </div>
       <div id="ao_1" class="ao">
         <span id="after_order_sign_1" class="after_order_sign">+</span>

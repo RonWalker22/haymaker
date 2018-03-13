@@ -1,15 +1,15 @@
 <div class="block_sec" >
-<p id='trading_pair'>| | BTC / USD | |</p>
-<h1 id="exchange" class="center">Gdax</h1>
+<p id='trading_pair'><%= @pair %></p>
+<h1 id="exchange" class="center"><%= @exchange.name %></h1>
 
 <div id="balance">
   <p>Balance</p>
   <ul>
     <div>
-      <li><span id='coin_0_balance_label'>USD</span>
+    <li><span id='coin_0_balance_label'><%= @coin_1_ticker %></span>
         <div class='inline_block_s balance_pair_values_div'>
-          <span id="balance_pair_values_0"class="balance_pair_values"><%=
-      current_player.cash%></span>
+          <span id="balance_pair_values_0"class="balance_pair_values">
+            <%=@coin_1_quantity%></span>
         </div>
       <div id="ao_0" class="ao">
         <span id="after_order_sign_0" class="after_order_sign">-</span> 
@@ -18,11 +18,13 @@
         <span id="after_order_total_0" class="after_order_total"></span>
       </div>
     </li>
-    <li><span id= 'coin_1_balance_label'>BTC</span>
+
+
+    <li><span id= 'coin_1_balance_label'><%= @coin_2_ticker %></span>
       <div class='inline_block_s balance_pair_values_div'>
         <span id="balance_pair_values_1" class="balance_pair_values">
-         <%=current_player.wallets.find_by({exchange_id:1}).coin_quantity%>
-        </span>
+         <%=@coin_2_quantity%>
+        </span> 
       </div>
       <div id="ao_1" class="ao">
         <span id="after_order_sign_1" class="after_order_sign">+</span>
@@ -55,6 +57,10 @@
     <div>
       <%= form_tag("/order", method: "post", :class => "order_form") do %>
       <%= hidden_field_tag :order_price, "-1", class: 'dynamic_price' %>
+      <%= hidden_field_tag :exchange_id, @exchange.id %>
+      <%= hidden_field_tag :coin_1_ticker, @coin_1_ticker %>
+      <%= hidden_field_tag :coin_2_ticker, @coin_2_ticker %>
+      <%= hidden_field_tag :pair, @pair %>
       <%= label_tag :coin_quantity, 'Amount:', id: 'amount_label'%> 
       <%= number_field_tag :coin_quantity, nil, placeholder: 0.0000, step:
       0.00000001,

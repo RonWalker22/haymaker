@@ -31,8 +31,6 @@ ActiveRecord::Schema.define(version: 20180312171656) do
     t.string "email", null: false
     t.string "password_digest"
     t.string "password_confirmation"
-    t.money "cash", scale: 2, default: "100000.0"
-    t.decimal "bitcoin", default: "0.0"
     t.integer "rank", default: 999
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

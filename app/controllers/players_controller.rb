@@ -19,6 +19,29 @@ class PlayersController < ApplicationController
     @player = Player.new
   end
 
+  # def order
+  #   puts params
+  #   price = params[:order_price].to_f
+  #   return "Invaid price" if price < 0.0
+  #   puts "price : #{price}"
+  #   coin_quantity = params[:coin_quantity].to_f
+  #   puts "coin_quantity : #{coin_quantity}"
+  #   if params[:commit] == "Place Buy Order"
+  #     cash = current_player.cash - (price * coin_quantity)
+  #     bitcoin = current_player.bitcoin + coin_quantity
+  #     if cash >= 0.0
+  #       current_player.update_attributes!({bitcoin: bitcoin, cash: cash})
+  #     end
+  #   elsif params[:commit] == "Place Sell Order"
+  #     cash = current_player.cash + (price * coin_quantity)
+  #     bitcoin = current_player.bitcoin - coin_quantity
+  #     if bitcoin >= 0.0
+  #       current_player.update_attributes!({bitcoin: bitcoin, cash: cash})
+  #     end
+  #   end
+  #   redirect_to exchanges_gdax_path
+  # end
+
   def order
     puts params
     price = params[:order_price].to_f
@@ -26,11 +49,14 @@ class PlayersController < ApplicationController
     puts "price : #{price}"
     coin_quantity = params[:coin_quantity].to_f
     puts "coin_quantity : #{coin_quantity}"
+    wallet = current_player.wallets.find_by({exchange_id:1})
     if params[:commit] == "Place Buy Order"
       cash = current_player.cash - (price * coin_quantity)
-      bitcoin = current_player.bitcoin + coin_quantity
+      wallet.coin_quantity
+      coin_type =  wallet.coin_quantity + coin_quantity
       if cash >= 0.0
-        current_player.update_attributes!({bitcoin: bitcoin, cash: cash})
+        current_player.update_attributes!({coin_type: coin_type, 
+                                          cash: cash})
       end
     elsif params[:commit] == "Place Sell Order"
       cash = current_player.cash + (price * coin_quantity)

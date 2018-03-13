@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
 
+  resources :exchanges
   resources :wallets
   root 'players#index'
 
@@ -12,9 +13,9 @@ Rails.application.routes.draw do
   post    '/login'                => 'sessions#create'
   delete  '/logout'               => 'sessions#destroy'
   get     '/about'                => 'static_pages#about'
-  get     '/exchanges/gdax'       => 'exchanges#gdax'
-  get     '/exchanges/binance'    => 'exchanges#binance'
-  post    '/order'                => 'players#order'
+  # get     '/exchanges/:id'       => 'exchanges#show'
+  # get     '/exchanges/binance'    => 'exchanges#binance'
+  post    '/order'                => 'exchanges#order'
 
   # get 'profile' => 'players#'
   # get 'profile/edit' => 'players#'

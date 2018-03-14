@@ -6,24 +6,10 @@
   <p>Balance</p>
   <ul>
     <div>
-    <li><span id='coin_0_balance_label'><%= @coin_1_ticker %></span>
-        <div class='inline_block_s balance_pair_values_div'>
-          <span id="balance_pair_values_0"class="balance_pair_values">
-            <%=@coin_1_quantity%></span>
-        </div>
-      <div id="ao_0" class="ao">
-        <span id="after_order_sign_0" class="after_order_sign">-</span> 
-        <span id="after_order_value_0" class="after_order_value"></span>
-        <span id="ao_equal_sign_0" class="ao_equal_sign">=</span>
-        <span id="after_order_total_0" class="after_order_total"></span>
-      </div>
-    </li>
-
-
-    <li><span id= 'coin_1_balance_label'><%= @coin_2_ticker %></span>
+    <li><span id= 'coin_1_balance_label'><%= @coin_1_ticker %></span>
       <div class='inline_block_s balance_pair_values_div'>
         <span id="balance_pair_values_1" class="balance_pair_values">
-         <%=@coin_2_quantity%>
+         <%=@coin_1_quantity%>
         </span> 
       </div>
       <div id="ao_1" class="ao">
@@ -31,6 +17,18 @@
         <span id="after_order_value_1" class="after_order_value"></span>
         <span id="ao_equal_sign_1" class="ao_equal_sign">=</span>
         <span id="after_order_total_1" class="after_order_total"></span>
+      </div>
+    </li>
+    <li><span id='coin_0_balance_label'><%= @coin_2_ticker %></span>
+        <div class='inline_block_s balance_pair_values_div'>
+          <span id="balance_pair_values_0"class="balance_pair_values">
+            <%=@coin_2_quantity%></span>
+        </div>
+      <div id="ao_0" class="ao">
+        <span id="after_order_sign_0" class="after_order_sign">-</span> 
+        <span id="after_order_value_0" class="after_order_value"></span>
+        <span id="ao_equal_sign_0" class="ao_equal_sign">=</span>
+        <span id="after_order_total_0" class="after_order_total"></span>
       </div>
     </li>
     </div>

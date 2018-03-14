@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180312171656) do
+ActiveRecord::Schema.define(version: 20180314231147) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "exchange_leagues", force: :cascade do |t|
+    t.bigint "exchange_id"
+    t.bigint "league_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["exchange_id", "league_id"], name: "index_exchange_leagues_on_exchange_id_and_league_id", unique: true
+    t.index ["exchange_id"], name: "index_exchange_leagues_on_exchange_id"
+    t.index ["league_id"], name: "index_exchange_leagues_on_league_id"
+  end
 
   create_table "exchanges", force: :cascade do |t|
     t.string "name", null: false
@@ -22,6 +32,34 @@ ActiveRecord::Schema.define(version: 20180312171656) do
     t.decimal "taker_fee", default: "0.0", null: false
     t.decimal "withdrawal_fee", default: "0.0", null: false
     t.decimal "deposit_fee", default: "0.0", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "league_players", force: :cascade do |t|
+    t.bigint "league_id"
+    t.bigint "player_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["league_id", "player_id"], name: "index_league_players_on_league_id_and_player_id", unique: true
+    t.index ["league_id"], name: "index_league_players_on_league_id"
+    t.index ["player_id"], name: "index_league_players_on_player_id"
+  end
+
+  create_table "leagues", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "entry_fee", default: "free", null: false
+    t.string "commissioner", null: false
+    t.datetime "start_date", null: false
+    t.datetime "end_date", null: false
+    t.integer "rounds", default: 1, null: false
+    t.boolean "exchange_risk", default: false, null: false
+    t.boolean "exchange_fees", default: false, null: false
+    t.boolean "high_be_score", default: true, null: false
+    t.boolean "public_keys", default: false, null: false
+    t.boolean "instant_deposits_withdraws", default: true, null: false
+    t.boolean "lazy_picker", default: false, null: false
+    t.boolean "margin_trading", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

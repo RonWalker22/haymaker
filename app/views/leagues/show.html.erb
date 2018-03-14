@@ -1,0 +1,64 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @league.name %>
+</p>
+
+<p>
+  <strong>Entry fee:</strong>
+  <%= @league.entry_fee %>
+</p>
+
+<p>
+  <strong>Commissioner:</strong>
+  <%= @league.commissioner %>
+</p>
+
+<p>
+  <strong>Start date:</strong>
+  <%= @league.start_date %>
+</p>
+
+<p>
+  <strong>End date:</strong>
+  <%= @league.end_date %>
+</p>
+
+<p>
+  <strong>Rounds:</strong>
+  <%= @league.rounds %>
+</p>
+
+<p>
+  <strong>Exchange risk:</strong>
+  <%= @league.exchange_risk %>
+</p>
+
+<p>
+  <strong>Exchange fees:</strong>
+  <%= @league.exchange_fees %>
+</p>
+
+<p>
+  <strong>High be score:</strong>
+  <%= @league.high_be_score %>
+</p>
+
+<p>
+  <strong>Public keys:</strong>
+  <%= @league.public_keys %>
+</p>
+
+<p>
+  <strong>Instant deposits withdraws:</strong>
+  <%= @league.instant_deposits_withdraws %>
+</p>
+
+<p>
+  <strong>Lazy picker:</strong>
+  <%= @league.lazy_picker %>
+</p>
+
+<%= link_to 'Edit', edit_league_path(@league) %> |
+<%= link_to 'Back', leagues_path %>

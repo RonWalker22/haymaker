@@ -1,0 +1,77 @@
+<%= form_with(model: league, local: true) do |form| %>
+  <% if league.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(league.errors.count, "error") %> prohibited this league from being saved:</h2>
+
+      <ul>
+      <% league.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name, id: :league_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :entry_fee %>
+    <%= form.text_field :entry_fee, id: :league_entry_fee %>
+  </div>
+
+  <div class="field">
+    <%= form.label :commissioner %>
+    <%= form.text_field :commissioner, id: :league_commissioner %>
+  </div>
+
+  <div class="field">
+    <%= form.label :start_date %>
+    <%= form.datetime_select :start_date, id: :league_start_date %>
+  </div>
+
+  <div class="field">
+    <%= form.label :end_date %>
+    <%= form.datetime_select :end_date, id: :league_end_date %>
+  </div>
+
+  <div class="field">
+    <%= form.label :rounds %>
+    <%= form.number_field :rounds, id: :league_rounds %>
+  </div>
+
+  <div class="field">
+    <%= form.label :exchange_risk %>
+    <%= form.check_box :exchange_risk, id: :league_exchange_risk %>
+  </div>
+
+  <div class="field">
+    <%= form.label :exchange_fees %>
+    <%= form.check_box :exchange_fees, id: :league_exchange_fees %>
+  </div>
+
+  <div class="field">
+    <%= form.label :high_be_score %>
+    <%= form.check_box :high_be_score, id: :league_high_be_score %>
+  </div>
+
+  <div class="field">
+    <%= form.label :public_keys %>
+    <%= form.check_box :public_keys, id: :league_public_keys %>
+  </div>
+
+  <div class="field">
+    <%= form.label :instant_deposits_withdraws %>
+    <%= form.check_box :instant_deposits_withdraws, id: :league_instant_deposits_withdraws %>
+  </div>
+
+  <div class="field">
+    <%= form.label :lazy_picker %>
+    <%= form.check_box :lazy_picker, id: :league_lazy_picker %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

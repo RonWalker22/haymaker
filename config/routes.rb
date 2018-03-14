@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
 
+  resources :leagues
   resources :exchanges
   resources :wallets
   root 'players#index'

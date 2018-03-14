@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  entry_fee: MyString
+  commissioner: MyString
+  start_date: 2018-03-14 13:35:55
+  end_date: 2018-03-14 13:35:55
+  rounds: 1
+  exchange_risk: false
+  exchange_fees: false
+  high_be_score: false
+  public_keys: false
+  instant_deposits_withdraws: false
+  lazy_picker: false
+
+two:
+  name: MyString
+  entry_fee: MyString
+  commissioner: MyString
+  start_date: 2018-03-14 13:35:55
+  end_date: 2018-03-14 13:35:55
+  rounds: 1
+  exchange_risk: false
+  exchange_fees: false
+  high_be_score: false
+  public_keys: false
+  instant_deposits_withdraws: false
+  lazy_picker: false

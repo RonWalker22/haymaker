@@ -1,5 +1,7 @@
 class Player < ApplicationRecord
   has_many :wallets
+  has_many :league_players
+  has_many :leagues, :through => :league_players
   attr_accessor :remember_token
 
   validates :password, presence: false, length: { maximum: 30}

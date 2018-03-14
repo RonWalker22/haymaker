@@ -15,8 +15,8 @@ Exchange.create!( name: 'Binance',
   password = "123"
   admin = false
 
-  name = 'Ron22' && email = 'ron@gmail.com'  && admin = true if n == 0
-  name = 'Tom22' && email = 'tom@gmail.com'                  if n == 1
+  (name = 'Ron22' && email = 'ron@gmail.com'  && admin = true) if n == 0
+  (name = 'Tom22' && email = 'tom@gmail.com')                  if n == 1
 
   Player.create!(username: name,
                  email: email,

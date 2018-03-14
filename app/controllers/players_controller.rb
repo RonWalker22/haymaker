@@ -19,55 +19,6 @@ class PlayersController < ApplicationController
     @player = Player.new
   end
 
-  # def order
-  #   puts params
-  #   price = params[:order_price].to_f
-  #   return "Invaid price" if price < 0.0
-  #   puts "price : #{price}"
-  #   coin_quantity = params[:coin_quantity].to_f
-  #   puts "coin_quantity : #{coin_quantity}"
-  #   if params[:commit] == "Place Buy Order"
-  #     cash = current_player.cash - (price * coin_quantity)
-  #     bitcoin = current_player.bitcoin + coin_quantity
-  #     if cash >= 0.0
-  #       current_player.update_attributes!({bitcoin: bitcoin, cash: cash})
-  #     end
-  #   elsif params[:commit] == "Place Sell Order"
-  #     cash = current_player.cash + (price * coin_quantity)
-  #     bitcoin = current_player.bitcoin - coin_quantity
-  #     if bitcoin >= 0.0
-  #       current_player.update_attributes!({bitcoin: bitcoin, cash: cash})
-  #     end
-  #   end
-  #   redirect_to exchanges_gdax_path
-  # end
-
-  def order
-    puts params
-    price = params[:order_price].to_f
-    return "Invaid price" if price < 0.0
-    puts "price : #{price}"
-    coin_quantity = params[:coin_quantity].to_f
-    puts "coin_quantity : #{coin_quantity}"
-    wallet = current_player.wallets.find_by({exchange_id:1})
-    if params[:commit] == "Place Buy Order"
-      cash = current_player.cash - (price * coin_quantity)
-      wallet.coin_quantity
-      coin_type =  wallet.coin_quantity + coin_quantity
-      if cash >= 0.0
-        current_player.update_attributes!({coin_type: coin_type, 
-                                          cash: cash})
-      end
-    elsif params[:commit] == "Place Sell Order"
-      cash = current_player.cash + (price * coin_quantity)
-      bitcoin = current_player.bitcoin - coin_quantity
-      if bitcoin >= 0.0
-        current_player.update_attributes!({bitcoin: bitcoin, cash: cash})
-      end
-    end
-    redirect_to exchanges_gdax_path
-  end
-
   # GET /players/1/edit
   def edit
   end
@@ -122,18 +73,5 @@ class PlayersController < ApplicationController
     def player_params
       params.require(:player).permit(:username, :password,
         :password_confirmation, :email)
-    end
-
-    def check_permissions
-      if !logged_in?
-        store_location
-        flash[:notice] = 'Please log in.'
-        redirect_to login_path
-      elsif current_player.admin?
-        return
-      elsif !current_player?(@player)
-        flash[:notice] = "You have not been granted access to that section."
-        redirect_to leaderboards_path
-      end
     end
 end

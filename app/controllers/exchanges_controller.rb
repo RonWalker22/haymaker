@@ -1,5 +1,7 @@
 class ExchangesController < ApplicationController
   before_action :set_exchange, only: [:show, :edit, :update, :destroy]
+  before_action :check_logged_in, only: [:show, :edit, :update, :destroy]
+
 
   def order
     pair = params[:pair]

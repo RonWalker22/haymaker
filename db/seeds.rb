@@ -13,15 +13,17 @@ Exchange.create!( name: 'Binance',
   name = Faker::Name.name
   email = "example-#{n+1}@gmail.com"
   password = "123"
+  admin = false
 
-  name = 'Ron22' && email = 'ron@gmail.com' if n == 0
-  name = 'Tom22' && email = 'tom@gmail.com' if n == 1
+  name = 'Ron22' && email = 'ron@gmail.com'  && admin = true if n == 0
+  name = 'Tom22' && email = 'tom@gmail.com'                  if n == 1
 
   Player.create!(username: name,
                  email: email,
                  password: password,
                  password_confirmation: password,
-                 rank: n + 1
+                 rank: n + 1,
+                 admin: admin
                 )
 
   Wallet.create!(coin_type: 'USD', 

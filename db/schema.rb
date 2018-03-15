@@ -48,10 +48,11 @@ ActiveRecord::Schema.define(version: 20180314231147) do
 
   create_table "leagues", force: :cascade do |t|
     t.string "name", null: false
-    t.string "entry_fee", default: "free", null: false
+    t.string "entry_fee", default: "FREE", null: false
     t.string "commissioner", null: false
-    t.datetime "start_date", null: false
-    t.datetime "end_date", null: false
+    t.string "mode", default: "Fantasy Friendly", null: false
+    t.datetime "start_date", default: "2018-03-15 03:12:29", null: false
+    t.datetime "end_date", default: "2018-04-15 03:12:29", null: false
     t.integer "rounds", default: 1, null: false
     t.boolean "exchange_risk", default: false, null: false
     t.boolean "exchange_fees", default: false, null: false
@@ -69,7 +70,7 @@ ActiveRecord::Schema.define(version: 20180314231147) do
     t.string "email", null: false
     t.string "password_digest"
     t.string "password_confirmation"
-    t.integer "rank", default: 999
+    t.integer "rank", default: -1
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "remember_digest"
@@ -82,10 +83,12 @@ ActiveRecord::Schema.define(version: 20180314231147) do
     t.string "public_key", null: false
     t.bigint "player_id"
     t.bigint "exchange_id"
+    t.bigint "league_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["coin_type", "player_id", "exchange_id"], name: "index_wallets_on_coin_type_and_player_id_and_exchange_id", unique: true
+    t.index ["coin_type", "player_id", "exchange_id", "league_id"], name: "unique_wallet", unique: true
     t.index ["exchange_id"], name: "index_wallets_on_exchange_id"
+    t.index ["league_id"], name: "index_wallets_on_league_id"
     t.index ["player_id"], name: "index_wallets_on_player_id"
     t.index ["public_key"], name: "index_wallets_on_public_key", unique: true
   end

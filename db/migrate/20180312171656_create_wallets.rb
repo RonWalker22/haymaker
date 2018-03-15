@@ -7,9 +7,16 @@ class CreateWallets < ActiveRecord::Migration[5.1]
 
       t.references :player
       t.references :exchange
+      t.references :league
+
       t.timestamps
     end
-    add_index :wallets, :public_key, unique: true
-    add_index :wallets, [:coin_type, :player_id, :exchange_id], unique: true
+    add_index :wallets, 
+              :public_key, 
+              unique: true
+    add_index :wallets, 
+              [:coin_type, :player_id, :exchange_id, :league_id],
+              unique: true,
+              name: 'unique_wallet'
   end
 end

@@ -9,6 +9,17 @@ Exchange.create!( name: 'Binance',
                   taker_fee: '0.01'
                 )
 
+League.create!( name: 'Practice',
+                commissioner: 'Site Admins',
+                start_date: DateTime.now,
+                end_date: 50.years.from_now,
+                mode: 'Fantasy Friendly'
+              )
+
+ExchangeLeague.create!( exchange_id: 1, league_id: 1)
+ExchangeLeague.create!( exchange_id: 2, league_id: 1)
+
+
 20.times do |n|
   name = Faker::Name.name
   email = "example-#{n+1}@gmail.com"
@@ -26,10 +37,13 @@ Exchange.create!( name: 'Binance',
                  admin: admin
                 )
 
-  Wallet.create!(coin_type: 'USD', 
-                coin_quantity: '100000.00', 
-                player_id: n + 1,
-                exchange_id: 1,
-                public_key: "usd#{n + 1}1" 
+  Wallet.create!( coin_type: 'USD', 
+                  coin_quantity: '100000.00', 
+                  player_id: n + 1,
+                  exchange_id: 1,
+                  league_id: 1,
+                  public_key: "usd#{n + 1}1" 
                 )
+
+  LeaguePlayer.create!( player_id: n + 1, league_id: 1)
 end

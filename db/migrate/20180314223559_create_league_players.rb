@@ -6,6 +6,8 @@ class CreateLeaguePlayers < ActiveRecord::Migration[5.1]
 
       t.timestamps
     end
-    add_index :league_players, [:league_id, :player_id], unique: true
+    add_index :league_players, 
+              [:league_id, :player_id], 
+              unique: true
   end
 end

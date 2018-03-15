@@ -6,6 +6,8 @@ class CreateExchangeLeagues < ActiveRecord::Migration[5.1]
 
       t.timestamps
     end
-    add_index :exchange_leagues, [:exchange_id, :league_id], unique: true
+    add_index :exchange_leagues, 
+              [:exchange_id, :league_id], 
+              unique: true
   end
 end

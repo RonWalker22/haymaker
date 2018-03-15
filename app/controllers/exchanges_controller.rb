@@ -1,5 +1,3 @@
-require 'pry'
-
 class ExchangesController < ApplicationController
   before_action :set_exchange, only: [:show, :edit, :update, :destroy]
   before_action :check_logged_in, only: [:show, :edit, :update, :destroy]
@@ -155,7 +153,6 @@ class ExchangesController < ApplicationController
     end
     
     def create_wallet_if_missing
-      # binding.pry
       unless @coin_1  
         Wallet.create!({coin_type:  @coin_1_ticker, 
                     coin_quantity: 0,

@@ -19,6 +19,13 @@
         <td class="leaderboard_values">
           <%= link_to player.username, player %>
         </td>
+
+        <td class="leaderboard_values">
+          <%= player.coin_total(player, 'USD') %>
+        </td>
+        <td class="leaderboard_values">
+          <%= player.coin_total(player, 'BTC') %>
+        </td>
         <td class="leaderboard_values"><%= player.rank %></td>
         <td class="leaderboard_values"><%= player.email %></td>
       </tr>

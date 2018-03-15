@@ -34,4 +34,12 @@ class Player < ApplicationRecord
   def forget
     update_attribute(:remember_digest, nil)
   end
+
+  def coin_total(player, coin)
+    arr = [] 
+    player.wallets.where({coin_type: coin}).each do 
+        |wallet| arr << wallet.coin_quantity.to_i
+     end
+    arr.sum
+  end
 end

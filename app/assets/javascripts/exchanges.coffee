@@ -10,7 +10,7 @@ tryWebsocket  = ->
     sell_btn = document.querySelector('#sell_btn')
     coin_price = document.querySelector('#coin_price')
     order_btn = document.querySelector('#order_btn')
-    coin_quantity = document.querySelector('#coin_quantity')
+    coin_quantity = document.querySelector('#order_quantity')
     coin_2_quantity =  coin_price.textContent
 
     balance_pair_values_0 = document.querySelector('#balance_pair_values_0')
@@ -62,27 +62,27 @@ tryWebsocket  = ->
 
     buy_btn.addEventListener 'click', ->
       sell_btn.style.cssText = "background: transparent; border-style: outset;"
-      buy_btn.style.cssText = "background: #ccff66; border-style: inset;"
-      order_btn.style.background = "#ccff66"
+      buy_btn.style.cssText = "background: #ACB6E5; border-style: inset;"
+      order_btn.style.background = "#ACB6E5"
       order_btn.setAttribute "value", "Place Buy Order"
       after_order_sign_0.innerHTML = "-"
       after_order_sign_1.innerHTML = "+"
-      elm.style.color = "#ccff66" for elm in ao_0
-      elm.style.color = "#ccff66" for elm in ao_1
+      elm.style.color = "#ACB6E5" for elm in ao_0
+      elm.style.color = "#ACB6E5" for elm in ao_1
       after_order_total_0.innerHTML = Number(balance_pair_values_0.innerHTML) -
         Number(after_order_value_0.innerHTML)
       after_order_total_1.innerHTML = Number(balance_pair_values_1.innerHTML) +
         Number(after_order_value_1.innerHTML)
 
     sell_btn.addEventListener 'click', ->
-      sell_btn.style.cssText = "background: #004d00; border-style: inset;"
+      sell_btn.style.cssText = "background: #cf8bf3; border-style: inset;"
       buy_btn.style.cssText = "background: transparent; border-style: outset;"
-      order_btn.style.background = "#004d00"
+      order_btn.style.background = "#cf8bf3"
       order_btn.setAttribute "value", "Place Sell Order"
       after_order_sign_0.innerHTML = "+"
       after_order_sign_1.innerHTML = "-"
-      elm.style.color = "rgb(0, 77, 0)" for elm in ao_0
-      elm.style.color = "rgb(0, 77, 0)" for elm in ao_1
+      elm.style.color = "#cf8bf3" for elm in ao_0
+      elm.style.color = "#cf8bf3" for elm in ao_1
       after_order_total_0.innerHTML = Number(balance_pair_values_0.innerHTML) +
         Number(after_order_value_0.innerHTML)
       after_order_total_1.innerHTML = Number(balance_pair_values_1.innerHTML) -
@@ -112,7 +112,7 @@ tryWebsocket  = ->
         after_order_fun()
         price = parseFloat(message["price"]).toFixed(2)
         callback = ->
-          coin_price.style.color = "#eafaea"
+          coin_price.style.color = "white"
         if !isNaN(price)
           try
             dynamic_price.setAttribute "value", price

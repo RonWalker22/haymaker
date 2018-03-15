@@ -1,39 +1,39 @@
-<div class="block_sec" >
-<p id='trading_pair'><%= @pair %></p>
-<h1 id="exchange" class="center"><%= @exchange.name %></h1>
+<div id="balance_block" class="block_sec">
+  <p id='trading_pair'><%= @pair %></p>
+  <h1 id="exchange" class="center"><%= @exchange.name %></h1>
 
-<div id="balance">
-  <p>Balance</p>
-  <ul>
-    <div>
-    <li><span id= 'coin_1_balance_label'><%= @coin_1_ticker %></span>
-      <div class='inline_block_s balance_pair_values_div'>
-        <span id="balance_pair_values_1" class="balance_pair_values">
-         <%=@coin_1_quantity%>
-        </span> 
-      </div>
-      <div id="ao_1" class="ao">
-        <span id="after_order_sign_1" class="after_order_sign">+</span>
-        <span id="after_order_value_1" class="after_order_value"></span>
-        <span id="ao_equal_sign_1" class="ao_equal_sign">=</span>
-        <span id="after_order_total_1" class="after_order_total"></span>
-      </div>
-    </li>
-    <li><span id='coin_0_balance_label'><%= @coin_2_ticker %></span>
+  <div id="balance">
+    <p>Balance</p>
+    <ul>
+      <div>
+      <li><span id= 'coin_1_balance_label'><%= @coin_1_ticker %></span>
         <div class='inline_block_s balance_pair_values_div'>
-          <span id="balance_pair_values_0"class="balance_pair_values">
-            <%=@coin_2_quantity%></span>
+          <span id="balance_pair_values_1" class="balance_pair_values">
+           <%= @coin_1 ? @coin_1.coin_quantity : 0%>
+          </span> 
         </div>
-      <div id="ao_0" class="ao">
-        <span id="after_order_sign_0" class="after_order_sign">-</span> 
-        <span id="after_order_value_0" class="after_order_value"></span>
-        <span id="ao_equal_sign_0" class="ao_equal_sign">=</span>
-        <span id="after_order_total_0" class="after_order_total"></span>
+        <div id="ao_1" class="ao">
+          <span id="after_order_sign_1" class="after_order_sign">+</span>
+          <span id="after_order_value_1" class="after_order_value"></span>
+          <span id="ao_equal_sign_1" class="ao_equal_sign">=</span>
+          <span id="after_order_total_1" class="after_order_total"></span>
+        </div>
+      </li>
+      <li><span id='coin_0_balance_label'><%= @coin_2_ticker %></span>
+          <div class='inline_block_s balance_pair_values_div'>
+            <span id="balance_pair_values_0"class="balance_pair_values">
+              <%= @coin_2 ? @coin_2.coin_quantity : 0%></span>
+          </div>
+        <div id="ao_0" class="ao">
+          <span id="after_order_sign_0" class="after_order_sign">-</span> 
+          <span id="after_order_value_0" class="after_order_value"></span>
+          <span id="ao_equal_sign_0" class="ao_equal_sign">=</span>
+          <span id="after_order_total_0" class="after_order_total"></span>
+        </div>
+      </li>
       </div>
-    </li>
-    </div>
-  </ul>
-</div>
+    </ul>
+  </div>
 </div>
 
 <div class="block_sec" id= "order_sec">
@@ -60,7 +60,7 @@
       <%= hidden_field_tag :coin_2_ticker, @coin_2_ticker %>
       <%= hidden_field_tag :pair, @pair %>
       <%= label_tag :coin_quantity, 'Amount:', id: 'amount_label'%> 
-      <%= number_field_tag :coin_quantity, nil, placeholder: 0.0000, step:
+      <%= number_field_tag :order_quantity, nil, placeholder: 0.0000, step:
       0.00000001,
       min: 0.01, autofocus: 'autofocus'%>
       <span id='inner_input_fixed_text'>BTC</span>

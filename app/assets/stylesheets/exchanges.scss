@@ -10,7 +10,15 @@ input::-webkit-inner-spin-button {
 
 
 input {
-  outline-color: #00802b;
+  outline-color: black;
+}
+
+#balance_block {
+  border-bottom: solid;
+  border-left: solid;
+  border-top: none;
+  border-right: none;
+  background: linear-gradient(to right, #667db6, #0082c8, #0082c8);
 }
 
 #inner_input_fixed_text {
@@ -19,7 +27,7 @@ input {
   z-index: 1;
   position: absolute;
   left: 35em;
-  top: 41.2em;
+  top: 44.2em;
   font-size: .6em;
 }
 
@@ -54,13 +62,13 @@ input {
 
 #ao_0 span {
   visibility: hidden;
-  color: rgb(204, 255, 102);
+  color: #ACB6E5;
   font-size: 0.6em;
 }
 
 #ao_1 span {
   visibility: hidden;
-  color: rgb(204, 255, 102);
+  color: #ACB6E5;
   font-size: 0.6em;
 }
 
@@ -77,14 +85,16 @@ input {
 }
 
 .block_sec {
-  background: #76b852;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to bottom, #8DC26F, #76b852);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to bottom, #8DC26F, #76b852); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  // position: relative;
+  background: #0082c8;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
   font-size: 1.5em;
   padding: 1em;
-  border-top: solid;
-  border-color: #e7e7e7;
+  border-right: solid;
+  border-bottom: solid;
+  border-color: black;
+  margin: 1em;
 }
 
 #order_sec {
@@ -100,13 +110,13 @@ input {
 
 #buy_btn {
   margin-bottom: 1em;
-  background: #ccff66;
+  background: #ACB6E5;
   border-style: outset;
   margin-right: 2em;
 }
 
 .balance_pair_values {
- color: #e7e7e7;
+ color: white;
 }
 
 
@@ -148,13 +158,12 @@ input {
   outline: none;
   margin-top: 1em;
   margin-bottom: 1em;
-  background: #ccff66;
+  background: #ACB6E5;
   border-style: groove;
 }
 
 #coin_quantity {
   width: 10em;
-  background: #eafaea;
   margin-left: 1em;
 }
 

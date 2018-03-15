@@ -4,10 +4,11 @@
 @import "font-awesome";
 
  body {
-  background: #56ab2f;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to right, #a8e063, #56ab2f);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #a8e063, #56ab2f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  color: #00802b;
+  background: #0082c8;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #1c92d2,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#1c92d2, ); /* W3C,
+  IE 10+/
+  Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .center {
@@ -16,6 +17,7 @@ background: linear-gradient(to right, #a8e063, #56ab2f); /* W3C, IE 10+/ Edge, F
 
 #inner_body {
   margin: 4em 10em 4em 10em;
+  margin: 4em 10em 4em 10em;
 }
 
 header {
@@ -23,7 +25,7 @@ header {
 }
 
 a:visited {
-  color:#ccff66;
+  color:#ACB6E5;
 }
 
 a:hover {
@@ -31,18 +33,22 @@ a:hover {
 }
 
 a {
-  color:#ccff66;
+  color:#ACB6E5;
 }
 
 ul {
   list-style-type: none;
 }
 
-#index {
+.index {
   margin-left: 5%;
+  background: #667db6;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
-#index_title {
+.index_title {
+  margin-left: 1.5em;
 }
 
 .index_titles {
@@ -54,15 +60,14 @@ ul {
 .index_values {
   margin-left: 10px;
   padding-right: 20px;
-  text-align: center
-}
-
-.navbar-brand {
+  text-align: center;
+  border-bottom-color: #0082c8;
+  border-bottom-style: solid;
   margin-right: 20px;
   margin-bottom: 10px;
   margin-top: -10px;
 }
 
 .container-fluid {
-  background: #eafaea;
+  background: white;
 }

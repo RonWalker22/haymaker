@@ -1,8 +1,8 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Leagues</h1>
+<h1 class="index_title">Leagues</h1>
 
-<table>
+<table class= 'index'>
   <thead>
     <tr>
       <th class="index_titles">Name</th>
@@ -11,6 +11,8 @@
       <th class="index_titles">End date</th>
       <th class="index_titles">Rounds</th>
       <th class="index_titles">Mode</th>
+      <th class="index_titles">Players</th>
+      <th class="index_titles">Exchanges</th>
       <th class="index_titles">Commissioner</th>
       <th colspan="3"></th>
     </tr>
@@ -25,6 +27,8 @@
         <td class="index_values"><%= league.end_date %></td>
         <td class="index_values"><%= league.rounds %></td>
         <td class="index_values"><%= league.mode %></td>
+        <td class="index_values"><%= league.players.count %></td>
+        <td class="index_values"><%= league.exchanges.count %></td>
         <td class="index_values"><%= league.commissioner %></td>
         <td class="index_values"><%= link_to 'Show', league %></td>
         <td class="index_values"><%= link_to 'Edit', edit_league_path(league) %></td>

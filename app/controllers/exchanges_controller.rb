@@ -1,88 +1,33 @@
+require 'pry'
+
 class ExchangesController < ApplicationController
   before_action :set_exchange, only: [:show, :edit, :update, :destroy]
   before_action :check_logged_in, only: [:show, :edit, :update, :destroy]
 
-
   def order
-    pair = params[:pair]
-    exchange = params[:exchange_id]
+    @pair = params[:pair]
+    @exchange = params[:exchange_id]
+    @league = 1
     @coin_1_ticker = params[:coin_1_ticker]
     @coin_2_ticker = params[:coin_2_ticker]
-    @wallets = current_player.wallets.where({exchange_id:exchange})
+    @order = params[:commit]
+    # @wallet = current_player.wallets.where({coin_type:
+    # @coin_1_ticker}).find_by(exchange_id: @exchange)
+    # puts params
+    @price = params[:order_price].to_f
+    return "Invaid price" if @price < 0.0
+    @order_quantity = params[:order_quantity].to_f
+    
+    @wallets = current_player.wallets.where(exchange_id:@exchange)
+
+    set_coin_tickers
     set_coin_quanities
-    puts params
-    coin_type = ''
-    price = params[:order_price].to_f
-    return "Invaid price" if price < 0.0
-    puts "price : #{price}"
-    coin_quantity = params[:coin_quantity].to_f
-    puts "coin_quantity : #{coin_quantity}"
-    wallet = current_player.wallets.where({coin_type:'btc'}).find_by(exchange:
-      exchange)
-    if params[:commit] == "Place Buy Order"
-      coin_2_quantity = @coin_2_quantity - (price * coin_quantity)
-      coin_1_quantity  = @coin_1_quantity + coin_quantity
-      
-      if @coin_2
-        if coin_2_quantity >= 0.0
-          @coin_2.update_attributes!({coin_quantity: coin_2_quantity})        
-        end
-      else
-        Wallet.create({coin_type:     @coin_2_ticker, 
-                    coin_quantity: coin_2_quantity,
-                    exchange_id: exchange, 
-                    player_id: current_player.id,
-                    public_key: "#{@coin_1_ticker}#{current_player.id}" +
-                                                                    exchange
-                  })
-      end
+    
+    create_wallet_if_missing
 
-      if @coin_1
-        if coin_1_quantity >= 0.0
-          @coin_1.update_attributes!({coin_quantity: coin_1_quantity})        
-        end
-      else
-        Wallet.create({coin_type:     @coin_1_ticker, 
-                    coin_quantity: coin_1_quantity,
-                    exchange_id: exchange, 
-                    player_id: current_player.id,
-                    public_key: "#{@coin_1_ticker}#{current_player.id}" +
-                                                                    exchange
-                  })
-      end
-    elsif params[:commit] == "Place Sell Order"
-      coin_2_quantity = @coin_2_quantity + (price * coin_quantity)
-      coin_1_quantity  = @coin_1_quantity - coin_quantity
-      
-      if @coin_2
-        if coin_2_quantity >= 0.0
-          @coin_2.update_attributes!({coin_quantity: coin_2_quantity})        
-        end
-      else
-        Wallet.create({coin_type:     @coin_2_ticker, 
-                    coin_quantity: coin_2_quantity,
-                    exchange_id: exchange, 
-                    player_id: current_player.id,
-                    public_key: "#{@coin_1_ticker}#{current_player.id}" +
-                                                                    exchange
-                  })
-      end
+    execute_order if sufficient_funds?
 
-      if @coin_1
-        if coin_1_quantity >= 0.0
-          @coin_1.update_attributes!({coin_quantity: coin_1_quantity})        
-        end
-      else
-        Wallet.create({coin_type:     @coin_1_ticker, 
-                    coin_quantity: coin_1_quantity,
-                    exchange_id: exchange, 
-                    player_id: current_player.id,
-                    public_key: "#{@coin_1_ticker}#{current_player.id}" +
-                                                                    exchange
-                  })
-      end
-    end
-    redirect_to "/exchanges/#{exchange}?symbol=#{pair}"
+    redirect_to "/exchanges/#{@exchange}?symbol=#{@pair}"
   end
   
 
@@ -100,8 +45,9 @@ class ExchangesController < ApplicationController
     #@coin_1 =   /([-]\K.*)/.match(params[:symbol]).to_s
   def show
     @pair = params[:symbol]
-    set_coins
-    puts 'hi'
+    @wallets = current_player.wallets.where(exchange_id:@exchange)
+    set_coin_tickers
+    set_coin_quanities
   end
 
   # GET /exchanges/new
@@ -164,12 +110,6 @@ class ExchangesController < ApplicationController
       params.fetch(:exchange, {})
     end
 
-
-    def set_coins
-      set_coin_tickers
-      set_coin_quanities
-    end
-
     #better regex:
       #@coin_2 =    /.+?(?=-)/.match(@symbol).to_s
       #@coin_1 =   /([-]\K.*)/.match(params[:symbol]).to_s
@@ -186,21 +126,57 @@ class ExchangesController < ApplicationController
     end
 
     def set_coin_quanities
-      @wallets = @wallets || current_player.wallets.where(
-        {exchange_id:@exchange.id})
+      if @wallets
+        wallet_1 = @wallets.find_by({coin_type:@coin_1_ticker})
+        wallet_2 = @wallets.find_by({coin_type:@coin_2_ticker})
 
-      if @wallets.find_by({coin_type:@coin_1_ticker})
-        @coin_1 = @wallets.find_by({coin_type:@coin_1_ticker})
-        @coin_1_quantity = @coin_1.coin_quantity
-      else
-        @coin_1_quantity = 0
+        @coin_1 = wallet_1 if wallet_1
+        @coin_2 = wallet_2 if wallet_2
       end
-      
-      if @wallets.find_by({coin_type: @coin_2_ticker})
-        @coin_2 = @wallets.find_by({coin_type:@coin_2_ticker})
-        @coin_2_quantity = @coin_2.coin_quantity
-      else
-        @coin_2_quantity = 0
+    end
+
+    def sufficient_funds?
+      n = 1
+      if @order == "Place Sell Order"
+        n = -1
       end
+      @coin_1_quantity_total  = @coin_1.coin_quantity + (@order_quantity *
+       n)
+      @coin_2_quantity_total = @coin_2.coin_quantity - ((@price *
+       @order_quantity) * n)
+
+      (@coin_1_quantity_total >= 0.00) && (@coin_2_quantity_total >= 0.00)
+    end
+
+    def execute_order
+      @coin_1.update_attributes!({coin_quantity: @coin_1_quantity_total})        
+
+      @coin_2.update_attributes!({coin_quantity: @coin_2_quantity_total})        
+    end
+    
+    def create_wallet_if_missing
+      # binding.pry
+      unless @coin_1  
+        Wallet.create!({coin_type:  @coin_1_ticker, 
+                    coin_quantity: 0,
+                    exchange_id: @exchange, 
+                    player_id: current_player.id,
+                    public_key: "#{@coin_1_ticker}#{current_player.id}" +
+                                                                    @exchange,
+                    league_id: 1
+                  })
+        set_coin_quanities
+      end
+      unless @coin_2
+        Wallet.create!({coin_type:  @coin_2_ticker, 
+                      coin_quantity: 0,
+                      exchange_id: @exchange, 
+                      player_id: current_player.id,
+                      public_key: "#{@coin_1_ticker}#{current_player.id}" +
+                                                                    @exchange,
+                      league_id: 1
+                    })
+        set_coin_quanities
+      end      
     end
 end

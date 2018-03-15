@@ -5,18 +5,13 @@
 <table>
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Entry fee</th>
-      <th>Commissioner</th>
-      <th>Start date</th>
-      <th>End date</th>
-      <th>Rounds</th>
-      <th>Exchange risk</th>
-      <th>Exchange fees</th>
-      <th>High be score</th>
-      <th>Public keys</th>
-      <th>Instant deposits withdraws</th>
-      <th>Lazy picker</th>
+      <th class="index_titles">Name</th>
+      <th class="index_titles">Entry fee</th>
+      <th class="index_titles">Commissioner</th>
+      <th class="index_titles">Start date</th>
+      <th class="index_titles">End date</th>
+      <th class="index_titles">Rounds</th>
+      <th class="index_titles">Mode</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -24,21 +19,15 @@
   <tbody>
     <% @leagues.each do |league| %>
       <tr>
-        <td><%= league.name %></td>
-        <td><%= league.entry_fee %></td>
-        <td><%= league.commissioner %></td>
-        <td><%= league.start_date %></td>
-        <td><%= league.end_date %></td>
-        <td><%= league.rounds %></td>
-        <td><%= league.exchange_risk %></td>
-        <td><%= league.exchange_fees %></td>
-        <td><%= league.high_be_score %></td>
-        <td><%= league.public_keys %></td>
-        <td><%= league.instant_deposits_withdraws %></td>
-        <td><%= league.lazy_picker %></td>
-        <td><%= link_to 'Show', league %></td>
-        <td><%= link_to 'Edit', edit_league_path(league) %></td>
-        <td><%= link_to 'Destroy', league, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td class="index_values"><%= league.name %></td>
+        <td class="index_values"><%= league.entry_fee %></td>
+        <td class="index_values"><%= league.commissioner %></td>
+        <td class="index_values"><%= league.start_date %></td>
+        <td class="index_values"><%= league.end_date %></td>
+        <td class="index_values"><%= league.rounds %></td>
+        <td class="index_values"><%= link_to 'Show', league %></td>
+        <td class="index_values"><%= link_to 'Edit', edit_league_path(league) %></td>
+        <td class="index_values"><%= link_to 'Destroy', league, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>

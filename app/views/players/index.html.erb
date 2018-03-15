@@ -1,33 +1,33 @@
 <p id="notice"><%= flash[:notice] %></p>
 
-<h1 id="leaderboard_title">Top Haymakers</h1>
+<h1 id="index_title">Top Haymakers</h1>
 
-<table id="leaderboard">
+<table id="index">
   <thead>
     <tr>
-      <th class="leaderboard_titles">Username</th>
-      <th class="leaderboard_titles">Cash</th>
-      <th class="leaderboard_titles">Bitcoin</th>
-      <th class="leaderboard_titles">Rank</th>
-      <th class="leaderboard_titles">Email</th>
+      <th class="index_titles">Username</th>
+      <th class="index_titles">Cash</th>
+      <th class="index_titles">Bitcoin</th>
+      <th class="index_titles">Rank</th>
+      <th class="index_titles">Email</th>
     </tr>
   </thead>
 
   <tbody>
     <% @players.each do |player| %>
       <tr>
-        <td class="leaderboard_values">
+        <td class="index_values">
           <%= link_to player.username, player %>
         </td>
 
-        <td class="leaderboard_values">
+        <td class="index_values">
           <%= player.coin_total(player, 'USD') %>
         </td>
-        <td class="leaderboard_values">
+        <td class="index_values">
           <%= player.coin_total(player, 'BTC') %>
         </td>
-        <td class="leaderboard_values"><%= player.rank %></td>
-        <td class="leaderboard_values"><%= player.email %></td>
+        <td class="index_values"><%= player.rank %></td>
+        <td class="index_values"><%= player.email %></td>
       </tr>
     <% end %>
   </tbody>

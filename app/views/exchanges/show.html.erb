@@ -83,5 +83,11 @@
 </div>
 
 <div id='league_info' class='block_sec'>
-  <p>League Info</p>
+ <p>My Leagues</p>
+  <ul>
+    <%current_player.leagues.each do |l|  %>
+      <li><%= link_to l.name, "http://localhost:3000/leagues/#{l.id}"
+      %></li>
+    <% end %>
+  </ul>
 </div>

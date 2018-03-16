@@ -131,14 +131,13 @@ input {
 }
 
 #capital_percentage input {
-  opacity: 0
-}
-
-#capital_percentage {
+  opacity: .5;
+  position: absolute;
+  margin-top: .4em;
+  cursor: pointer;
 }
 
 #capital_percentage label {
-  cursor: pointer;
   border-style: outset;
   border-width: thin;
   font-size: 0.55em;

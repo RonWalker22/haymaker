@@ -9,9 +9,6 @@ class ExchangesController < ApplicationController
     @coin_1_ticker = params[:coin_1_ticker]
     @coin_2_ticker = params[:coin_2_ticker]
     @order = params[:commit]
-    # @wallet = current_player.wallets.where({coin_type:
-    # @coin_1_ticker}).find_by(exchange_id: @exchange)
-    # puts params
     @price = params[:order_price].to_f
     return "Invaid price" if @price < 0.0
     @order_quantity = params[:order_quantity].to_f

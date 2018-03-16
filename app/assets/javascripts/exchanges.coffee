@@ -2,7 +2,6 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-
 tryWebsocket  = ->
   try 
     dynamic_price = document.querySelector(".dynamic_price")
@@ -34,31 +33,27 @@ tryWebsocket  = ->
     ao_1 = [after_order_sign_1, after_order_value_1, after_order_total_1,
             ao_equal_sign_1, ]
 
-    after_order_fun_reset = ->
-      coin_quantity.addEventListener 'input', ->
-        if Number(coin_quantity.value) <= 0
-          elm.style.visibility = 'hidden' for elm in ao_0
-          elm.style.visibility = 'hidden' for elm in ao_1
-
-
-
     after_order_fun = ->
-      coin_quantity.addEventListener 'input', ->
-        after_order_fun_reset()
-        if Number(coin_quantity.value) > 0
-          elm.style.visibility = 'visible' for elm in ao_0
-          elm.style.visibility = 'visible' for elm in ao_1
-          after_order_value_0.innerHTML = Number coin_quantity.value * 
-            Number dynamic_price.value
-          after_order_value_1.innerHTML = coin_quantity.value
-          console.log "amount input hit"
-          console.log order_btn.getAttribute "value"
-          if "#{order_btn.getAttribute 'value'}" == "Place Buy Order"
-            after_order_total_0.innerHTML = Number(balance_pair_values_0.innerHTML) - Number(after_order_value_0.innerHTML)
-            after_order_total_1.innerHTML = Number(balance_pair_values_1.innerHTML) + Number(after_order_value_1.innerHTML)
-          else if "#{order_btn.getAttribute 'value'}" == "Place Sell Order"
-            after_order_total_0.innerHTML = Number(balance_pair_values_0.innerHTML) + Number(after_order_value_0.innerHTML)
-            after_order_total_1.innerHTML = Number(balance_pair_values_1.innerHTML) - Number(after_order_value_1.innerHTML)
+      try
+        coin_quantity.addEventListener 'input', ->
+          if Number(coin_quantity.value) > 0
+            elm.style.visibility = 'visible' for elm in ao_0
+            elm.style.visibility = 'visible' for elm in ao_1
+            after_order_value_0.innerHTML = Number coin_quantity.value * 
+              Number dynamic_price.value
+            after_order_value_1.innerHTML = coin_quantity.value
+            if "#{order_btn.getAttribute 'value'}" == "Place Buy Order"
+              after_order_total_0.innerHTML = Number(balance_pair_values_0.innerHTML) - Number(after_order_value_0.innerHTML)
+              after_order_total_1.innerHTML = Number(balance_pair_values_1.innerHTML) + Number(after_order_value_1.innerHTML)
+            else if "#{order_btn.getAttribute 'value'}" == "Place Sell Order"
+              after_order_total_0.innerHTML = Number(balance_pair_values_0.innerHTML) + Number(after_order_value_0.innerHTML)
+              after_order_total_1.innerHTML = Number(balance_pair_values_1.innerHTML) - Number(after_order_value_1.innerHTML)
+          else if Number(coin_quantity.value) <= 0
+            elm.style.visibility = 'hidden' for elm in ao_0
+            elm.style.visibility = 'hidden' for elm in ao_1
+      catch nil
+        console.log 'after_order_fun failed!'
+        after_order_fun
 
     buy_btn.addEventListener 'click', ->
       sell_btn.style.cssText = "background: transparent; border-style: outset;"
@@ -69,11 +64,14 @@ tryWebsocket  = ->
       after_order_sign_1.innerHTML = "+"
       elm.style.color = "#ACB6E5" for elm in ao_0
       elm.style.color = "#ACB6E5" for elm in ao_1
-      after_order_total_0.innerHTML = Number(balance_pair_values_0.innerHTML) -
-        Number(after_order_value_0.innerHTML)
-      after_order_total_1.innerHTML = Number(balance_pair_values_1.innerHTML) +
-        Number(after_order_value_1.innerHTML)
+      after_order_total_0.innerHTML = 
+        Number(balance_pair_values_0.innerHTML) - 
+          Number(after_order_value_0.innerHTML)
+      after_order_total_1.innerHTML = 
+        Number(balance_pair_values_1.innerHTML) + 
+          Number(after_order_value_1.innerHTML)
 
+    
     sell_btn.addEventListener 'click', ->
       sell_btn.style.cssText = "background: #cf8bf3; border-style: inset;"
       buy_btn.style.cssText = "background: transparent; border-style: outset;"
@@ -83,10 +81,12 @@ tryWebsocket  = ->
       after_order_sign_1.innerHTML = "-"
       elm.style.color = "#cf8bf3" for elm in ao_0
       elm.style.color = "#cf8bf3" for elm in ao_1
-      after_order_total_0.innerHTML = Number(balance_pair_values_0.innerHTML) +
-        Number(after_order_value_0.innerHTML)
-      after_order_total_1.innerHTML = Number(balance_pair_values_1.innerHTML) -
-        Number(after_order_value_1.innerHTML)
+      after_order_total_0.innerHTML = 
+        Number(balance_pair_values_0.innerHTML) + 
+          Number(after_order_value_0.innerHTML)
+      after_order_total_1.innerHTML = 
+        Number(balance_pair_values_1.innerHTML) -
+          Number(after_order_value_1.innerHTML)
 
     dynamic_price = document.querySelector(".dynamic_price")
     exchange = document.querySelector("#exchange")
@@ -128,15 +128,21 @@ tryWebsocket  = ->
               setTimeout callback, 300
           catch error
             console.log 'Waiting to reconnect'
+            socket.close()
+            callback = tryWebsocket
+            setTimeout callback, 3000
     else
       console.log 'Waiting to connect'
       callback = tryWebsocket
       setTimeout callback, 3000
   catch error
-    console.log 'error or waiting to connect through click'
+    console.log 'waiting to connect through click'
     callback = tryWebsocket
     setTimeout callback, 3000
 
-window.addEventListener 'load', tryWebsocket
+
+
+window.addEventListener 'load', ->
+  tryWebsocket()
 
 

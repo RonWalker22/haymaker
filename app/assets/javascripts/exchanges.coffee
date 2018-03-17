@@ -16,6 +16,8 @@ tryWebsocket  = ->
     cp0 = 
       document.querySelector("#coin_0_balance_label").innerHTML.toLowerCase()
 
+    up_arrow = document.querySelector(".up_arrow")
+    down_arrow = document.querySelector(".down_arrow")
     dynamic_price = document.querySelector(".dynamic_price")
     buy_btn = document.querySelector('#buy_btn')
     sell_btn = document.querySelector('#sell_btn')
@@ -185,7 +187,8 @@ tryWebsocket  = ->
         after_order_fun()
         price = parseFloat(message[price_ws_target]).toFixed(2)
         callback = ->
-          coin_price.style.color = "white"
+          down_arrow.style.visibility = 'hidden'
+          up_arrow.style.visibility = 'hidden'
         if !isNaN(price)
           try
             dynamic_price.setAttribute "value", price
@@ -195,12 +198,16 @@ tryWebsocket  = ->
             puts price
             if price > past_price
               past_price = price
-              coin_price.style.color = "#5fff33"
-              setTimeout callback, 300
+              down_arrow.style.visibility = 'hidden'
+              up_arrow.style.cssText = 
+                "visibility: visible; border-color:#5fff33;"
+              setTimeout callback, 1000
             else if price < past_price
               past_price = price
-              coin_price.style.color = "red"
-              setTimeout callback, 300
+              up_arrow.style.visibility = 'hidden'
+              down_arrow.style.cssText = "visibility: visible;
+              border-color:red;"
+              setTimeout callback, 1000
           catch error
             puts 'Waiting to reconnect'
             socket.close()

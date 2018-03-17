@@ -5,7 +5,7 @@ class ExchangesController < ApplicationController
 
   def order
     @pair = params[:pair]
-    @league = 1
+    @league = params[:league]
     @coin_1_ticker = params[:coin_1_ticker]
     @coin_2_ticker = params[:coin_2_ticker]
     @order = params[:commit]
@@ -24,7 +24,7 @@ class ExchangesController < ApplicationController
 
     execute_order if sufficient_funds?
 
-    redirect_to "/exchanges/#{@exchange.id}?symbol=#{@pair}"
+    redirect_to "/exchanges/#{@exchange.id}?p=#{@pair}"
   end
   
 
@@ -37,11 +37,8 @@ class ExchangesController < ApplicationController
   # GET /exchanges/1
   # GET /exchanges/1.json
   
-  #better regex:
-    #@coin_2 =    /.+?(?=-)/.match(@symbol).to_s
-    #@coin_1 =   /([-]\K.*)/.match(params[:symbol]).to_s
   def show
-    @pair = params[:symbol]
+    @pair = params[:p]
     @wallets = current_player.wallets.where(exchange_id:@exchange.id)
     set_coin_tickers
     find_and_set_coins
@@ -107,9 +104,6 @@ class ExchangesController < ApplicationController
       params.fetch(:exchange, {})
     end
 
-    #better regex:
-      #@coin_2 =    /.+?(?=-)/.match(@symbol).to_s
-      #@coin_1 =   /([-]\K.*)/.match(params[:symbol]).to_s
     def set_coin_tickers
       mid_point = @pair =~ /-/
       @coin_1_ticker = []

@@ -9,6 +9,28 @@ input::-webkit-inner-spin-button {
 }
 
 
+.order_sec, i {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+.up_arrow {
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+    margin-left: 0.5em;
+    margin-bottom: 0.3em;
+    visibility: hidden;
+}
+
+.down_arrow {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    visibility: hidden;
+}
+
+
 input {
   outline-color: black;
 }
@@ -116,7 +138,7 @@ input {
 }
 
 .balance_pair_values {
- color: white;
+ color: #eafaea;
 }
 
 

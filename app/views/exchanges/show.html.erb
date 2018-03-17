@@ -65,13 +65,13 @@
         min: 0.01, autofocus: 'autofocus'%>
         <div id='allocation_box' class='center'>
           <div id= "capital_percentage">
-            <%= label_tag(:capital_percentage, "25%") %>
+            <%= label_tag(:capital_percentage, "25%", id: 'cap_label_25') %>
             <%= radio_button_tag(:capital_percentage, "25%")%>
-            <%= label_tag(:capital_percentage, "50%") %>
+            <%= label_tag(:capital_percentage, "50%", id: 'cap_label_50') %>
             <%= radio_button_tag(:capital_percentage, "50%")%>
-            <%= label_tag(:capital_percentage, "75%") %>
+            <%= label_tag(:capital_percentage, "75%", id: 'cap_label_75') %>
             <%= radio_button_tag(:capital_percentage, "75%")%>
-            <%= label_tag(:capital_percentage, "100%") %>
+            <%= label_tag(:capital_percentage, "100%", id: 'cap_label_100') %>
             <%= radio_button_tag(:capital_percentage, "100%")%>
           </div>
         </div>

@@ -40,13 +40,27 @@ tryWebsocket  = ->
     pre_cap_50_btn = document.querySelector('#capital_percentage_50_')
     pre_cap_75_btn = document.querySelector('#capital_percentage_75_')
     pre_cap_100_btn = document.querySelector('#capital_percentage_100_')
+    cap_label_25 = document.querySelector('#cap_label_25')
+    cap_label_50 = document.querySelector('#cap_label_50')
+    cap_label_75 = document.querySelector('#cap_label_75')
+    cap_label_100 = document.querySelector('#cap_label_100')
 
     ao_0 = [after_order_sign_0, after_order_value_0, after_order_total_0,
             ao_equal_sign_0, ]
     ao_1 = [after_order_sign_1, after_order_value_1, after_order_total_1,
             ao_equal_sign_1, ]
 
-    allo = (target, percent, order_type)->
+    allo = (target, percent, order_type, label)->
+      if order_type == 'buy'
+        target.addEventListener 'mouseover', ->
+          label.style.background = "#ACB6E5"          
+        target.addEventListener 'mouseout', ->
+          label.style.background = "transparent"
+      else 
+        target.addEventListener 'mouseover', ->
+          label.style.background = "#cf8bf3"
+        target.addEventListener 'mouseout', ->
+          label.style.background = "transparent"
       target.addEventListener 'click', ->
         if order_type == 'buy'
           all_coin = +balance_pair_values_0.textContent / +coin_price.innerHTML
@@ -54,14 +68,14 @@ tryWebsocket  = ->
         else
           all_coin = +balance_pair_values_1.textContent
           coin_quantity.value = Math.roundTo all_coin * percent, 8
-        after_order_execute()
+      after_order_execute()
     
 
-    activate_allocation_listeners =  (order_type) ->
-      allo pre_cap_25_btn, 0.25, order_type
-      allo pre_cap_50_btn, 0.5, order_type
-      allo pre_cap_75_btn, 0.75, order_type
-      allo pre_cap_100_btn, 1, order_type
+    activate_allocation_listeners =  (order_type, label) ->
+      allo pre_cap_25_btn, 0.25, order_type, cap_label_25
+      allo pre_cap_50_btn, 0.5, order_type, cap_label_50
+      allo pre_cap_75_btn, 0.75, order_type, cap_label_75
+      allo pre_cap_100_btn, 1, order_type, cap_label_100
 
     after_order_execute = ->
       if Number(coin_quantity.value) > 0

@@ -1,10 +1,10 @@
 class ExchangesController < ApplicationController
-  before_action :set_exchange, only: [:show, :edit, :update, :destroy]
-  before_action :check_logged_in, only: [:show, :edit, :update, :destroy]
+  before_action :set_exchange, only: [:show, :edit, :update, :destroy, :order]
+  before_action :check_logged_in, only: [:show, :edit, :update, :destroy,
+                                          :order]
 
   def order
     @pair = params[:pair]
-    @exchange = params[:exchange_id]
     @league = 1
     @coin_1_ticker = params[:coin_1_ticker]
     @coin_2_ticker = params[:coin_2_ticker]
@@ -13,16 +13,18 @@ class ExchangesController < ApplicationController
     return "Invaid price" if @price < 0.0
     @order_quantity = params[:order_quantity].to_f
     
-    @wallets = current_player.wallets.where(exchange_id:@exchange)
+    @wallets = current_player.wallets.where(exchange_id: @exchange.id)
 
     set_coin_tickers
-    set_coin_quanities
-    
+
+    find_and_set_coins
+
     create_wallet_if_missing
+  
 
     execute_order if sufficient_funds?
 
-    redirect_to "/exchanges/#{@exchange}?symbol=#{@pair}"
+    redirect_to "/exchanges/#{@exchange.id}?symbol=#{@pair}"
   end
   
 
@@ -40,9 +42,9 @@ class ExchangesController < ApplicationController
     #@coin_1 =   /([-]\K.*)/.match(params[:symbol]).to_s
   def show
     @pair = params[:symbol]
-    @wallets = current_player.wallets.where(exchange_id:@exchange)
+    @wallets = current_player.wallets.where(exchange_id:@exchange.id)
     set_coin_tickers
-    set_coin_quanities
+    find_and_set_coins
   end
 
   # GET /exchanges/new
@@ -120,14 +122,12 @@ class ExchangesController < ApplicationController
       @coin_2_ticker = @coin_2_ticker.join
     end
 
-    def set_coin_quanities
-      if @wallets
-        wallet_1 = @wallets.find_by({coin_type:@coin_1_ticker})
-        wallet_2 = @wallets.find_by({coin_type:@coin_2_ticker})
-
-        @coin_1 = wallet_1 if wallet_1
-        @coin_2 = wallet_2 if wallet_2
+    def find_and_set_coins
+      unless !@wallets
+        @coin_1 = @wallets.find_by({coin_type:@coin_1_ticker})
+        @coin_2 = @wallets.find_by({coin_type:@coin_2_ticker})
       end
+      # binding.pry
     end
 
     def sufficient_funds?
@@ -136,9 +136,9 @@ class ExchangesController < ApplicationController
         n = -1
       end
       @coin_1_quantity_total  = @coin_1.coin_quantity + (@order_quantity *
-       n)
+                                n)
       @coin_2_quantity_total = @coin_2.coin_quantity - ((@price *
-       @order_quantity) * n)
+                                @order_quantity) * n)
 
       (@coin_1_quantity_total >= 0.00) && (@coin_2_quantity_total >= 0.00)
     end
@@ -153,24 +153,23 @@ class ExchangesController < ApplicationController
       unless @coin_1  
         Wallet.create!({coin_type:  @coin_1_ticker, 
                     coin_quantity: 0,
-                    exchange_id: @exchange, 
+                    exchange_id: @exchange.id, 
                     player_id: current_player.id,
-                    public_key: "#{@coin_1_ticker}#{current_player.id}" +
-                                                                    @exchange,
+                    public_key: 
+                    "#{@coin_1_ticker}#{current_player.id}#{@exchange.id}",
                     league_id: 1
                   })
-        set_coin_quanities
       end
       unless @coin_2
         Wallet.create!({coin_type:  @coin_2_ticker, 
                       coin_quantity: 0,
-                      exchange_id: @exchange, 
+                      exchange_id: @exchange.id, 
                       player_id: current_player.id,
-                      public_key: "#{@coin_1_ticker}#{current_player.id}" +
-                                                                    @exchange,
+                      public_key: 
+                      "#{@coin_2_ticker}#{current_player.id}#{@exchange.id}",
                       league_id: 1
                     })
-        set_coin_quanities
-      end      
+      end
+      find_and_set_coins      
     end
 end

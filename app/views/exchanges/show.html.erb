@@ -55,7 +55,7 @@
     <div>
       <%= form_tag("/order", method: "post", :class => "order_form") do %>
         <%= hidden_field_tag :order_price, "-1", class: 'dynamic_price' %>
-        <%= hidden_field_tag :exchange_id, @exchange.id %>
+        <%= hidden_field_tag :id, params[:id] %>
         <%= hidden_field_tag :coin_1_ticker, @coin_1_ticker %>
         <%= hidden_field_tag :coin_2_ticker, @coin_2_ticker %>
         <%= hidden_field_tag :pair, @pair %>

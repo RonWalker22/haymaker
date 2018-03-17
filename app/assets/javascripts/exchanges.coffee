@@ -161,10 +161,12 @@ tryWebsocket  = ->
           request = { "type": "subscribe",  "channels": [{ "name": "ticker",
           "product_ids": [trading_pair] }]}
           price_ws_target = "price"
+          puts '<--------->GDAX WebSocket!<--------->'
         when 'binance' 
           socket = 
             new WebSocket "wss://stream.binance.com:9443/ws/#{cp1}#{cp0}@trade"
           price_ws_target = "p"
+          puts '<--------->BINANCE WebSocket!<--------->'
 
       socket.onerror = (error) ->
         puts "WebSocket Error: ${error}"

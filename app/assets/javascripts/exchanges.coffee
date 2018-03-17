@@ -65,10 +65,11 @@ tryWebsocket  = ->
         if order_type == 'buy'
           all_coin = +balance_pair_values_0.textContent / +coin_price.innerHTML
           coin_quantity.value = Math.roundTo all_coin * percent, 8
+          after_order_execute()
         else
           all_coin = +balance_pair_values_1.textContent
           coin_quantity.value = Math.roundTo all_coin * percent, 8
-      after_order_execute()
+          after_order_execute()
     
 
     activate_allocation_listeners =  (order_type, label) ->

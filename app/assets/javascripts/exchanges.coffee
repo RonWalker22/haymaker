@@ -6,9 +6,9 @@ tryWebsocket  = ->
   try
     Math.roundTo = (number, precision) ->
       Math.round(number * 10**precision) / 10**precision
-    
     puts = (string) ->
       console.log string
+    already_ran = false
 
     trading_pair = document.querySelector("#trading_pair").innerHTML
 
@@ -72,7 +72,7 @@ tryWebsocket  = ->
           after_order_execute()
     
 
-    activate_allocation_listeners =  (order_type, label) ->
+    activate_allocation_listeners =  (order_type) ->
       allo pre_cap_25_btn, 0.25, order_type, cap_label_25
       allo pre_cap_50_btn, 0.5, order_type, cap_label_50
       allo pre_cap_75_btn, 0.75, order_type, cap_label_75
@@ -175,6 +175,8 @@ tryWebsocket  = ->
           try
             dynamic_price.setAttribute "value", price
             coin_price.innerHTML = "#{price}"
+            activate_allocation_listeners('buy') unless already_ran
+            already_ran = true
             puts price
             if price > past_price
               past_price = price

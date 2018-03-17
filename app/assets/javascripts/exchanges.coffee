@@ -11,6 +11,10 @@ tryWebsocket  = ->
     already_ran = false
 
     trading_pair = document.querySelector("#trading_pair").innerHTML
+    cp1 = 
+      document.querySelector("#coin_1_balance_label").innerHTML.toLowerCase()
+    cp0 = 
+      document.querySelector("#coin_0_balance_label").innerHTML.toLowerCase()
 
     dynamic_price = document.querySelector(".dynamic_price")
     buy_btn = document.querySelector('#buy_btn')
@@ -150,7 +154,18 @@ tryWebsocket  = ->
     exchange = document.querySelector("#exchange")
     if exchange
       past_price = 0
-      socket = new WebSocket 'wss://ws-feed.gdax.com'
+
+      switch exchange.innerHTML.toLowerCase()
+        when 'gdax'
+          socket = new WebSocket 'wss://ws-feed.gdax.com'
+          request = { "type": "subscribe",  "channels": [{ "name": "ticker",
+          "product_ids": [trading_pair] }]}
+          price_ws_target = "price"
+        when 'binance' 
+          socket = 
+            new WebSocket "wss://stream.binance.com:9443/ws/#{cp1}#{cp0}@trade"
+          price_ws_target = "p"
+
       socket.onerror = (error) ->
         puts "WebSocket Error: ${error}"
 
@@ -159,16 +174,14 @@ tryWebsocket  = ->
 
       socket.onopen = (event) -> 
         puts 'WebSocket is connected!'
-        request = { "type": "subscribe",  "channels": [{ "name": "ticker",
-        "product_ids": [trading_pair] }]}
-        socket.send JSON.stringify request
+        socket.send JSON.stringify request if request 
 
 
       socket.onmessage = (event) -> 
         coin_price = document.querySelector("#coin_price")
         message = JSON.parse(event.data)
         after_order_fun()
-        price = parseFloat(message["price"]).toFixed(2)
+        price = parseFloat(message[price_ws_target]).toFixed(2)
         callback = ->
           coin_price.style.color = "white"
         if !isNaN(price)

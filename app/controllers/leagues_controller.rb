@@ -25,9 +25,10 @@ class LeaguesController < ApplicationController
   # POST /leagues.json
   def create
     @league = League.new(league_params)
-
     respond_to do |format|
       if @league.save
+        @leaguePlayer = LeaguePlayer.create!({league_id:@league.id, 
+                                  player_id:current_player.id})
         format.html { redirect_to @league, notice: 'League was successfully created.' }
         format.json { render :show, status: :created, location: @league }
       else

@@ -12,9 +12,13 @@
   <% end %>
 
   <div class="field">
+    <%= form.hidden_field :id, id: params["id"] %>
+  </div>
+
+  <div class="field">
     <%= form.label :name %>
     <%= form.text_field :name, id: :league_name %>
-  </div>
+  </div>  
 
   <div class="field">
     <%= form.label :entry_fee %>

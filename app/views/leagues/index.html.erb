@@ -30,7 +30,8 @@
         <td class="index_values"><%= league.players.count %></td>
         <td class="index_values"><%= league.exchanges.count %></td>
         <td class="index_values">
-          <%= Player.find_by(id:league.player_id).username %>  
+            <%= link_to Player.find(league.player_id).username, 
+                        player_path(Player.find(league.player_id).id)%>
         </td>
         <td class="index_values"><%= link_to 'Show', league %></td>
         <td class="index_values"><%= link_to 'Edit', edit_league_path(league) %></td>

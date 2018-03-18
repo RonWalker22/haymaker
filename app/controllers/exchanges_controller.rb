@@ -24,7 +24,7 @@ class ExchangesController < ApplicationController
 
     execute_order if sufficient_funds?
 
-    redirect_to "/exchanges/#{@exchange.id}?p=#{@pair}"
+    redirect_to "/exchanges/#{@exchange.id}?p=#{@pair}&l=#{@league}"
   end
   
 

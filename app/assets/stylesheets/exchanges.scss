@@ -39,7 +39,6 @@ input {
   border-left: solid;
   border-top: none;
   border-right: none;
-  background: linear-gradient(to right, #667db6, #0082c8, #0082c8);
 }
 
 #inner_input_fixed_text {
@@ -54,7 +53,12 @@ input {
 
 
 #league_info {
-  float: right; 
+  padding-right: 1em;
+  padding-top: 1em;
+  float: right;
+  border-top: solid;
+  border-right: solid;
+  border-width: thin;
 }
 
 
@@ -106,10 +110,8 @@ input {
   margin-right: 2.9em;
 }
 
-.current_league {
-  padding-right: .3em;
-  border-right: solid;
-  border-bottom: solid;
+.current_league a{
+  color: white;
 }
 
 .block_sec {

@@ -3,14 +3,13 @@
 
 Exchange.create!( name: 'GDAX' )
 
-
 Exchange.create!( name: 'Binance', 
                   maker_fee: '0.01',
                   taker_fee: '0.01'
                 )
 
 League.create!( name: 'Practice',
-                commissioner: 'Site Admins',
+                player_id: 1,
                 start_date: DateTime.now,
                 end_date: 50.years.from_now,
                 mode: 'Fantasy Friendly'
@@ -18,7 +17,6 @@ League.create!( name: 'Practice',
 
 ExchangeLeague.create!( exchange_id: 1, league_id: 1)
 ExchangeLeague.create!( exchange_id: 2, league_id: 1)
-
 
 20.times do |n|
   name = Faker::Name.name

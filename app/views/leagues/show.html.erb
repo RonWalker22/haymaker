@@ -12,7 +12,7 @@
 
 <p>
   <strong>Commissioner:</strong>
-  <%= @league.commissioner %>
+  <%= Player.find(@league.player_id).username %>
 </p>
 
 <p>

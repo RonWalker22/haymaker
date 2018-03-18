@@ -48,11 +48,11 @@ ActiveRecord::Schema.define(version: 20180314231147) do
 
   create_table "leagues", force: :cascade do |t|
     t.string "name", null: false
-    t.string "entry_fee", default: "FREE", null: false
-    t.string "commissioner", null: false
+    t.string "entry_fee", default: "free", null: false
+    t.bigint "player_id", null: false
     t.string "mode", default: "Fantasy Friendly", null: false
-    t.datetime "start_date", default: "2018-03-15 03:12:29", null: false
-    t.datetime "end_date", default: "2018-04-15 03:12:29", null: false
+    t.datetime "start_date", default: "2018-03-18 04:58:56", null: false
+    t.datetime "end_date", default: "2018-04-18 04:58:56", null: false
     t.integer "rounds", default: 1, null: false
     t.boolean "exchange_risk", default: false, null: false
     t.boolean "exchange_fees", default: false, null: false
@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(version: 20180314231147) do
     t.boolean "margin_trading", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["player_id"], name: "index_leagues_on_player_id"
   end
 
   create_table "players", force: :cascade do |t|

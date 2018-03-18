@@ -29,7 +29,9 @@
         <td class="index_values"><%= league.mode %></td>
         <td class="index_values"><%= league.players.count %></td>
         <td class="index_values"><%= league.exchanges.count %></td>
-        <td class="index_values"><%= league.commissioner %></td>
+        <td class="index_values">
+          <%= Player.find_by(id:league.player_id).username %>  
+        </td>
         <td class="index_values"><%= link_to 'Show', league %></td>
         <td class="index_values"><%= link_to 'Edit', edit_league_path(league) %></td>
         <td class="index_values"><%= link_to 'Destroy', league, method: :delete, data: { confirm: 'Are you sure?' } %></td>

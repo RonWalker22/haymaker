@@ -6,8 +6,7 @@ class CreateLeagues < ActiveRecord::Migration[5.1]
       t.string :entry_fee,              
                 default: 'free',            
                 null: false
-      t.string :commissioner,                                       
-                null: false
+      t.references :player
       t.string :mode,                  
                 default: "Fantasy Friendly", 
                 null: false

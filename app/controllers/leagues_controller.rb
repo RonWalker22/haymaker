@@ -70,6 +70,8 @@ class LeaguesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def league_params
-      params.require(:league).permit(:name, :entry_fee, :commissioner, :start_date, :end_date, :rounds, :exchange_risk, :exchange_fees, :high_be_score, :public_keys, :instant_deposits_withdraws, :lazy_picker)
+      params.require(:league).permit(:name, :entry_fee, :commissioner,
+        :start_date, :player_id, :end_date, :rounds, :exchange_risk,
+        :exchange_fees, :high_be_score, :public_keys, :instant_deposits_withdraws, :lazy_picker)
     end
 end

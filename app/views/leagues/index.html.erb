@@ -37,7 +37,11 @@
         </td>
 
         <td class="index_values join_league">
-          <%= link_to "Join", join_path(league: league.id), method: :post %>
+            <% unless current_player.leagues.any? { |l| l.id == league.id } %>
+              <%= link_to "Join", 
+                  join_path(league:league.id), 
+                  method: :post %>
+            <% end %>
         </td>
         <td class="index_values"><%= link_to 'Show', league %></td>
         <td class="index_values"><%= link_to 'Edit', edit_league_path(league) %></td>

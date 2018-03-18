@@ -12,8 +12,12 @@
 <p>
   <strong>Name:</strong>
   <%= @league.name %>
-  <%= link_to "Join", join_path(league:@league.id), method: :post %>
-  <%= link_to "Reset Funds", reset_path(league:@league.id)%>
+  <% unless current_player.leagues.any? { |l| l.id == @league.id } %>
+    <%= link_to "Join", join_path(league:@league.id), method: :post %>
+  <% end %>
+  <% if @league.id == 1 %>
+    <%= link_to "Reset-Funds", reset_path(league:@league.id)%>
+  <% end %>
 </p>
 
 <p>

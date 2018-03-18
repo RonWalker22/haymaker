@@ -35,12 +35,12 @@ ExchangeLeague.create!( exchange_id: 2, league_id: 1)
                  admin: admin
                 )
 
-  Wallet.create!( coin_type: 'USD', 
-                  coin_quantity: '100000.00', 
+  Wallet.create!( coin_type: 'BTC', 
+                  coin_quantity: '100.00', 
                   player_id: n + 1,
-                  exchange_id: 1,
+                  exchange_id: 2,
                   league_id: 1,
-                  public_key: "usd#{n + 1}1" 
+                  public_key: "btc#{n + 1}1" 
                 )
 
   LeaguePlayer.create!( player_id: n + 1, league_id: 1)

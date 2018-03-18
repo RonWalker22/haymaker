@@ -40,17 +40,6 @@ class LeaguesController < ApplicationController
     end
   end
 
-  def join
-    new_palyer = LeaguePlayer.new({player_id:current_player.id, 
-                      league_id: params[:league]})
-    if new_palyer.save
-      flash[:notice] = 'You have successfully joined this league.'
-    else
-      flash[:notice] = 'You have aleady joined this league.'
-    end
-      redirect_to league_path(params[:league])
-  end
-
   # PATCH/PUT /leagues/1
   # PATCH/PUT /leagues/1.json
   def update
@@ -76,6 +65,52 @@ class LeaguesController < ApplicationController
       format.html { redirect_to leagues_url}
       format.json { head :no_content }
     end
+  end
+
+  def join
+    new_palyer = LeaguePlayer.new({player_id:current_player.id,
+                      league_id: params[:league]})
+    if new_palyer.save
+      flash[:notice] = 'You have successfully joined this league.'
+    else
+      flash[:notice] = 'You have aleady joined this league.'
+    end
+      redirect_to league_path(params[:league])
+  end
+
+  def request_reset
+  league = League.find(params[:league])
+    if league.id == 1
+      # flash[:notice] = 'League was successfully updated.'
+      flash[:reset_funds] = 
+                  'Are you sure you want to reset your practice league funds?'
+      respond_to do |format|
+        format.html { redirect_to league_url(league.id)}
+        format.json { render :show, status: :ok, location: league }
+      end
+    else
+      respond_to do |format|
+        flash[:notice] = "Funds can only be reset in the practice league."
+        format.html { redirect_to league_url(league.id) }
+        format.json { render json: @league.errors, 
+                      status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def reset_funds
+    wallets = Wallet.where player_id: current_player, league_id: 1 
+
+    wallets.each do |wallet|
+      if wallet.coin_type == 'BTC'
+        wallet.update_attributes coin_quantity: 100.00
+      else
+        wallet.update_attributes coin_quantity: 0
+      end
+      flash[:notice] = 'Funds in Practice League have been reset.'
+    end
+
+    redirect_to league_url(1)
   end
 
   private

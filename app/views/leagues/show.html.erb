@@ -1,9 +1,19 @@
-<p id="notice"><%= notice %></p>
+<p class="notice"><%= notice %></p>
+
+<p class="notice center">
+  <% if flash[:reset_funds] &&  %>
+    <%= flash[:reset_funds] %>
+   <%= link_to "Yes", reset_path(league:@league.id), method: :post %>
+   <%= link_to "No", league_path(league:@league.id)%>
+<% end %>
+</p>
+
 
 <p>
   <strong>Name:</strong>
   <%= @league.name %>
   <%= link_to "Join", join_path(league:@league.id), method: :post %>
+  <%= link_to "Reset Funds", reset_path(league:@league.id)%>
 </p>
 
 <p>

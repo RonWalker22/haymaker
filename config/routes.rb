@@ -14,7 +14,9 @@ Rails.application.routes.draw do
   delete  '/logout'               => 'sessions#destroy'
   get     '/about'                => 'static_pages#about'
   post    '/order'                => 'exchanges#order'
-  post    'join'                  => 'leagues#join'
+  post    '/join'                 => 'leagues#join'
+  get     '/reset'                => 'leagues#request_reset'
+  post    '/reset'                => 'leagues#reset_funds'
 
   # get 'profile' => 'players#'
   # get 'profile/edit' => 'players#'

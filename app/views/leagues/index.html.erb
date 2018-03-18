@@ -1,4 +1,4 @@
-<p id="notice"><%= notice %></p>
+<p id="notice"><%= flash[:notice] %></p>
 
 <h1 class="index_title">Leagues</h1>
 
@@ -34,6 +34,10 @@
         <td class="index_values">
             <%= link_to Player.find(league.player_id).username, 
                         player_path(Player.find(league.player_id).id)%>
+        </td>
+
+        <td class="index_values join_league">
+          <%= link_to "Join", join_path(league: league.id), method: :post %>
         </td>
         <td class="index_values"><%= link_to 'Show', league %></td>
         <td class="index_values"><%= link_to 'Edit', edit_league_path(league) %></td>

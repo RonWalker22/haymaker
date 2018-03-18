@@ -27,15 +27,28 @@ class LeaguesController < ApplicationController
     @league = League.new(league_params)
     respond_to do |format|
       if @league.save
+        flash[:notice] = 'League was successfully created.'
         @leaguePlayer = LeaguePlayer.create!({league_id:@league.id, 
                                   player_id:current_player.id})
-        format.html { redirect_to @league, notice: 'League was successfully created.' }
+        format.html { redirect_to @league }
         format.json { render :show, status: :created, location: @league }
       else
+        flash.now[:notice] = 'League was not created.'
         format.html { render :new }
         format.json { render json: @league.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def join
+    new_palyer = LeaguePlayer.new({player_id:current_player.id, 
+                      league_id: params[:league]})
+    if new_palyer.save
+      flash[:notice] = 'You have successfully joined this league.'
+    else
+      flash[:notice] = 'You have aleady joined this league.'
+    end
+      redirect_to league_path(params[:league])
   end
 
   # PATCH/PUT /leagues/1
@@ -43,9 +56,11 @@ class LeaguesController < ApplicationController
   def update
     respond_to do |format|
       if @league.update(league_params)
-        format.html { redirect_to @league, notice: 'League was successfully updated.' }
+        flash[:notice] = 'League was successfully updated.'
+        format.html { redirect_to @league}
         format.json { render :show, status: :ok, location: @league }
       else
+        flash.now[:notice] = 'League was not updated.'
         format.html { render :edit }
         format.json { render json: @league.errors, status: :unprocessable_entity }
       end
@@ -57,7 +72,8 @@ class LeaguesController < ApplicationController
   def destroy
     @league.destroy
     respond_to do |format|
-      format.html { redirect_to leagues_url, notice: 'League was successfully destroyed.' }
+      flash[:notice] = 'League was successfully destroyed.' 
+      format.html { redirect_to leagues_url}
       format.json { head :no_content }
     end
   end

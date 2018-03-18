@@ -1,11 +1,10 @@
 Rails.application.routes.draw do
 
-
+  root 'players#index'
+  
   resources :leagues
   resources :exchanges
   resources :wallets
-  root 'players#index'
-
   resources :players
 
   get     '/leaderboards'         => 'players#index'
@@ -14,9 +13,8 @@ Rails.application.routes.draw do
   post    '/login'                => 'sessions#create'
   delete  '/logout'               => 'sessions#destroy'
   get     '/about'                => 'static_pages#about'
-  # get     '/exchanges/:id'       => 'exchanges#show'
-  # get     '/exchanges/binance'    => 'exchanges#binance'
   post    '/order'                => 'exchanges#order'
+  post    'join'                  => 'leagues#join'
 
   # get 'profile' => 'players#'
   # get 'profile/edit' => 'players#'

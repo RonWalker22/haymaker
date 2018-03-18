@@ -3,6 +3,7 @@
 <p>
   <strong>Name:</strong>
   <%= @league.name %>
+  <%= link_to "Join", join_path(league:@league.id), method: :post %>
 </p>
 
 <p>

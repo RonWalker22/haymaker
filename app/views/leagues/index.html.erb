@@ -21,7 +21,9 @@
   <tbody>
     <% @leagues.each do |league| %>
       <tr>
-        <td class="index_values"><%= league.name %></td>
+        <td class="index_values">
+          <%=link_to league.name, league_path(league.id) %>                 
+        </td>
         <td class="index_values"><%= league.entry_fee %></td>
         <td class="index_values"><%= league.start_date %></td>
         <td class="index_values"><%= league.end_date %></td>

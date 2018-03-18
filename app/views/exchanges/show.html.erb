@@ -1,6 +1,7 @@
 <div id="balance_block" class="block_sec">
   <p id='trading_pair'><%= @pair %></p>
   <h1 id="exchange" class="center"><%= @exchange.name %></h1>
+  <h2 class="center"><%= League.find(params[:l]).name %> League</h2>
 
   <div id="balance">
     <p>Balance</p>
@@ -89,8 +90,15 @@
  <p>My Leagues</p>
   <ul>
     <%current_player.leagues.each do |l|  %>
-      <li><%= link_to l.name, "http://localhost:3000/leagues/#{l.id}"
-      %></li>
-    <% end %>
+      <% if l.id == params[:l].to_i%>
+        <li class='current_league'>
+          <%= link_to l.name, "http://localhost:3000/leagues/#{l.id}" %>
+        </li>
+      <% else %>
+        <li>
+          <%= link_to l.name, "http://localhost:3000/leagues/#{l.id}" %>
+        </li>
+      <% end %>
+    <% end  %>
   </ul>
 </div>

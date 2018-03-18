@@ -49,7 +49,7 @@ input {
   z-index: 1;
   position: absolute;
   left: 35em;
-  top: 44.2em;
+  top: 45.7em;
   font-size: .6em;
 }
 
@@ -104,6 +104,13 @@ input {
 
 #exchange {
   margin-top: 0px;
+  margin-right: 2.9em;
+}
+
+.current_league {
+  padding-right: .3em;
+  border-right: solid;
+  border-bottom: solid;
 }
 
 .block_sec {
@@ -127,7 +134,7 @@ input {
 #coin_price {
   color: #eafaea;
   margin-bottom: 2em;
-  margin-left: 2.4em;
+  margin-left: 1.7em;
 }
 
 #buy_btn {

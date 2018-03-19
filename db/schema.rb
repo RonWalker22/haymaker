@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180314231147) do
+ActiveRecord::Schema.define(version: 20180319010227) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,10 +49,10 @@ ActiveRecord::Schema.define(version: 20180314231147) do
   create_table "leagues", force: :cascade do |t|
     t.string "name", null: false
     t.string "entry_fee", default: "free", null: false
-    t.bigint "player_id", null: false
+    t.bigint "player_id"
     t.string "mode", default: "Fantasy Friendly", null: false
-    t.datetime "start_date", default: "2018-03-18 04:58:56", null: false
-    t.datetime "end_date", default: "2018-04-18 04:58:56", null: false
+    t.datetime "start_date", default: "2018-03-19 01:08:56", null: false
+    t.datetime "end_date", default: "2018-04-19 01:08:56", null: false
     t.integer "rounds", default: 1, null: false
     t.boolean "exchange_risk", default: false, null: false
     t.boolean "exchange_fees", default: false, null: false
@@ -64,6 +64,19 @@ ActiveRecord::Schema.define(version: 20180314231147) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["player_id"], name: "index_leagues_on_player_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.bigint "wallet_id", null: false
+    t.boolean "open", default: true, null: false
+    t.decimal "size", null: false
+    t.decimal "price", null: false
+    t.decimal "fee", default: "0.0", null: false
+    t.string "product", null: false
+    t.boolean "buy", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["wallet_id"], name: "index_orders_on_wallet_id"
   end
 
   create_table "players", force: :cascade do |t|

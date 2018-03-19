@@ -40,8 +40,19 @@ ExchangeLeague.create!( exchange_id: 2, league_id: 1)
                   player_id: n + 1,
                   exchange_id: 2,
                   league_id: 1,
-                  public_key: "btc#{n + 1}1" 
+                  public_key: "btc#{n + 1}2" 
                 )
 
   LeaguePlayer.create!( player_id: n + 1, league_id: 1)
+end
+
+
+10.times do |n|
+  n < 5 ? buy = true : buy = false
+  Order.create!(wallet_id: 1, 
+                open: false, 
+                size: n+1, 
+                price: 10000, 
+                product: 'BTC-USDT', 
+                buy: buy)
 end

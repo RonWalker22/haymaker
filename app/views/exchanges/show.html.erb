@@ -6,11 +6,11 @@
       <%current_player.leagues.each do |l|  %>
         <% if l.id == params[:l].to_i%>
           <li class='current_league'>
-            <%= link_to l.name, "http://localhost:3000/leagues/#{l.id}" %>
+            <%= link_to l.name, "/leagues/#{l.id}" %>
           </li>
         <% else %>
           <li>
-            <%= link_to l.name, "http://localhost:3000/leagues/#{l.id}" %>
+            <%= link_to l.name, "/leagues/#{l.id}" %>
           </li>
         <% end %>
       <% end  %>

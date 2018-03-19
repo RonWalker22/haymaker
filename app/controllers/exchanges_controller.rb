@@ -23,6 +23,7 @@ class ExchangesController < ApplicationController
   
 
     execute_order if sufficient_funds?
+    binding.pry
 
     redirect_to "/exchanges/#{@exchange.id}?p=#{@pair}&l=#{@league}"
   end

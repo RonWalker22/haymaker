@@ -103,14 +103,34 @@
 </div>
 
 
-
-<div class="block_sec" id= "orders_sec">
- 
-  <p>My Orders</p>
-  <div>
-    <%=  %>    
+<% if @wallet %>
+  <div class="block_sec center" id= "orders_sec">
+    <p>My Orders</p>
+    <div class="center">
+      <table>
+      <tr>
+        <th>Type</th>
+        <th>Open</th>
+        <th>size</th>
+        <th>price</th>
+        <th>fee</th>
+        <th>product</th>
+        <th>Time</th>
+        <th>filled%</th>
+      </tr>
+      <% @wallet.orders.each do |o| %>
+        <tr>
+          <td> <%= o.buy ? 'buy' : 'sell' %> </td>
+          <td> <%= o.open ? 'open' : 'filled' %></td> 
+          <td> <%= o.size.to_f.round(8) %> </td>
+          <td> <%= o.price.to_f.round(8) %> </td>
+          <td> <%= o.fee.to_f %> </td>
+          <td> <%= o.product %> </td>
+          <td> <%= o.when %> </td>
+          <td>100</td>
+        </tr>
+      <% end %> 
+    </table>
+    </div>
   </div>
-
-
-
-</div>
+<% end %>

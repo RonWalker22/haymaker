@@ -40,8 +40,9 @@ class ExchangesController < ApplicationController
   
   def show
     @pair = params[:p]
-    @wallets = current_player.wallets.where(exchange_id:@exchange.id)
     set_coin_tickers
+    @wallets = current_player.wallets.where(exchange_id:@exchange.id)
+    @wallet = @wallets.find_by(coin_type:@coin_1_ticker)
     find_and_set_coins
   end
 

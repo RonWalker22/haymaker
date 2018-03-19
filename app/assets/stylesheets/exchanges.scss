@@ -8,6 +8,21 @@ input::-webkit-inner-spin-button {
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
 
+table {
+  margin: 0 auto;
+}
+
+th {
+  padding: 1em
+}
+
+tr:hover th {
+  color: #333333;
+}
+
+tr:hover {
+  color:white;
+}
 .order_sec, i {
   border: solid black;
   border-width: 0 3px 3px 0;
@@ -52,8 +67,22 @@ input {
 }
 
 #orders_sec {
-  float:right
+  margin-top: 20em;
 }
+
+#orders_sec tr {
+  margin-right: 1em;
+}
+
+#orders_sec th {
+  margin-top: 1em;
+}
+
+#orders_sec td {
+  margin-top: 20em;
+  float:none
+}
+
 
 
 #league_info {

@@ -8,7 +8,7 @@ class ExchangesController < ApplicationController
     @league = params[:league]
     @coin_1_ticker = params[:coin_1_ticker]
     @coin_2_ticker = params[:coin_2_ticker]
-    @order = params[:commit]
+    @order_type = params[:commit] == "Place Buy Order" ? 'Buy' : 'Sell'
     @price = params[:order_price].to_f
     return "Invaid price" if @price < 0.0
     @order_quantity = params[:order_quantity].to_f
@@ -23,7 +23,6 @@ class ExchangesController < ApplicationController
   
 
     execute_order if sufficient_funds?
-    binding.pry
 
     redirect_to "/exchanges/#{@exchange.id}?p=#{@pair}&l=#{@league}"
   end
@@ -128,7 +127,7 @@ class ExchangesController < ApplicationController
 
     def sufficient_funds?
       n = 1
-      if @order == "Place Sell Order"
+      if @order_type == "Sell"
         n = -1
       end
       @coin_1_quantity_total  = @coin_1.coin_quantity + (@order_quantity *
@@ -140,9 +139,22 @@ class ExchangesController < ApplicationController
     end
 
     def execute_order
-      @coin_1.update_attributes!({coin_quantity: @coin_1_quantity_total})        
+      @coin_1.update_attributes!({coin_quantity: @coin_1_quantity_total})      
+      @coin_2.update_attributes!({coin_quantity: @coin_2_quantity_total})
+      
+      update_order_history 
+    end
 
-      @coin_2.update_attributes!({coin_quantity: @coin_2_quantity_total})        
+    def update_order_history
+      wallet = @wallets.find_by(coin_type:@coin_1_ticker)
+      type = wallet.coin_type
+      product = @pair
+      Order.create!(wallet_id: wallet.id, 
+                    product: @pair,
+                    size: @order_quantity,
+                    price: @price,
+                    buy: @order_type == 'Buy',
+                    open: false) 
     end
     
     def create_wallet_if_missing

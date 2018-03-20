@@ -1,5 +1,7 @@
 class LeaguesController < ApplicationController
   before_action :set_league, only: [:show, :edit, :update, :destroy]
+  before_action :check_logged_in, only: [:show, :edit, :update, :destroy,
+                                          :order, :index]
 
   # GET /leagues
   # GET /leagues.json

@@ -44,6 +44,24 @@
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"
             role="button" aria-haspopup="true"
+            aria-expanded="false">My Leagues<span
+            class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <% current_player.leagues.each_with_index do |l,i| %>
+                <%unless i == 0 %>
+                  <li role="separator" class="divider"></li>
+                <% end %>
+                <li>
+                  <%= link_to l.name, league_path(l.id) %>
+                </li>
+              <% end %>
+            </ul>
+          </li>
+
+
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+            role="button" aria-haspopup="true"
             aria-expanded="false"><%= current_player.username %><span
             class="caret"></span></a>
             <ul class="dropdown-menu">

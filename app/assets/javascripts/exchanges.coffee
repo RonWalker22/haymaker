@@ -10,6 +10,7 @@ tryWebsocket  = ->
       console.log string
     already_ran = false
 
+    exchange = document.querySelector("#exchange")
     trading_pair = document.querySelector("#trading_pair").innerHTML
     cp1 = 
       document.querySelector("#coin_1_balance_label").innerHTML.toLowerCase()
@@ -153,7 +154,6 @@ tryWebsocket  = ->
       activate_allocation_listeners('sell')
 
     dynamic_price = document.querySelector(".dynamic_price")
-    exchange = document.querySelector("#exchange")
     if exchange
       past_price = 0
 

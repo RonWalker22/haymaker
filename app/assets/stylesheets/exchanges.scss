@@ -8,6 +8,20 @@ input::-webkit-inner-spin-button {
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
 
+#order_and_balance_sec {
+  float:left;
+}
+
+#balance_block{
+  float:left;
+}
+
+.chart-page {
+    background: red;
+}
+.league_title {
+}
+
 table {
   margin: 0 auto;
 }
@@ -49,25 +63,20 @@ input {
   outline-color: black;
 }
 
-#balance_block {
-  border-bottom: solid;
-  border-left: solid;
-  border-top: none;
-  border-right: none;
-}
-
 #inner_input_fixed_text {
   background-color: transparent;
   color: #ccc;
   z-index: 1;
   position: absolute;
-  left: 35em;
-  top:  49.2em;
+  left: 24em;
+  top:  36.6em;
   font-size: .6em;
 }
 
 #orders_sec {
-  margin-top: 20em;
+  float: left;
+  clear: left;
+  margin-bottom: 1em;
 }
 
 #orders_sec tr {
@@ -85,13 +94,9 @@ input {
 
 
 
+
 #league_info {
-  padding-right: 1em;
-  padding-top: 1em;
   float: right;
-  border-top: solid;
-  border-right: solid;
-  border-width: thin;
 }
 
 
@@ -115,27 +120,24 @@ input {
 }
 
 .ao {
-  margin-left: 4em;
 }
 
 #ao_0 span {
   visibility: hidden;
   color: #ACB6E5;
-  font-size: 0.6em;
+  font-size: 0.8em;
 }
 
 #ao_1 span {
   visibility: hidden;
   color: #ACB6E5;
-  font-size: 0.6em;
+  font-size: 0.8em;
 }
 
 #trading_pair {
-  float:left;
-  border-think: thin;
   border: solid;
-  padding-left: .5em;
-  padding-right: .5em;
+  text-align: center;
+  width: 9em;
 }
 
 #exchange {
@@ -152,17 +154,16 @@ input {
   background: -webkit-linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6);  /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
-  font-size: 1.5em;
-  padding: 1em;
-  border-right: solid;
-  border-bottom: solid;
-  border-color: black;
-  margin: 1em;
+  font-size: 1.3em;
+  padding: .5em .7em 0em .7em;
 }
 
 #order_sec {
   float:left;
-
+  clear: left;
+  border-top: solid;
+  border-width: thin;
+  padding-top: 1em
 }
 
 #coin_price {

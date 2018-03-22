@@ -25,8 +25,12 @@
           <%=link_to league.name, league_path(league.id) %>                 
         </td>
         <td class="index_values"><%= league.entry_fee %></td>
-        <td class="index_values"><%= league.start_date %></td>
-        <td class="index_values"><%= league.end_date %></td>
+        <td class="index_values">
+          <%= league.start_date.strftime("%m/%d/%y %I:%M%p").downcase %>
+        </td>
+        <td class="index_values">
+          <%= league.end_date.strftime("%m/%d/%y %I:%M%p").downcase %>
+        </td>
         <td class="index_values"><%= league.rounds %></td>
         <td class="index_values"><%= league.mode %></td>
         <td class="index_values"><%= league.players.count %></td>

@@ -6,7 +6,7 @@
   <thead>
     <tr>
       <th class="index_titles">Username</th>
-      <th class="index_titles">Cash</th>
+      <th class="index_titles">USD/USDT</th>
       <th class="index_titles">Bitcoin</th>
       <th class="index_titles">Rank</th>
       <th class="index_titles">Email</th>
@@ -21,10 +21,10 @@
         </td>
 
         <td class="index_values">
-          <%= player.coin_total(player, 'USD') %>
+          <%= player.coin_total('USD') + player.coin_total('USDT') %>
         </td>
         <td class="index_values">
-          <%= player.coin_total(player, 'BTC') %>
+          <%= player.coin_total('BTC')%>
         </td>
         <td class="index_values"><%= player.rank %></td>
         <td class="index_values"><%= player.email %></td>

@@ -1,4 +1,5 @@
-<p class="notice"><%= notice %></p>
+<div class='center'>
+  <p class="notice"><%= notice %></p>
 
 <p class="notice center">
   <% if flash[:reset_funds] &&  %>
@@ -8,6 +9,13 @@
 <% end %>
 </p>
 
+
+
+
+<p>
+  <%= link_to 'Trade', trade_path(@league.id,@league.exchanges.first.id, p:
+  'BTC-USD') %>
+</p>
 
 <p>
   <strong>Name:</strong>
@@ -78,3 +86,5 @@
 
 <%= link_to 'Edit', edit_league_path(@league) %> |
 <%= link_to 'Back', leagues_path %>
+
+</div>

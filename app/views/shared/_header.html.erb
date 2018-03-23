@@ -10,20 +10,7 @@
 
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"
-            role="button" aria-haspopup="true" aria-expanded="false">Exchanges
-            <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="/exchanges/1?p=BTC-USD&l=1" class="ws_trigger">
-                GDAX
-              </a></li>
-              <li><a href="/exchanges/2?p=BTC-USDT&l=1" class="ws_trigger">
-                Binance
-              </a></li>
-            </ul>
-          </li>          
+        <ul class="nav navbar-nav">       
           <li><%= link_to 'Leagues', leagues_path %></li>
           <li><%= link_to 'Leaderboards', leaderboards_path %></li>
           <li>
@@ -47,13 +34,9 @@
             aria-expanded="false">My Leagues<span
             class="caret"></span></a>
             <ul class="dropdown-menu">
-              <% current_player.leagues.each_with_index do |l,i| %>
-                <%unless i == 0 %>
-                  <li role="separator" class="divider"></li>
-                <% end %>
-                <li>
-                  <%= link_to l.name, league_path(l.id) %>
-                </li>
+              <% current_player.leagues.each do |l| %>
+              <li class='my-league-li'><%= link_to l.name,league_path(l.id) %>
+              </li>
               <% end %>
             </ul>
           </li>
@@ -68,7 +51,6 @@
               <li>
                 <%= link_to "My Profile", player_path(current_player.id) %>
               </li>
-              <li role="separator" class="divider"></li>
               <li>
                 <%= link_to "Log out", logout_path, method: :delete %>
               </li>

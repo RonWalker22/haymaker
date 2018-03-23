@@ -1,20 +1,3 @@
-<div id='league_info' class="block_sec">
- <p>My Leagues</p>
-  <ul>
-    <%current_player.leagues.each do |l|  %>
-      <% if l.id == params[:l].to_i%>
-        <li class='current_league'>
-          <%= link_to l.name, "/leagues/#{l.id}" %>
-        </li>
-      <% else %>
-        <li>
-          <%= link_to l.name, "/leagues/#{l.id}" %>
-        </li>
-      <% end %>
-    <% end  %>
-  </ul>
-</div>
-
 <div class='block_sec' id='order_and_balance_sec'>
 <div id="balance_block">
   <p id='trading_pair'><%= @pair %></p>
@@ -104,7 +87,7 @@
 </div>
 
 <h1 id="exchange" class="center"><%= @exchange.name %></h1>
-<h2 class="center league_title"><%= League.find(params[:l]).name %>
+<h2 class="center league_title"><%= League.find(params[:lid]).name %>
 League</h2>
 
 
@@ -122,7 +105,7 @@ League</h2>
         <th>filled%</th>
       </tr>
       <% if @wallet %>
-        <% @wallet.orders.each do |o| %>
+        <% @wallet.orders.order('created_at DESC').each do |o| %>
           <tr>
             <td> <%= o.buy ? 'buy' : 'sell' %> </td>
             <td> <%= o.size.to_f.round(8) %> </td>

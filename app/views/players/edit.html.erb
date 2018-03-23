@@ -1,14 +1,16 @@
 <p id="notice"><%= flash[:notice] %></p>
-<h1>Editing Player</h1>
+<div class='center'>
+  <h1 id='edit_player_title'>Editing Player</h1>
+  <span id="delete-account">
+    <% if logged_in? && current_player?(@player) %>
+    <%= link_to icon('fas', 'minus-circle', text = "Delete Account"), 
+            @player, method: :delete, 
+            data: { confirm: 'Are you sure you want to delete your account?'} %>
+    <% end %>
+  </span>
 
-<%= render 'form', player: @player %>
-<div>
-  <%= link_to "Cancel Edit", @player %>
-</div>
-<div id="delete-account">
-  <% if logged_in? && current_player?(@player) %>
-  <%= link_to icon('fas', 'minus-circle', text = "Delete Account"), 
-          @player, method: :delete, 
-          data: { confirm: 'Are you sure you want to delete your account?'} %>
-  <% end %>
+  <%= render 'form', player: @player %>
+  <div class='cancel_edit'>
+    <%= link_to "Cancel Edit", @player %>
+  </div>
 </div>

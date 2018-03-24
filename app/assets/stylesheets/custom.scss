@@ -1,5 +1,5 @@
+@import "bulma";
 @import "bootstrap-sprockets";
-@import "bootstrap";
 @import "font-awesome-sprockets";
 @import "font-awesome";
 
@@ -9,9 +9,11 @@
   background: linear-gradient(to right, #1c92d2,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#1c92d2, ); /* W3C,
   IE 10+/
   Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  font-size: 1.3em;
 }
 
+html {
+  background-color: transparent;
+}
 .center {
   text-align: center;
 }

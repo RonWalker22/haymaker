@@ -16,65 +16,103 @@
   </div>
 
   <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name, id: :league_name %>
+    <%= form.label :name, class: "label" %>
+    <div class="control">
+      <%= form.text_field :name, id: :league_name, class: "input" %>
+    </div>
   </div>  
 
   <div class="field">
-    <%= form.label :entry_fee %>
-    <%= form.text_field :entry_fee, id: :league_entry_fee %>
+    <div class="control">
+      <%= form.label :entry_fee, class: "label" %>
+      <%= form.text_field :entry_fee, id: :league_entry_fee, class: "input"%>
+    </div>
   </div>
 
   <div class="field">
-    <%= form.hidden_field :player_id, value: current_player.id %>
+      <div class="control">
+      <%= form.hidden_field :player_id, value: current_player.id, 
+      class:"input"%>
+    </div>
   </div>
 
   <div class="field">
-    <%= form.label :start_date %>
-    <%= form.datetime_select :start_date, id: :league_start_date %>
+    <div class="control">
+      <%= form.label :start_date, class: "label"%>
+      <%= form.datetime_select :start_date, id: :league_start_date, 
+      class:"input"%>
+    </div>
   </div>
 
   <div class="field">
-    <%= form.label :end_date %>
-    <%= form.datetime_select :end_date, id: :league_end_date %>
+    <div class="control">
+      <%= form.label :end_date, class: "label" %>
+      <%= form.datetime_select :end_date, id: :league_end_date, 
+      class:"input"%>
+    </div>
   </div>
 
   <div class="field">
-    <%= form.label :rounds %>
-    <%= form.number_field :rounds, id: :league_rounds %>
+    <div class="control">
+      <%= form.label :rounds, class: "label" %>
+      <%= form.number_field :rounds, id: :league_rounds, class:"input"%>
+    </div>
   </div>
 
   <div class="field">
-    <%= form.label :exchange_risk %>
-    <%= form.check_box :exchange_risk, id: :league_exchange_risk %>
+    <div class="control">
+      <%= form.label :exchange_risk, class: "label" %>
+      <%= form.check_box :exchange_risk, id: :league_exchange_risk, 
+      class:"checkbox"%>
+    </div>
   </div>
 
   <div class="field">
-    <%= form.label :exchange_fees %>
-    <%= form.check_box :exchange_fees, id: :league_exchange_fees %>
+    <div class="control">
+      <%= form.label :exchange_fees, class: "label" %>
+      <%= form.check_box :exchange_fees, id: :league_exchange_fees, 
+      class:"checkbox"%>
+    </div>
   </div>
 
   <div class="field">
-    <%= form.label :high_be_score %>
-    <%= form.check_box :high_be_score, id: :league_high_be_score %>
+    <div class="control">
+      <%= form.label :high_be_score, class: "label" %>
+      <%= form.check_box :high_be_score, id: :league_high_be_score, 
+      class:"checkbox"%>
+    </div>
   </div>
 
   <div class="field">
-    <%= form.label :public_keys %>
-    <%= form.check_box :public_keys, id: :league_public_keys %>
+    <div class="control">
+      <%= form.label :public_keys, class: "label" %>
+      <%= form.check_box :public_keys, id: :league_public_keys, 
+      class:"checkbox"%>
+    </div>
   </div>
 
   <div class="field">
-    <%= form.label :instant_deposits_withdraws %>
-    <%= form.check_box :instant_deposits_withdraws, id: :league_instant_deposits_withdraws %>
+    <div class="control">
+      <%= form.label :instant_deposits_withdraws, class: "label" %>
+      <%= form.check_box :instant_deposits_withdraws, id: :league_instant_deposits_withdraws, 
+    class:"checkbox"%>
+    </div>
   </div>
 
   <div class="field">
-    <%= form.label :lazy_picker %>
-    <%= form.check_box :lazy_picker, id: :league_lazy_picker %>
+    <div class="control">
+      <%= form.label :lazy_picker, class: "label" %>
+      <%= form.check_box :lazy_picker, id: :league_lazy_picker, 
+      class:"checkbox"%>
+    </div>
   </div>
-
-  <div class="actions">
-    <%= form.submit %>
+  
+  <div class="field is-grouped">
+    <div class="control">
+      <%= form.submit class:"button is-link" %>
+    </div>
+    <div class="control">
+      <%= button_tag "Reset", type: :reset, class:"button is-text" %>
+    </div>
   </div>
 <% end %>

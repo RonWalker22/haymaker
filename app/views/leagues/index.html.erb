@@ -2,54 +2,68 @@
 
 <h1 class="index_title">Leagues</h1>
 
-<table class= 'index'>
+<table class= 'table'>
   <thead>
     <tr>
-      <th class="index_titles">Name</th>
-      <th class="index_titles">Entry fee</th>
-      <th class="index_titles">Start date</th>
-      <th class="index_titles">End date</th>
-      <th class="index_titles">Rounds</th>
-      <th class="index_titles">Mode</th>
-      <th class="index_titles">Players</th>
-      <th class="index_titles">Exchanges</th>
-      <th class="index_titles">Commissioner</th>
-      <th colspan="3"></th>
+      <th>Name</th>
+      <th>Entry fee</th>
+      <th>Start date</th>
+      <th>End date</th>
+      <th>Rounds</th>
+      <th>Mode</th>
+      <th>Players</th>
+      <th>Exchanges</th>
+      <th>Commissioner</th>
+      <th></th>
     </tr>
   </thead>
+  <tfoot>
+    <tr>
+      <th>Name</th>
+      <th>Entry fee</th>
+      <th>Start date</th>
+      <th>End date</th>
+      <th>Rounds</th>
+      <th>Mode</th>
+      <th>Players</th>
+      <th>Exchanges</th>
+      <th>Commissioner</th>
+      <th></th>
+    </tr>
+  </tfoot>
 
   <tbody>
     <% @leagues.each do |league| %>
       <tr>
-        <td class="index_values">
+        <td>
           <%=link_to league.name, league_path(league.id) %>                 
         </td>
-        <td class="index_values"><%= league.entry_fee %></td>
-        <td class="index_values">
+        <td><%= league.entry_fee %></td>
+        <td>
           <%= league.start_date.strftime("%m/%d/%y %I:%M%p").downcase %>
         </td>
-        <td class="index_values">
+        <td>
           <%= league.end_date.strftime("%m/%d/%y %I:%M%p").downcase %>
         </td>
-        <td class="index_values"><%= league.rounds %></td>
-        <td class="index_values"><%= league.mode %></td>
-        <td class="index_values"><%= league.players.count %></td>
-        <td class="index_values"><%= league.exchanges.count %></td>
-        <td class="index_values">
+        <td><%= league.rounds %></td>
+        <td><%= league.mode %></td>
+        <td><%= league.players.count %></td>
+        <td><%= league.exchanges.count %></td>
+        <td>
             <%= link_to Player.find(league.player_id).username, 
                         player_path(Player.find(league.player_id).id)%>
         </td>
 
-        <td class="index_values join_league">
+        <td>
             <% unless current_player.leagues.any? { |l| l.id == league.id } %>
-              <%= link_to "Join", 
-                  join_path(league:league.id), 
-                  method: :post %>
+              <%= link_to "Join", join_path(league:league.id), method: :post,
+                                            class: "button is-rounded is-small"
+              %>
             <% end %>
         </td>
-        <td class="index_values"><%= link_to 'Show', league %></td>
-        <td class="index_values"><%= link_to 'Edit', edit_league_path(league) %></td>
-        <td class="index_values"><%= link_to 'Destroy', league, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Show', league %></td>
+        <td><%= link_to 'Edit', edit_league_path(league) %></td>
+        <td><%= link_to 'Destroy', league, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>

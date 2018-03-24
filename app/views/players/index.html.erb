@@ -2,33 +2,34 @@
 
 <h1 class="index_title">Top Haymakers</h1>
 
-<table class="index">
+<table id="players_table" class="table">
   <thead>
     <tr>
-      <th class="index_titles">Username</th>
-      <th class="index_titles">USD/USDT</th>
-      <th class="index_titles">Bitcoin</th>
-      <th class="index_titles">Rank</th>
-      <th class="index_titles">Email</th>
+      <th><abbr title="Position">Pos</abbr></th>
+      <th>Username</th>
+      <th>Cash</th>
+      <th>BTC</th>
+      <th>Email</th>
     </tr>
   </thead>
-
+  <tfoot>
+    <tr>
+      <th><abbr title="Position">Pos</abbr></th>
+      <th>Username</th>
+      <th>Cash</th>
+      <th>BTC</th>
+      <th>Email</th>
+    </tr>
+  </tfoot>
   <tbody>
-    <% @players.each do |player| %>
+    <% @players.each_with_index do |p,i| %>
       <tr>
-        <td class="index_values">
-          <%= link_to player.username, player %>
-        </td>
-
-        <td class="index_values">
-          <%= player.coin_total('USD') + player.coin_total('USDT') %>
-        </td>
-        <td class="index_values">
-          <%= player.coin_total('BTC')%>
-        </td>
-        <td class="index_values"><%= player.rank %></td>
-        <td class="index_values"><%= player.email %></td>
+        <th><%= i + 1 %></th>
+        <th><%= link_to p.username, player_path(p.id) %></th>
+        <td><%= p.coin_total('USD') + p.coin_total('USDT') %></td>
+        <td><%= p.coin_total('BTC') %></td>
+        <td><%= p.email %></td>
       </tr>
     <% end %>
   </tbody>
-</table> 
+</table>

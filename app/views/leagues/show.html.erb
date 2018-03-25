@@ -48,33 +48,57 @@
   </p>
 
   <p>
-    <strong>Exchange risk:</strong>
-    <%= @league.exchange_risk %>
+    <strong>Exchange risk</strong>
+    <% if @league.exchange_risk %>
+      <i class="fas fa-check fa-lg"></i>
+    <% else %>
+      <i class="fas fa-times fa-lg"></i>
+    <% end %>
   </p>
 
   <p>
     <strong>Exchange fees:</strong>
-    <%= @league.exchange_fees %>
+    <% if @league.exchange_fees %>
+    <i class="fas fa-check fa-lg"></i>
+    <% else %>
+      <i class="fas fa-times fa-lg"></i>
+    <% end %>
   </p>
 
   <p>
     <strong>High be score:</strong>
-    <%= @league.high_be_score %>
+    <% if @league.high_be_score %>
+    <i class="fas fa-check fa-lg"></i>
+    <% else %>
+      <i class="fas fa-times fa-lg"></i>
+    <% end %>
   </p>
 
   <p>
     <strong>Public keys:</strong>
-    <%= @league.public_keys %>
+    <% if @league.public_keys %>
+    <i class="fas fa-check fa-lg"></i>
+    <% else %>
+      <i class="fas fa-times fa-lg"></i>
+    <% end %>
   </p>
 
   <p>
     <strong>Instant deposits withdraws:</strong>
-    <%= @league.instant_deposits_withdraws %>
+    <% if @league.instant_deposits_withdraws %>
+      <i class="fas fa-check fa-lg"></i>
+    <% else %>
+      <i class="fas fa-times fa-lg"></i>
+    <% end %>
   </p>
 
   <p>
     <strong>Lazy picker:</strong>
-    <%= @league.lazy_picker %>
+    <% if @league.lazy_picker %>
+      <i class="fas fa-check fa-lg"></i>
+    <% else %>
+      <i class="fas fa-times fa-lg"></i>
+    <% end %>
   </p>
 
   <% if @league.id == 1 %>

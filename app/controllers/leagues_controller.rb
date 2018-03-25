@@ -29,6 +29,7 @@ class LeaguesController < ApplicationController
     @league = League.new(league_params)
     respond_to do |format|
       if @league.save
+        create_exchange_league_table
         flash[:notice] = 'League was successfully created.'
         @leaguePlayer = LeaguePlayer.create!({league_id:@league.id, 
                                   player_id:current_player.id})
@@ -126,5 +127,10 @@ class LeaguesController < ApplicationController
       params.require(:league).permit(:name, :entry_fee, :commissioner,
         :start_date, :player_id, :end_date, :rounds, :exchange_risk,
         :exchange_fees, :high_be_score, :public_keys, :instant_deposits_withdraws, :lazy_picker)
+    end
+    def create_exchange_league_table
+      Exchange.all.each do |x|
+        ExchangeLeague.create! league_id: @league.id, exchange_id: x.id  
+      end 
     end
 end

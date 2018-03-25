@@ -1,6 +1,7 @@
-<p id="notice"><%= flash[:notice] %></p>
-
 <div id="profile_page">
+  <% if notice %>
+  <p class="notification is-primary center"><%= flash[:notice] %></p>
+  <% end %>
   <ul>
     <li class="pp-username">
       <%= @player.username %>

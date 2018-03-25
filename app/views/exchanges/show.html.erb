@@ -1,3 +1,8 @@
+<% if notice %>
+  <p class="notification is-primary"><%= flash[:notice] %></p>
+<% end %>
+
+
 <div class='block_sec' id='order_and_balance_sec'>
 <div id="balance_block">
   <p id='trading_pair'><%= @pair %></p>

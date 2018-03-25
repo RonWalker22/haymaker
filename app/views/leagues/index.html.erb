@@ -1,4 +1,10 @@
-<p id="notice"><%= flash[:notice] %></p>
+<% if notice %>
+  <p class="notification is-primary"><%= flash[:notice] %></p>
+<% end %>
+
+<% if notice %>
+  <p class="notification is-primary"><%= notice %></p>
+<% end %>
 
 <h1 class="index_title">Leagues</h1>
 

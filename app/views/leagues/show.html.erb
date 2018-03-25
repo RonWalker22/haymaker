@@ -1,91 +1,86 @@
 <div class='center'>
-  <p class="notice"><%= notice %></p>
-
-<p class="notice center">
-  <% if flash[:reset_funds] &&  %>
-    <%= flash[:reset_funds] %>
-   <%= link_to "Yes", reset_path(league:@league.id), method: :post %>
-   <%= link_to "No", league_path(league:@league.id)%>
-<% end %>
-</p>
-
-
-
-
-<p>
-  <%= link_to 'Trade', trade_path(@league.id,@league.exchanges.first.id, p:
-  'BTC-USD') %>
-</p>
-
-<p>
-  <strong>Name:</strong>
-  <%= @league.name %>
-  <% unless current_player.leagues.any? { |l| l.id == @league.id } %>
-    <%= link_to "Join", join_path(league:@league.id), method: :post %>
+  <% if notice %>
+    <p class="notification is-primary"><%= flash[:notice] %></p>
   <% end %>
+
+  <p class="notice center">
+    <% if flash[:reset_funds] &&  %>
+      <%= flash[:reset_funds] %>
+     <%= link_to "Yes", reset_path(league:@league.id), method: :post %>
+     <%= link_to "No", league_path(league:@league.id)%>
+  <% end %>
+  </p>
+
+  <p>
+    <strong>Name:</strong>
+    <%= @league.name %>
+    <% unless current_player.leagues.any? { |l| l.id == @league.id } %>
+      <%= link_to "Join", join_path(league:@league.id), method: :post %>
+    <% end %>
+    <%= link_to 'Trade', trade_path(@league.id,@league.exchanges.first.id, p:
+    'BTC-USD'), class:"button is-primary is-small"%>
+  </p>
+
+  <p>
+    <strong>Entry fee:</strong>
+    <%= @league.entry_fee %>
+  </p>
+
+  <p>
+    <strong>Start date:</strong>
+    <%= @league.start_date.strftime("%m/%d/%y %I:%M%p").downcase  %>
+  </p>
+
+  <p>
+    <strong>End date:</strong>
+    <%= @league.end_date.strftime("%m/%d/%y %I:%M%p").downcase  %>
+  </p>
+
+  <p>
+    <strong>Rounds:</strong>
+    <%= @league.rounds %>
+  </p>
+
+  <p>
+    <strong>Commissioner:</strong>
+    <%= link_to Player.find(@league.player_id).username, 
+                player_path(Player.find(@league.player_id).id)%>
+  </p>
+
+  <p>
+    <strong>Exchange risk:</strong>
+    <%= @league.exchange_risk %>
+  </p>
+
+  <p>
+    <strong>Exchange fees:</strong>
+    <%= @league.exchange_fees %>
+  </p>
+
+  <p>
+    <strong>High be score:</strong>
+    <%= @league.high_be_score %>
+  </p>
+
+  <p>
+    <strong>Public keys:</strong>
+    <%= @league.public_keys %>
+  </p>
+
+  <p>
+    <strong>Instant deposits withdraws:</strong>
+    <%= @league.instant_deposits_withdraws %>
+  </p>
+
+  <p>
+    <strong>Lazy picker:</strong>
+    <%= @league.lazy_picker %>
+  </p>
+
   <% if @league.id == 1 %>
-    <%= link_to "Reset-Funds", reset_path(league:@league.id)%>
+    <p>
+      <%= link_to "Reset Funds", reset_path(league:@league.id), class:"button
+      is-danger is-small"%>
+    </p>
   <% end %>
-</p>
-
-<p>
-  <strong>Entry fee:</strong>
-  <%= @league.entry_fee %>
-</p>
-
-<p>
-  <strong>Commissioner:</strong>
-  <%= link_to Player.find(@league.player_id).username, 
-              player_path(Player.find(@league.player_id).id)%>
-</p>
-
-<p>
-  <strong>Start date:</strong>
-  <%= @league.start_date.strftime("%m/%d/%y %I:%M%p").downcase  %>
-</p>
-
-<p>
-  <strong>End date:</strong>
-  <%= @league.end_date.strftime("%m/%d/%y %I:%M%p").downcase  %>
-</p>
-
-<p>
-  <strong>Rounds:</strong>
-  <%= @league.rounds %>
-</p>
-
-<p>
-  <strong>Exchange risk:</strong>
-  <%= @league.exchange_risk %>
-</p>
-
-<p>
-  <strong>Exchange fees:</strong>
-  <%= @league.exchange_fees %>
-</p>
-
-<p>
-  <strong>High be score:</strong>
-  <%= @league.high_be_score %>
-</p>
-
-<p>
-  <strong>Public keys:</strong>
-  <%= @league.public_keys %>
-</p>
-
-<p>
-  <strong>Instant deposits withdraws:</strong>
-  <%= @league.instant_deposits_withdraws %>
-</p>
-
-<p>
-  <strong>Lazy picker:</strong>
-  <%= @league.lazy_picker %>
-</p>
-
-<%= link_to 'Edit', edit_league_path(@league) %> |
-<%= link_to 'Back', leagues_path %>
-
 </div>
-

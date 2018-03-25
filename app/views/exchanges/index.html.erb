@@ -1,4 +1,6 @@
-<p id="notice"><%= notice %></p>
+<% if notice %>
+  <p class="notification is-primary"><%= flash[:notice] %></p>
+<% end %>
 
 <h1>Exchanges</h1>
 

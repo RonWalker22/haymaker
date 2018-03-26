@@ -4,11 +4,15 @@
 @import "font-awesome";
 
  body {
-  background: #0082c8;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #1c92d2,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#1c92d2, ); /* W3C,
-  IE 10+/
-  Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  // background: #0082c8;  /* fallback for old browsers */
+  // background: -webkit-linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6);  /* Chrome 10-25, Safari 5.1-6 */
+  // background: linear-gradient(to right, #1c92d2,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#0082c8,#1c92d2, ); /* W3C,
+  // IE 10+/
+  // Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.table {
+  background: transparent;
 }
 
 html {
@@ -23,10 +27,6 @@ html {
 }
 
 #inner_body {
-}
-
-header {
-  background: #d6f5d6;
 }
 
 a:visited {
@@ -46,10 +46,6 @@ ul {
   margin-top: 0;
   margin-bottom: 0;
   padding: 0;
-}
-
-table {
-  background: linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6);
 }
 
 .notice {

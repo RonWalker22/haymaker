@@ -99,16 +99,18 @@ League</h2>
 <div class="block_sec center" id= "orders_sec">
   <p>My Orders</p>
   <div class="center">
-    <table>
-      <tr>
-        <th>Type</th>
-        <th>size</th>
-        <th>price</th>
-        <th>fee</th>
-        <th>product</th>
-        <th>Time</th>
-        <th>filled%</th>
-      </tr>
+    <table class="table is-narrow">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>size</th>
+          <th>price</th>
+          <th>fee</th>
+          <th>product</th>
+          <th>Time</th>
+          <th>filled%</th>
+        </tr>
+      </thead>
       <% if @wallet %>
         <% @wallet.orders.order('created_at DESC').each do |o| %>
           <tr>

@@ -3,44 +3,47 @@
 <% end %>
 
 
-<div class='block_sec' id='order_and_balance_sec'>
-<div id="balance_block">
-  <p id='trading_pair'><%= @pair %></p>
+<h1 id="exchange" class="center"><%= @exchange.name %></h1>
+<h2 class="center league_title"><%= League.find(params[:lid]).name %>
+League</h2>
 
-  <div id="balance">
-    <p>Balance</p>
-    <ul>
-      <div>
-      <li><span id= 'coin_1_balance_label'><%= @coin_1_ticker %></span>
-        <div class='inline_block_s balance_pair_values_div'>
-          <span id="balance_pair_values_1" class="balance_pair_values">
-           <%= @coin_1 ? @coin_1.coin_quantity : 0%>
-          </span> 
-        </div>
-        <div id="ao_1" class="ao">
-          <span id="after_order_sign_1" class="after_order_sign">+</span>
-          <span id="after_order_value_1" class="after_order_value"></span>
-          <span id="ao_equal_sign_1" class="ao_equal_sign">=</span>
-          <span id="after_order_total_1" class="after_order_total"></span>
-        </div>
-      </li>
-      <li><span id='coin_0_balance_label'><%= @coin_2_ticker %></span>
+<div class="wrapper">
+  <div id="balance_block" class='block_sec'>
+    <p id='trading_pair'><%= @pair %></p>
+
+    <div id="balance">
+      <p>Balance</p>
+      <ul>
+        <div>
+        <li><span id= 'coin_1_balance_label'><%= @coin_1_ticker %></span>
           <div class='inline_block_s balance_pair_values_div'>
-            <span id="balance_pair_values_0"class="balance_pair_values">
-              <%= @coin_2 ? @coin_2.coin_quantity : 0%></span>
+            <span id="balance_pair_values_1" class="balance_pair_values">
+             <%= @coin_1 ? @coin_1.coin_quantity : 0%>
+            </span>
           </div>
-        <div id="ao_0" class="ao">
-          <span id="after_order_sign_0" class="after_order_sign">-</span> 
-          <span id="after_order_value_0" class="after_order_value"></span>
-          <span id="ao_equal_sign_0" class="ao_equal_sign">=</span>
-          <span id="after_order_total_0" class="after_order_total"></span>
+          <div id="ao_1" class="ao">
+            <span id="after_order_sign_1" class="after_order_sign">+</span>
+            <span id="after_order_value_1" class="after_order_value"></span>
+            <span id="ao_equal_sign_1" class="ao_equal_sign">=</span>
+            <span id="after_order_total_1" class="after_order_total"></span>
+          </div>
+        </li>
+        <li><span id='coin_0_balance_label'><%= @coin_2_ticker %></span>
+            <div class='inline_block_s balance_pair_values_div'>
+              <span id="balance_pair_values_0"class="balance_pair_values">
+                <%= @coin_2 ? @coin_2.coin_quantity : 0%></span>
+            </div>
+          <div id="ao_0" class="ao">
+            <span id="after_order_sign_0" class="after_order_sign">-</span>
+            <span id="after_order_value_0" class="after_order_value"></span>
+            <span id="ao_equal_sign_0" class="ao_equal_sign">=</span>
+            <span id="after_order_total_0" class="after_order_total"></span>
+          </div>
+        </li>
         </div>
-      </li>
-      </div>
-    </ul>
+      </ul>
+    </div>
   </div>
-</div>
-
   <div id= "order_sec">
     <div>
       <div class="center" id= 'buy_sell_btns'>
@@ -67,7 +70,7 @@
           <%= hidden_field_tag :pair, params[:p] %>
           <%= hidden_field_tag :coin_1_ticker, @coin_1_ticker %>
           <%= hidden_field_tag :coin_2_ticker, @coin_2_ticker %>
-          <%= label_tag :coin_quantity, 'Amount:', id: 'amount_label'%> 
+          <%= label_tag :coin_quantity, 'Amount:', id: 'amount_label'%>
           <%= number_field_tag :order_quantity, nil, placeholder: 0.0000, step:
           0.00000001,
           min: 0.01, autofocus: 'autofocus'%>
@@ -86,44 +89,39 @@
           <%= submit_tag "Place Buy Order", id: 'order_btn', class: 'center' %>
           <span id='inner_input_fixed_text'><%= @coin_1_ticker %></span>
           <% end %>
-        </div>   
+        </div>
     </span>
   </div>
-</div>
 
-<h1 id="exchange" class="center"><%= @exchange.name %></h1>
-<h2 class="center league_title"><%= League.find(params[:lid]).name %>
-League</h2>
-
-
-<div class="block_sec center" id= "orders_sec">
-  <p>My Orders</p>
-  <div class="center">
-    <table class="table is-narrow">
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>size</th>
-          <th>price</th>
-          <th>fee</th>
-          <th>product</th>
-          <th>Time</th>
-          <th>filled%</th>
-        </tr>
-      </thead>
-      <% if @wallet %>
-        <% @wallet.orders.order('created_at DESC').each do |o| %>
+  <div class="block_sec center" id= "orders_sec">
+    <p>My Orders</p>
+    <div class="center">
+      <table class="table is-narrow">
+        <thead>
           <tr>
-            <td> <%= o.buy ? 'buy' : 'sell' %> </td>
-            <td> <%= o.size.to_f.round(8) %> </td>
-            <td> <%= o.price.to_f.round(8) %> </td>
-            <td> <%= o.fee.to_f %> </td>
-            <td> <%= o.product %> </td>
-            <td> <%= o.when %> </td>
-            <td>100</td>
+            <th>Type</th>
+            <th>size</th>
+            <th>price</th>
+            <th>fee</th>
+            <th>product</th>
+            <th>Time</th>
+            <th>filled%</th>
           </tr>
-      <% end %> 
-      <% end %>
-    </table>
+        </thead>
+        <% if @wallet %>
+          <% @wallet.orders.order('created_at DESC').each do |o| %>
+            <tr>
+              <td> <%= o.buy ? 'buy' : 'sell' %> </td>
+              <td> <%= o.size.to_f.round(8) %> </td>
+              <td> <%= o.price.to_f.round(8) %> </td>
+              <td> <%= o.fee.to_f %> </td>
+              <td> <%= o.product %> </td>
+              <td> <%= o.when %> </td>
+              <td>100</td>
+            </tr>
+        <% end %>
+        <% end %>
+      </table>
+    </div>
   </div>
 </div>

@@ -1,19 +1,21 @@
 // Place all the styles related to the Exchanges controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+html {
+  box-sizing: border-box;
+}
+/* inherit border-box on all elements in the universe and before and after
+ */
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     /* display: none; <- Crashes Chrome on hover */
     -webkit-appearance: none;
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
-}
-
-#order_and_balance_sec {
-  float:left;
-}
-
-#balance_block{
-  float:left;
 }
 
 .chart-page {
@@ -68,8 +70,6 @@ input {
 }
 
 #orders_sec {
-  float: left;
-  clear: left;
   margin-bottom: 1em;
 }
 
@@ -83,16 +83,7 @@ input {
 
 #orders_sec td {
   margin-top: 20em;
-  float:none
 }
-
-
-
-
-#league_info {
-  float: right;
-}
-
 
 .inline_block_s {
   display: inline-block;
@@ -143,22 +134,15 @@ input {
 }
 
 .block_sec {
-  background: #0082c8;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   padding: .5em .7em 0em .7em;
 }
 
 #order_sec {
-  float:left;
-  clear: left;
-  border-top: solid;
-  border-width: thin;
   padding-top: 1em
 }
 
 #coin_price {
-  color: #eafaea;
+  color: black;
   margin-bottom: 2em;
   margin-left: 1.7em;
 }
@@ -182,7 +166,7 @@ input {
 #sell_btn {
   margin-right: 10px;
   background: transparent;
-  border-style: inset; 
+  border-style: inset;
 }
 
 #capital_percentage input {
@@ -229,7 +213,7 @@ input {
 
 
 #amount_label {
-  font-weight: normal; 
+  font-weight: normal;
 }
 
 
@@ -239,7 +223,7 @@ input {
 }
 
 .spinner > div {
-  background-color: white;
+  background-color: black;
   height: 100%;
   width: 6px;
   display: inline-block;
@@ -268,16 +252,41 @@ input {
 }
 
 @-webkit-keyframes sk-stretchdelay {
-  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
   20% { -webkit-transform: scaleY(1.0) }
 }
 
 @keyframes sk-stretchdelay {
-  0%, 40%, 100% { 
+  0%, 40%, 100% {
     transform: scaleY(0.4);
     -webkit-transform: scaleY(0.4);
-  }  20% { 
+  }  20% {
     transform: scaleY(1.0);
     -webkit-transform: scaleY(1.0);
+  }
+}
+
+/* grid system -- mobile first! */
+.wrapper {
+  display: grid;
+}
+
+/* Mobile Landscape Screen Sizes */
+@media only screen and (min-width: 480px)  {
+  body {
+    background-color: skyblue;
+  }
+  .wrapper {
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: 1fr 1fr;
+  }
+  #order_sec {
+    grid-row:2/3;
+  }
+}
+/* Desktop screen Sizes */
+@media only screen and (min-width: 768px) {
+  body {
+    background-color: green;
   }
 }

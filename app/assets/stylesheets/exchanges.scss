@@ -273,9 +273,6 @@ input {
 
 /* Mobile Landscape Screen Sizes */
 @media only screen and (min-width: 480px)  {
-  body {
-    background-color: skyblue;
-  }
   .wrapper {
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: 1fr 1fr;
@@ -286,7 +283,4 @@ input {
 }
 /* Desktop screen Sizes */
 @media only screen and (min-width: 768px) {
-  body {
-    background-color: green;
-  }
 }

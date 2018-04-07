@@ -8,7 +8,7 @@
 
 #new_player_username_field{
   margin-right: 59px;
-} 
+}
 #new_player_email_field{
   margin-right: 91px;
 }
@@ -21,21 +21,18 @@
 
 #delete-account {
   margin-top: 2em;
-}
-
-
-#delete-account a{
-  font-size: 1em;
-  margin-left: 2em;
+  a {
+    font-size: 1em;
+    margin-left: 2em;
+    &:hover{
+      color: red;
+      text-decoration: none;
+    }
+  }
 }
 
 #edit_player_title {
   display: inline-block;
-}
-
-#delete-account a:hover{
-  color: red;
-  text-decoration: none;
 }
 
 .pp-username {

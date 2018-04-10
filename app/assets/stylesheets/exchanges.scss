@@ -32,20 +32,15 @@ th {
   padding: 1em
 }
 
-.up_arrow {
-    transform: rotate(-135deg);
-    -webkit-transform: rotate(-135deg);
-    margin-left: 0.5em;
-    margin-bottom: 0.3em;
-    visibility: hidden;
-}
+.fas {
+  &.fa-arrow-up {
+      visibility: hidden;
+  }
 
-.down_arrow {
-    transform: rotate(45deg);
-    -webkit-transform: rotate(45deg);
-    visibility: hidden;
+  &.fa-arrow-down {
+      visibility: hidden;
+  }
 }
-
 
 input {
   outline-color: black;

@@ -5,28 +5,23 @@ class ExchangesController < ApplicationController
 
   def order
     @pair = params[:pair]
-    @league = params[:league]
+    @league_id = params[:league]
     @coin_1_ticker = params[:coin_1_ticker]
     @coin_2_ticker = params[:coin_2_ticker]
     @order_type = params[:commit] == "Place Buy Order" ? 'Buy' : 'Sell'
     @price = params[:order_price].to_f
     return "Invaid price" if @price < 0.0
     @order_quantity = params[:order_quantity].to_f
-    
     @wallets = current_player.wallets.where(exchange_id: @exchange.id)
 
     set_coin_tickers
-
     find_and_set_coins
-
     create_wallet_if_missing
-  
-
     execute_order if sufficient_funds?
 
-    redirect_to "/exchanges/#{@exchange.id}?p=#{@pair}&l=#{@league}"
+    redirect_to "/leagues/#{@league_id}/exchanges/#{@exchange.id}?p=#{@pair}"
   end
-  
+
 
   # GET /exchanges
   # GET /exchanges.json
@@ -36,7 +31,7 @@ class ExchangesController < ApplicationController
 
   # GET /exchanges/1
   # GET /exchanges/1.json
-  
+
   def show
     @pair = params[:p]
     set_coin_tickers
@@ -139,45 +134,45 @@ class ExchangesController < ApplicationController
     end
 
     def execute_order
-      @coin_1.update_attributes!({coin_quantity: @coin_1_quantity_total})      
+      @coin_1.update_attributes!({coin_quantity: @coin_1_quantity_total})
       @coin_2.update_attributes!({coin_quantity: @coin_2_quantity_total})
-      
-      update_order_history 
+
+      update_order_history
     end
 
     def update_order_history
       wallet = @wallets.find_by(coin_type:@coin_1_ticker)
       type = wallet.coin_type
       product = @pair
-      Order.create!(wallet_id: wallet.id, 
+      Order.create!(wallet_id: wallet.id,
                     product: @pair,
                     size: @order_quantity,
                     price: @price,
                     buy: @order_type == 'Buy',
-                    open: false) 
+                    open: false)
     end
-    
+
     def create_wallet_if_missing
-      unless @coin_1  
-        Wallet.create!({coin_type:  @coin_1_ticker, 
+      unless @coin_1
+        Wallet.create!({coin_type:  @coin_1_ticker,
                     coin_quantity: 0,
-                    exchange_id: @exchange.id, 
+                    exchange_id: @exchange.id,
                     player_id: current_player.id,
-                    public_key: 
+                    public_key:
                     "#{@coin_1_ticker}#{current_player.id}#{@exchange.id}",
                     league_id: 1
                   })
       end
       unless @coin_2
-        Wallet.create!({coin_type:  @coin_2_ticker, 
+        Wallet.create!({coin_type:  @coin_2_ticker,
                       coin_quantity: 0,
-                      exchange_id: @exchange.id, 
+                      exchange_id: @exchange.id,
                       player_id: current_player.id,
-                      public_key: 
+                      public_key:
                       "#{@coin_2_ticker}#{current_player.id}#{@exchange.id}",
                       league_id: 1
                     })
       end
-      find_and_set_coins      
+      find_and_set_coins
     end
 end

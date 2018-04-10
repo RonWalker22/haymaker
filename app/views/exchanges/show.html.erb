@@ -2,7 +2,6 @@
   <p class="notification is-primary"><%= flash[:notice] %></p>
 <% end %>
 
-
 <h1 id="exchange" class="center"><%= @exchange.name %></h1>
 <h2 class="center league_title"><%= League.find(params[:lid]).name %>
 League</h2>
@@ -66,7 +65,7 @@ League</h2>
         <%= form_tag("/order", method: "post", :class => "order_form") do %>
           <%= hidden_field_tag :order_price, "-1", class: 'dynamic_price' %>
           <%= hidden_field_tag :id, params[:id] %>
-          <%= hidden_field_tag :league, params[:l] %>
+          <%= hidden_field_tag :league, params[:lid] %>
           <%= hidden_field_tag :pair, params[:p] %>
           <%= hidden_field_tag :coin_1_ticker, @coin_1_ticker %>
           <%= hidden_field_tag :coin_2_ticker, @coin_2_ticker %>

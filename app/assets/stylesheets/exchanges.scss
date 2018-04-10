@@ -73,6 +73,14 @@ input {
       color: #333333;
     }
   }
+  thead {
+    display: block;
+  }
+  tbody {
+    display: block;
+    height: 40vh;
+    overflow-y: scroll;
+  }
 }
 
 .inline_block_s {
@@ -125,7 +133,7 @@ input {
 }
 
 #order_sec {
-  padding-top: 1em
+  padding-top: 1em;
 }
 
 #coin_price {
@@ -187,8 +195,7 @@ input {
   margin-bottom: 1em;
   background: #ACB6E5;
   border-style: groove;
-  margin-left: auto;
-  margin-right: auto;
+  margin-left: 2.5em;
 }
 
 #coin_quantity {
@@ -254,11 +261,15 @@ input {
 /* Mobile Landscape Screen Sizes */
 @media only screen and (min-width: 480px)  {
   .wrapper {
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: 1fr 1fr;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
   }
   #order_sec {
     grid-row:2/3;
+  }
+  #orders_sec{
+    grid-column: 2/3;
+    grid-row: 1/3;
   }
 }
 /* Desktop screen Sizes */

@@ -3,7 +3,8 @@
 @import "font-awesome-sprockets";
 @import "font-awesome";
 
- body {
+#inner_body {
+  min-height: 75.5vh;
 }
 
 .table {

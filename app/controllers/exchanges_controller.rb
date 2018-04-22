@@ -13,7 +13,6 @@ class ExchangesController < ApplicationController
     return "Invaid price" if @price < 0.0
     @order_quantity = params[:order_quantity].to_f
     @wallets = current_player.wallets.where(exchange_id: @exchange.id)
-
     set_coin_tickers
     find_and_set_coins
     create_wallet_if_missing
@@ -38,6 +37,7 @@ class ExchangesController < ApplicationController
     @wallets = current_player.wallets.where(exchange_id:@exchange.id)
     @wallet = @wallets.find_by(coin_type:@coin_1_ticker)
     find_and_set_coins
+    get_full_coin_list
   end
 
   # GET /exchanges/new
@@ -117,7 +117,7 @@ class ExchangesController < ApplicationController
         @coin_1 = @wallets.find_by({coin_type:@coin_1_ticker})
         @coin_2 = @wallets.find_by({coin_type:@coin_2_ticker})
       end
-      # binding.pry
+      #
     end
 
     def sufficient_funds?
@@ -174,5 +174,67 @@ class ExchangesController < ApplicationController
                     })
       end
       find_and_set_coins
+    end
+    def get_full_coin_list
+      if params[:id] == 1.to_s
+        @btc_coin_list = []
+        @bch_coin_list = []
+        @eth_coin_list = []
+        @ltc_coin_list = []
+
+        response = HTTParty.get('https://api.gdax.com/products')
+        response = JSON.parse(response.to_s)
+        response.each do |hash|
+          next if hash['quote_currency'] == 'EUR' || hash['quote_currency'] == 'GBP'
+          if hash['base_currency'] == 'ETH'
+            @eth_coin_list << hash['id']
+            @eth_coin_list.sort!
+          elsif hash['base_currency'] == 'BTC'
+            @btc_coin_list << hash['id']
+            @btc_coin_list.sort!
+          elsif hash['base_currency'] == 'BCH'
+            @bch_coin_list << hash['id']
+            @bch_coin_list.sort!
+          elsif hash['base_currency'] == 'LTC'
+            @ltc_coin_list << hash['id']
+            @ltc_coin_list.sort!
+          end
+        end
+      elsif params[:id] == 2.to_s
+        @btc_coin_list = []
+        @bnb_coin_list = []
+        @eth_coin_list = []
+        @usdt_coin_list = []
+
+        response = HTTParty.get('https://api.binance.com/api/v1/exchangeInfo')
+        response = JSON.parse(response.to_s)
+
+        response["symbols"].each do |hash|
+          if hash['quoteAsset'] == 'ETH'
+            @eth_coin_list << format_pair(hash['symbol'], 'ETH')
+            @eth_coin_list.sort!
+          elsif hash['quoteAsset'] == 'BNB'
+            @bnb_coin_list << format_pair(hash['symbol'], 'BNB')
+            @bnb_coin_list.sort!
+          elsif hash['quoteAsset'] == 'BTC'
+            @btc_coin_list << format_pair(hash['symbol'], 'BTC')
+            @btc_coin_list.sort!
+          elsif hash['quoteAsset'] == 'USDT'
+            @usdt_coin_list << format_pair(hash['symbol'], 'USDT')
+            @usdt_coin_list.sort!
+          end
+        end
+      end
+    end
+
+    def format_pair(pair, match)
+      mid_point = pair =~ /#{match}/
+      coin_1_ticker = []
+      coin_2_ticker = []
+      pair.size.times do |n|
+        coin_1_ticker << pair[n] if n < mid_point
+        coin_2_ticker << pair[n] if n >= mid_point
+      end
+      "#{coin_1_ticker.join}-#{coin_2_ticker.join}"
     end
 end

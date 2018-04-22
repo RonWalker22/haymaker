@@ -17,7 +17,7 @@
     <% unless current_player.leagues.any? { |l| l.id == @league.id } %>
       <%= link_to "Join", join_path(league:@league.id), method: :post %>
     <% end %>
-    <%= link_to 'Trade', trade_path(@league.id,@league.exchanges.first.id, p:
+    <%= link_to 'Trade', trade_path(@league.id,@league.exchanges.second.id, p:
     'BTC-USD'), class:"button is-primary is-small"%>
   </p>
 
@@ -43,7 +43,7 @@
 
   <p>
     <strong>Commissioner:</strong>
-    <%= link_to Player.find(@league.player_id).username, 
+    <%= link_to Player.find(@league.player_id).username,
                 player_path(Player.find(@league.player_id).id)%>
   </p>
 

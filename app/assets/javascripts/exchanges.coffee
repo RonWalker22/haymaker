@@ -185,7 +185,7 @@ tryWebsocket  = ->
         coin_price = document.querySelector("#coin_price")
         message = JSON.parse(event.data)
         after_order_fun()
-        price = parseFloat(message[price_ws_target]).toFixed(2)
+        price = Math.roundTo parseFloat(message[price_ws_target]), 8
         callback = ->
           down_arrow.style.visibility = 'hidden'
           up_arrow.style.visibility = 'hidden'

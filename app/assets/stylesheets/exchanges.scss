@@ -220,11 +220,14 @@ input {
 .wrapper {
   display: grid;
   align-items: center;
+
   #order_sec {
     padding-top: 1em;
+    border-top: solid thin;
+    background: linear-gradient(to top, #108dc7, #0082c8, #0082c8);
   }
   #balance_block {
-
+    background: linear-gradient(to bottom, #108dc7, #0082c8, #0082c8);
   }
 
   .coin_list_table,
@@ -234,39 +237,36 @@ input {
     overflow-y: scroll;
   }
 
-  #tradingview_7ef5b {
-    height: 70vh;
-  }
-
 }
 
 /* Mobile Landscape Screen Sizes */
 @media only screen and (min-width: 480px)  {
   .wrapper {
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, 1fr);
+    grid-template-rows: .1fr .3fr .3fr .5fr;
   }
   #order_sec {
-    grid-row:2/3;
+    grid-row:3/4;
     align-self: start;
-    justify-self: end;
+    justify-self: center;
     margin-right: 1em;
     width: 200px;
-    border-top: solid thin;
   }
 
   #balance_block {
+    grid-row:2/3;
     align-self: end;
-    justify-self: end;
+    justify-self: center;
   }
   .tradingview-widget-container {
-    grid-row: 1/3;
+    grid-row: 2/4;
     grid-column: 2/4;
+    justify-self: center;
   }
   #orders_sec{
-    justify-content: center;
     grid-column: 2/4;
-    grid-row: 3/5;
+    grid-row: 4/5;
+    justify-content: center;
     align-self: start;
   }
 }
@@ -274,17 +274,22 @@ input {
 @media only screen and (min-width: 768px) {
   .coin_list_options {
     grid-column: 4/5;
-    grid-row: 1/3;
-    align-self: start;
-    margin-top: 11em;
+    grid-row: 1/2;
+    align-self: end;
+    // margin-top: 11em;
     margin-left: 1em;
   }
 
   .coin_list_table {
     grid-column: 4/5;
-    grid-row: 1/3;
+    grid-row: 2/3;
     align-self: start;
-    margin-top: 14em;
+    // margin-top: 14em;
     margin-left: 1em;
+  }
+
+  #tradingview_7ef5b {
+    height: 36vh;
+    width: 70vh;
   }
 }

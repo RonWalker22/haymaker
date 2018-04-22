@@ -10,8 +10,4 @@ module ExchangesHelper
     end
     "#{coin_1_ticker.join}#{coin_2_ticker.join}"
   end
-
-  # def
-  #
-  # end
 end

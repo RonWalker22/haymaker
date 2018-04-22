@@ -1,13 +1,6 @@
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
 
-Exchange.create!( name: 'GDAX' )
-
-Exchange.create!( name: 'Binance', 
-                  maker_fee: '0.01',
-                  taker_fee: '0.01'
-                )
-
 League.create!( name: 'Practice',
                 player_id: 1,
                 start_date: DateTime.now,
@@ -15,8 +8,16 @@ League.create!( name: 'Practice',
                 mode: 'Fantasy Friendly'
               )
 
-ExchangeLeague.create!( exchange_id: 1, league_id: 1)
-ExchangeLeague.create!( exchange_id: 2, league_id: 1)
+4.times do |n|
+  case n
+  when 0 then name = 'GDAX'
+  when 1 then name = 'Binance'
+  when 2 then name = 'Hitbtc'
+  when 3 then name = 'Gemini'
+  end
+  Exchange.create!( name: name )
+  ExchangeLeague.create!( exchange_id: n+1, league_id: 1)
+end
 
 20.times do |n|
   name = Faker::Name.name
@@ -35,24 +36,15 @@ ExchangeLeague.create!( exchange_id: 2, league_id: 1)
                  admin: admin
                 )
 
-  Wallet.create!( coin_type: 'BTC', 
-                  coin_quantity: '100.00', 
-                  player_id: n + 1,
-                  exchange_id: 2,
-                  league_id: 1,
-                  public_key: "btc#{n + 1}2" 
-                )
+  4.times do |inner_n|
+    Wallet.create!( coin_type: 'BTC',
+                    coin_quantity: '1.00',
+                    player_id: n + 1,
+                    exchange_id: inner_n + 1,
+                    league_id: 1,
+                    public_key: "btc#{n + 1}#{inner_n + 1}"
+                  )
+  end
 
   LeaguePlayer.create!( player_id: n + 1, league_id: 1)
-end
-
-
-10.times do |n|
-  n < 5 ? buy = true : buy = false
-  Order.create!(wallet_id: 1, 
-                open: false, 
-                size: n+1, 
-                price: 10000, 
-                product: 'BTC-USDT', 
-                buy: buy)
 end

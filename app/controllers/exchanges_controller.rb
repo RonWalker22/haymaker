@@ -176,7 +176,7 @@ class ExchangesController < ApplicationController
       find_and_set_coins
     end
     def get_full_coin_list
-      if params[:id] == 1.to_s
+      if params[:id].to_i == 1
         @btc_coin_list = []
         @bch_coin_list = []
         @eth_coin_list = []
@@ -200,7 +200,7 @@ class ExchangesController < ApplicationController
             @ltc_coin_list.sort!
           end
         end
-      elsif params[:id] == 2.to_s
+      elsif params[:id].to_i == 2
         @btc_coin_list = []
         @bnb_coin_list = []
         @eth_coin_list = []
@@ -223,6 +223,41 @@ class ExchangesController < ApplicationController
             @usdt_coin_list << format_pair(hash['symbol'], 'USDT')
             @usdt_coin_list.sort!
           end
+        end
+      elsif params[:id].to_i == 3
+        @btc_coin_list = []
+        @bnb_coin_list = []
+        @eth_coin_list = []
+        @usdt_coin_list = []
+
+        response = HTTParty.get('https://api.hitbtc.com/api/2/public/symbol')
+        response = JSON.parse(response.to_s)
+
+        response.each do |hash|
+          if hash['quoteCurrency'] == 'ETH'
+            @eth_coin_list << format_pair(hash['id'], 'ETH')
+            @eth_coin_list.sort!
+          elsif hash['quoteCurrency'] == 'BTC'
+            @btc_coin_list << format_pair(hash['id'], 'BTC')
+            @btc_coin_list.sort!
+          elsif hash['quoteCurrency'] == 'USD'
+            @usdt_coin_list << format_pair(hash['id'], 'USD')
+            @usdt_coin_list.sort!
+          end
+        end
+      elsif params[:id].to_i == 4
+        @btc_coin_list = []
+        @bnb_coin_list = []
+        @eth_coin_list = []
+        @usdt_coin_list = []
+
+        response = HTTParty.get('https://api.gemini.com/v1/symbols')
+        response = JSON.parse(response.to_s)
+
+        response.each do |pair|
+
+          @btc_coin_list << pair
+          @btc_coin_list.sort!
         end
       end
     end

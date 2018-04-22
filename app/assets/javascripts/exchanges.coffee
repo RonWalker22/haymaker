@@ -158,17 +158,30 @@ tryWebsocket  = ->
       past_price = 0
 
       switch exchange.innerHTML.toLowerCase()
-        when 'gdax'
+        when 'gdax exchange'
           socket = new WebSocket 'wss://ws-feed.gdax.com'
           request = { "type": "subscribe",  "channels": [{ "name": "ticker",
           "product_ids": [trading_pair] }]}
           price_ws_target = "price"
           puts '<--------->GDAX WebSocket!<--------->'
-        when 'binance'
+        when 'binance exchange'
           socket =
             new WebSocket "wss://stream.binance.com:9443/ws/#{cp1}#{cp0}@trade"
           price_ws_target = "p"
           puts '<--------->BINANCE WebSocket!<--------->'
+        when 'hitbtc exchange'
+          socket = new WebSocket 'wss://api.hitbtc.com/api/2/ws'
+          request = {   "method": "subscribeTicker",
+          "params": {"symbol": "#{cp1}#{cp0}"}, "id": 123}
+          price_ws_target = "params"
+          target_2 = "last"
+          puts '<--------->HITBTC WebSocket!<--------->'
+        when 'gemini exchange'
+          socket = new WebSocket "wss://api.gemini.com/v1/marketdata/#{cp1}#{cp0}"
+          price_ws_target = 'events'
+          target_2 = 0
+          target_3 = 'price'
+          puts '<--------->GEMINI WebSocket!<--------->'
 
       socket.onerror = (error) ->
         puts "WebSocket Error: ${error}"
@@ -185,7 +198,16 @@ tryWebsocket  = ->
         coin_price = document.querySelector("#coin_price")
         message = JSON.parse(event.data)
         after_order_fun()
-        price = Math.roundTo parseFloat(message[price_ws_target]), 8
+        if target_3
+          if exchange.innerHTML.toLowerCase() == 'gemini'
+            if message[price_ws_target][target_2]['type'] == 'trade'
+              price = Math.roundTo parseFloat(message[price_ws_target][target_2][target_3]), 8
+          else
+            price = Math.roundTo parseFloat(message[price_ws_target][target_2][target_3]), 8
+        else if target_2
+          price = Math.roundTo parseFloat(message[price_ws_target][target_2]), 8
+        else
+          price = Math.roundTo parseFloat(message[price_ws_target]), 8
         callback = ->
           down_arrow.style.visibility = 'hidden'
           up_arrow.style.visibility = 'hidden'

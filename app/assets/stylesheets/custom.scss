@@ -5,11 +5,11 @@
 
 #inner_body {
   min-height: 75.5vh;
-  background: #1D976C;
+  background: #0082c8;
 }
 
 .table {
-  background: transparent;
+  background: linear-gradient(to right, #108dc7, #0082c8, #0082c8, #108dc7);
 }
 
 html {
@@ -46,9 +46,6 @@ ul {
 
 .index {
   margin-left: 5%;
-  background: #667db6;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .index_title {

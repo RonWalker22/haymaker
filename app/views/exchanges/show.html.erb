@@ -2,11 +2,11 @@
   <p class="notification is-primary"><%= flash[:notice] %></p>
 <% end %>
 
-<h1 id="exchange" class="center"><%= @exchange.name %></h1>
-<h2 class="center league_title"><%= League.find(params[:lid]).name %>
-League</h2>
-
 <div class="wrapper">
+  <div class="league_and_exchange_info">
+    <h1 id="exchange" class="center"><%= @exchange.name %> Exchange</h1>
+    <h2 class="center league_title"><%= League.find(params[:lid]).name %> League
+  </div>
   <div id="balance_block">
     <p id='trading_pair'><%= @pair %></p>
 
@@ -74,8 +74,8 @@ League</h2>
             <%= number_field_tag :order_quantity, nil, placeholder: 0.0000,
               step: 0.00000001, min: 0.01, autofocus: 'autofocus',
               class: 'input is-small'%>
-            <span class="icon is-small is-right">
-              <%= @coin_1_ticker %>
+            <span class="icon is-right">
+                <%= @coin_1_ticker %>
             </span>
           </p>
           <div id='allocation_box'>
@@ -133,14 +133,14 @@ League</h2>
 
   <div class="coin_list_options">
     <div class="buttons has-addons">
-      <span class="button has-addons is-info is-inverted is-outlined">BTC</span>
-      <span class="button has-addons is-info is-inverted is-outlined">ETH</span>
-      <span class="button has-addons is-info is-inverted is-outlined">BNB</span>
-      <span class="button has-addons is-info is-inverted is-outlined">USDT</span>
+      <span class="button has-addons is-info is-outlined">BTC</span>
+      <span class="button has-addons is-info is-outlined">ETH</span>
+      <span class="button has-addons is-info is-outlined">BNB</span>
+      <span class="button has-addons is-info is-outlined">USDT</span>
     </div>
   </div>
   <div class="coin_list_table">
-    <table class="table is-hoverable">
+    <table class="table">
       <tbody>
         <% @btc_coin_list.each do |pair| %>
           <tr>

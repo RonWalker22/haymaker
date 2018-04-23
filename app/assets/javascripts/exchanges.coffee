@@ -199,7 +199,7 @@ tryWebsocket  = ->
         message = JSON.parse(event.data)
         after_order_fun()
         if target_3
-          if exchange.innerHTML.toLowerCase() == 'gemini'
+          if exchange.innerHTML.toLowerCase() == 'gemini exchange'
             if message[price_ws_target][target_2]['type'] == 'trade'
               price = Math.roundTo parseFloat(message[price_ws_target][target_2][target_3]), 8
           else

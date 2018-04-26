@@ -21,12 +21,6 @@ class ExchangesController < ApplicationController
     redirect_to "/leagues/#{@league_id}/exchanges/#{@exchange.id}?p=#{@pair}"
   end
 
-  def balances
-  end
-
-  def withdrawal
-  end
-
   def process_withdrawal
     if qualifying_transaction?
       transfer_funds
@@ -37,16 +31,11 @@ class ExchangesController < ApplicationController
     redirect_to request.original_fullpath
   end
 
-  def transaction_history
-  end
-  # GET /exchanges
-  # GET /exchanges.json
+
   def index
     @exchanges = Exchange.all
   end
 
-  # GET /exchanges/1
-  # GET /exchanges/1.json
 
   def show
     @pair = params[:p]
@@ -57,17 +46,10 @@ class ExchangesController < ApplicationController
     get_full_coin_list
   end
 
-  # GET /exchanges/new
   def new
     @exchange = Exchange.new
   end
 
-  # GET /exchanges/1/edit
-  def edit
-  end
-
-  # POST /exchanges
-  # POST /exchanges.json
   def create
     @exchange = Exchange.new(exchange_params)
 
@@ -82,8 +64,6 @@ class ExchangesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /exchanges/1
-  # PATCH/PUT /exchanges/1.json
   def update
     respond_to do |format|
       if @exchange.update(exchange_params)
@@ -96,8 +76,6 @@ class ExchangesController < ApplicationController
     end
   end
 
-  # DELETE /exchanges/1
-  # DELETE /exchanges/1.json
   def destroy
     @exchange.destroy
     respond_to do |format|

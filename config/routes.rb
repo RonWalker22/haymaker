@@ -28,6 +28,9 @@ Rails.application.routes.draw do
   post   'leagues/:id/exchanges/:xid/withdrawal/:cid' =>
                                                 'exchanges#process_withdrawal',
                                                     :as => 'process_withdrawal'
+  get   'leagues/:id/exchanges/:xid/transactions/:cid' =>
+                                                'exchanges#transaction_history',
+                                                    :as => 'transaction_history'
 
   # get 'profile' => 'players#'
   # get 'profile/edit' => 'players#'

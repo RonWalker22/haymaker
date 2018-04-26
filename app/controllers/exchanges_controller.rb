@@ -32,6 +32,9 @@ class ExchangesController < ApplicationController
 
     redirect_to request.original_fullpath
   end
+
+  def transaction_history
+  end
   # GET /exchanges
   # GET /exchanges.json
   def index
@@ -365,14 +368,26 @@ class ExchangesController < ApplicationController
     end
 
     def transfer_funds
-      transfer_quanity = params[:withdrawal_quantity].to_f
-      updated_quantity = @receiving_coin.coin_quantity  + transfer_quanity
+      @transfer_quanity = params[:withdrawal_quantity].to_f
+      updated_quantity = @receiving_coin.coin_quantity  + @transfer_quanity
 
       @receiving_coin.coin_quantity = updated_quantity
       if @receiving_coin.save
-        updated_quantity = @giving_coin.coin_quantity  - transfer_quanity
+        updated_quantity = @giving_coin.coin_quantity  - @transfer_quanity
         @giving_coin.coin_quantity = updated_quantity
         @giving_coin.save
+        update_transaction_history
       end
+    end
+
+    def update_transaction_history
+      target_hash = {wallet_id: @giving_coin.id, amount:@transfer_quanity,
+                      address: @giving_coin.public_key,
+                      coin: @giving_coin.coin_type, deposit_type:false}
+      TransactionHistory.create!(target_hash)
+      target_hash = {wallet_id: @receiving_coin.id, amount:@transfer_quanity,
+                      address: @receiving_coin.public_key,
+                      coin: @receiving_coin.coin_type, deposit_type:true}
+      TransactionHistory.create!(target_hash)
     end
 end

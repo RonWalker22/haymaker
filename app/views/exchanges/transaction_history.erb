@@ -1,0 +1,36 @@
+<h1>transaction history</h1>
+<div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Transaction Type</th>
+        <th>Status</th>
+        <th>Coin</th>
+        <th>Amount</th>
+        <th>Date</th>
+        <th>Deposit Address</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% target = {exchange_id: params[:xid], league_id: params[:id],
+                  coin_type: params[:cid]} %>
+      <% wallet = current_player.wallets.find_by(target)  %>
+      <% if wallet %>
+        <% wallet.transaction_histories.each do |w| %>
+            <tr>
+              <% if w.deposit_type == true %>
+                <td>Deposit</td>
+              <% else %>
+                <td class='withdrawal'>Withdrawal</td>
+              <% end %>
+              <td> <%= w.completed ? 'Completed' : 'Processing' %> </td>
+              <td> <%= w.coin  %> </td>
+              <td> <%= w.amount %> </td>
+              <td> <%= w.created_at %> </td>
+              <td> <%= w.address %> </td>
+            </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>

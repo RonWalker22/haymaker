@@ -51,8 +51,8 @@ ActiveRecord::Schema.define(version: 20180319010227) do
     t.string "entry_fee", default: "free", null: false
     t.bigint "player_id"
     t.string "mode", default: "Fantasy Friendly", null: false
-    t.datetime "start_date", default: "2018-04-22 23:02:17", null: false
-    t.datetime "end_date", default: "2018-05-22 23:02:17", null: false
+    t.datetime "start_date", default: "2018-04-25 15:07:00", null: false
+    t.datetime "end_date", default: "2018-05-25 15:07:00", null: false
     t.integer "rounds", default: 1, null: false
     t.boolean "exchange_risk", default: false, null: false
     t.boolean "exchange_fees", default: false, null: false

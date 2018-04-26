@@ -11,10 +11,10 @@ class CreateWallets < ActiveRecord::Migration[5.1]
 
       t.timestamps
     end
-    add_index :wallets, 
-              :public_key, 
+    add_index :wallets,
+              :public_key,
               unique: true
-    add_index :wallets, 
+    add_index :wallets,
               [:coin_type, :player_id, :exchange_id, :league_id],
               unique: true,
               name: 'unique_wallet'

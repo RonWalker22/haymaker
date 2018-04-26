@@ -5,7 +5,7 @@
 <div class="wrapper">
   <div class="league_and_exchange_info">
     <h1 id="exchange" class="center"><%= @exchange.name %> Exchange</h1>
-    <h2 class="center league_title"><%= League.find(params[:lid]).name %> League
+    <h2 class="center league_title"><%= League.find(params[:id]).name %> League
   </div>
   <div id="balance_block">
     <p id='trading_pair'><%= @pair %></p>
@@ -62,10 +62,9 @@
     </div>
     <span>
       <div class="field">
-        <%= form_tag("/order", method: "post", :class => "order_form") do %>
+        <%= form_tag(order_path(params[:id], params[:xid]), method: "post",
+                                :class => "order_form") do %>
           <%= hidden_field_tag :order_price, "-1", class: 'dynamic_price' %>
-          <%= hidden_field_tag :id, params[:id] %>
-          <%= hidden_field_tag :league, params[:lid] %>
           <%= hidden_field_tag :pair, params[:p] %>
           <%= hidden_field_tag :coin_1_ticker, @coin_1_ticker %>
           <%= hidden_field_tag :coin_2_ticker, @coin_2_ticker %>
@@ -112,7 +111,7 @@
     new TradingView.widget(
     {
     "autosize": true,
-    "symbol": "<%=Exchange.find(params[:id]).name.upcase == 'GDAX' ? 'COINBASE' : Exchange.find(params[:id]).name.upcase%>:<%= strip_dash_from_pair %>",
+    "symbol": "<%=Exchange.find(params[:xid]).name.upcase == 'GDAX' ? 'COINBASE' : Exchange.find(params[:xid]).name.upcase%>:<%= strip_dash_from_pair %>",
     "interval": "D",
     "timezone": "Etc/UTC",
     "theme": "Light",
@@ -146,8 +145,8 @@
           <tr>
             <td><i class="far fa-star"></i></td>
             <td>
-              <%= link_to pair,trade_path(params[:lid],
-                params[:id], p: pair) %>
+              <%= link_to pair,trade_path(params[:id],
+                params[:xid], p: pair) %>
             </td>
           </tr>
         <% end %>

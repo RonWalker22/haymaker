@@ -42,7 +42,7 @@ end
                     player_id: n + 1,
                     exchange_id: inner_n + 1,
                     league_id: 1,
-                    public_key: "btc#{n + 1}#{inner_n + 1}"
+                    public_key: SecureRandom.hex(20)
                   )
   end
 

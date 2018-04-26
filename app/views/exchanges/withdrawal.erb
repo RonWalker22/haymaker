@@ -1,0 +1,32 @@
+<h1>Withdrawal</h1>
+<div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Quantity</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <% target =  {exchange_id: params[:xid], coin_type: params[:cid] } %>
+        <% coin = current_player.wallets.find_by(target) %>
+        <td> <%= coin.coin_type  %> </td>
+        <td> <%= coin.coin_quantity %> </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="field">
+  <%= form_tag(process_withdrawal_path(params[:id], params[:xid], params[:cid]),
+                                  method: "post", :class => "order_form") do %>
+    <%= label_tag :deposit_address, 'Deposit Address:', id: 'deposit_label'%>
+    <%= text_field_tag :deposit_address, nil, :class => 'input',
+      autofocus: 'autofocus'%>
+    <%= label_tag :withdrawal_quantity, 'Withdrawal Amount:', id: 'amount_label'%>
+    <%= number_field_tag :withdrawal_quantity, nil, step: 0.00000001, min: 0.01,
+      class: 'input'%>
+    <%= submit_tag "Transfer Funds", class: 'button is-primary is-outlined'%>
+  <% end %>
+</div>

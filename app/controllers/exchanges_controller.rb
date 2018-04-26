@@ -5,7 +5,7 @@ class ExchangesController < ApplicationController
 
   def order
     @pair = params[:pair]
-    @league_id = params[:league]
+    @league_id = params[:id]
     @coin_1_ticker = params[:coin_1_ticker]
     @coin_2_ticker = params[:coin_2_ticker]
     @order_type = params[:commit] == "Place Buy Order" ? 'Buy' : 'Sell'
@@ -21,7 +21,17 @@ class ExchangesController < ApplicationController
     redirect_to "/leagues/#{@league_id}/exchanges/#{@exchange.id}?p=#{@pair}"
   end
 
+  def balances
+  end
 
+  def withdrawal
+  end
+
+  def process_withdrawal
+    transfer_funds if equivalent_pairs? && sufficient_funds_to_transfer?
+
+    redirect_to request.original_fullpath
+  end
   # GET /exchanges
   # GET /exchanges.json
   def index
@@ -92,7 +102,7 @@ class ExchangesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_exchange
-      @exchange = Exchange.find(params[:id])
+      @exchange = Exchange.find(params[:xid])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
@@ -155,28 +165,27 @@ class ExchangesController < ApplicationController
     def create_wallet_if_missing
       unless @coin_1
         Wallet.create!({coin_type:  @coin_1_ticker,
-                    coin_quantity: 0,
-                    exchange_id: @exchange.id,
-                    player_id: current_player.id,
-                    public_key:
-                    "#{@coin_1_ticker}#{current_player.id}#{@exchange.id}",
-                    league_id: 1
-                  })
+                        coin_quantity: 0,
+                        exchange_id: @exchange.id,
+                        player_id: current_player.id,
+                        public_key: SecureRandom.hex(20),
+                        league_id: 1
+                      })
       end
       unless @coin_2
         Wallet.create!({coin_type:  @coin_2_ticker,
-                      coin_quantity: 0,
-                      exchange_id: @exchange.id,
-                      player_id: current_player.id,
-                      public_key:
-                      "#{@coin_2_ticker}#{current_player.id}#{@exchange.id}",
-                      league_id: 1
-                    })
+                        coin_quantity: 0,
+                        exchange_id: @exchange.id,
+                        player_id: current_player.id,
+                        public_key: SecureRandom.hex(20),
+                        league_id: 1
+                      })
       end
       find_and_set_coins
     end
+
     def get_full_coin_list
-      if params[:id].to_i == 1
+      if params[:xid].to_i == 1
         @btc_coin_list = []
         @bch_coin_list = []
         @eth_coin_list = []
@@ -200,7 +209,7 @@ class ExchangesController < ApplicationController
             @ltc_coin_list.sort!
           end
         end
-      elsif params[:id].to_i == 2
+      elsif params[:xid].to_i == 2
         @btc_coin_list = []
         @bnb_coin_list = []
         @eth_coin_list = []
@@ -224,7 +233,7 @@ class ExchangesController < ApplicationController
             @usdt_coin_list.sort!
           end
         end
-      elsif params[:id].to_i == 3
+      elsif params[:xid].to_i == 3
         @btc_coin_list = []
         @bnb_coin_list = []
         @eth_coin_list = []
@@ -245,7 +254,7 @@ class ExchangesController < ApplicationController
             @usdt_coin_list.sort!
           end
         end
-      elsif params[:id].to_i == 4
+      elsif params[:xid].to_i == 4
         @btc_coin_list = []
         @bnb_coin_list = []
         @eth_coin_list = []
@@ -262,6 +271,73 @@ class ExchangesController < ApplicationController
       end
     end
 
+    # def get_full_coin_list
+    #   @btc_coin_list = []
+    #   @bch_coin_list = []
+    #   @eth_coin_list = []
+    #   @ltc_coin_list = []
+    #   @usd_coin_list = []
+    #   @usdt_coin_list = []
+    #   @bnb_coin_list = []
+    #
+    #   case params[:xid].to_i
+    #   when 1
+    #     target_1, target_2,  = 'quote_currency', 'id'
+    #     response = HTTParty.get 'https://api.gdax.com/products'
+    #   when 2
+    #     target_1, target_2  = 'quote_currency', 'id'
+    #     response = HTTParty.get 'https://api.binance.com/api/v1/exchangeInfo'
+    #   when 3
+    #     target_1, target_2  = 'quote_currency', 'id'
+    #     response = HTTParty.get 'https://api.hitbtc.com/api/2/public/symbol'
+    #   when 4
+    #     target_1, target_2  = 'quote_currency', 'id'
+    #     response = HTTParty.get 'https://api.gemini.com/v1/symbols'
+    #   end
+    #
+    #   response = JSON.parse(response.to_s)
+    #   response.each do |hash|
+    #     next if hash['quote_currency'] == 'EUR' || hash['quote_currency'] == 'GBP'
+    #     if hash[target_1] == 'ETH'
+    #       @eth_coin_list << hash[target_2]
+    #       @eth_coin_list.sort!
+    #     elsif hash[target_1] == 'BTC'
+    #       @btc_coin_list << hash[target_2]
+    #       @btc_coin_list.sort!
+    #     elsif hash[target_1] == 'BCH'
+    #       @bch_coin_list << hash[target_2]
+    #       @bch_coin_list.sort!
+    #     elsif hash[target_1] == 'LTC'
+    #       @ltc_coin_list << hash[target_2]
+    #       @ltc_coin_list.sort!
+    #     elsif hash[target_1] == 'BNB'
+    #       @bnb_coin_list << format_pair(hash[target_2], 'BNB')
+    #       @bnb_coin_list.sort!
+    #     elsif hash[target_1] == 'USDT'
+    #       @usdt_coin_list << format_pair(hash[target_2], 'USDT')
+    #       @usdt_coin_list.sort!
+    #     elsif hash[target_1] == 'USD'
+    #       @usd_coin_list << format_pair(hash[target_2], 'USD')
+    #       @usd_coin_list.sort!
+    #     end
+    #   end
+    # end
+    #
+    # def push_and_sort(pair)
+    #   self << pair
+    #   self.sort!
+    # end
+    #
+    # def push_sort_and_format(pair, match)
+    #   self << format_pair(pair, match)
+    #   self.sort!
+    # end
+    #
+    # def push_sort_and_format(pair, match=nil)
+    #   @format_active ? self << format_pair(pair, match) : self << pair
+    #   self.sort!
+    # end
+
     def format_pair(pair, match)
       mid_point = pair =~ /#{match}/
       coin_1_ticker = []
@@ -271,5 +347,32 @@ class ExchangesController < ApplicationController
         coin_2_ticker << pair[n] if n >= mid_point
       end
       "#{coin_1_ticker.join}-#{coin_2_ticker.join}"
+    end
+
+    def sufficient_funds_to_transfer?
+      @giving_coin.coin_quantity >= params[:withdrawal_quantity].to_f
+    end
+
+    def equivalent_pairs?
+      receiving_target = {public_key: params[:deposit_address]}
+      giving_target = {exchange_id: params[:xid], league_id: params[:id],
+                      coin_type: params[:cid] }
+      @receiving_coin = current_player.wallets.find_by(receiving_target)
+      @giving_coin = current_player.wallets.find_by(giving_target)
+
+      @receiving_coin.coin_type == @giving_coin.coin_type &&
+        @receiving_coin.league_id == @giving_coin.league_id
+    end
+
+    def transfer_funds
+      transfer_quanity = params[:withdrawal_quantity].to_f
+      updated_quantity = @receiving_coin.coin_quantity  + transfer_quanity
+
+      @receiving_coin.coin_quantity = updated_quantity
+      if @receiving_coin.save
+        updated_quantity = @giving_coin.coin_quantity  - transfer_quanity
+        @giving_coin.coin_quantity = updated_quantity
+        @giving_coin.save
+      end
     end
 end

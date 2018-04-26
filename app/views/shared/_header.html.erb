@@ -17,7 +17,19 @@
       </div>
 
       <div class="navbar-end">
-        <% if logged_in? %>       
+        <% if logged_in? %>
+          <% if appropriate_environment?('funds') %>
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a href="#" class=navbar-link>
+                <%= League.find(params[:id]).name%> Funds
+              </a>
+              <div class="navbar-dropdown is-boxed">
+                <%= link_to 'Balances',
+                  balances_path(params[:id], params[:xid]),
+                    :class =>"navbar-item" %>
+              </div>
+            </div>
+          <% end %>
           <div class="navbar-item has-dropdown is-hoverable">
             <a href="#" class=navbar-link>My Leagues</a>
             <div class="navbar-dropdown is-boxed">
@@ -31,12 +43,12 @@
               <%= current_player.username%>
             </a>
             <div class="navbar-dropdown is-boxed">
-              <%= link_to "My Profile", player_path(current_player.id), 
+              <%= link_to "My Profile", player_path(current_player.id),
                           :class =>"navbar-item" %>
-              <%= link_to "Log out", logout_path, method: :delete, 
+              <%= link_to "Log out", logout_path, method: :delete,
                           :class =>"navbar-item" %>
             </div>
-          </div> 
+          </div>
         <% else %>
           <%= link_to 'Login', login_path, :class => "navbar-item"%>
           <%= link_to 'Sign up', new_player_path, :class => "navbar-item"%>
@@ -44,4 +56,4 @@
       </div>
     </div>
   </nav>
-</header> 
+</header>

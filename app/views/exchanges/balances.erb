@@ -13,6 +13,7 @@
         <th>Quantity</th>
         <th>Deposit Address</th>
         <th></th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -22,7 +23,15 @@
             <td> <%= w.coin_quantity %> </td>
             <td> <%= w.public_key %> </td>
             <td> <%= link_to 'Withdrawal',
-                withdrawal_path(params[:id], params[:xid], w.coin_type) %>
+                  withdrawal_path(params[:id], params[:xid], w.coin_type),
+                  class: "button is-rounded is-info is-small"
+                  %>
+            </td>
+            <td>
+            <%= link_to 'Transaction history',
+                transaction_history_path(params[:id], params[:xid], w.coin_type),
+                class: "button is-rounded is-info is-inverted is-small"
+            %>
             </td>
           </tr>
       <% end %>

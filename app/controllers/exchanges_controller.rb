@@ -28,7 +28,7 @@ class ExchangesController < ApplicationController
   end
 
   def process_withdrawal
-    transfer_funds if equivalent_pairs? && sufficient_funds_to_transfer?
+    transfer_funds if qualifying_transaction?
 
     redirect_to request.original_fullpath
   end
@@ -362,6 +362,14 @@ class ExchangesController < ApplicationController
 
       @receiving_coin.coin_type == @giving_coin.coin_type &&
         @receiving_coin.league_id == @giving_coin.league_id
+    end
+
+    def giving_coin_not_usd?
+      @giving_coin.coin_type.upcase != 'USD'
+    end
+
+    def qualifying_transaction?
+      equivalent_pairs? && sufficient_funds_to_transfer? && giving_coin_not_usd?
     end
 
     def transfer_funds

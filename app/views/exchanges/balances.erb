@@ -1,4 +1,10 @@
+<% if flash[:notice] %>
+  <p class="notification is-primary"><%= flash[:notice] %></p>
+<% elsif flash[:fail] %>
+  <p class="notification is-warning"><%= flash[:fail] %></p>
+<% end %>
 <h1>Balances</h1>
+<h2><%= @exchange.name %> Exchange</h2>
 <div>
   <table class="table">
     <thead>

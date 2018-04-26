@@ -1,5 +1,5 @@
 class ExchangesController < ApplicationController
-  before_action :set_exchange, only: [:show, :edit, :update, :destroy, :order]
+  before_action :set_exchange, except: [:create, :index, :new]
   before_action :check_logged_in, only: [:show, :edit, :update, :destroy,
                                           :order]
 
@@ -28,8 +28,12 @@ class ExchangesController < ApplicationController
   end
 
   def process_withdrawal
-    transfer_funds if qualifying_transaction?
-
+    if qualifying_transaction?
+      transfer_funds
+      flash[:notice] = 'Your transaction was successfully processed.'
+    else
+      flash[:fail] = 'Your transaction was unsuccessful.'
+    end
     redirect_to request.original_fullpath
   end
   # GET /exchanges
@@ -359,7 +363,7 @@ class ExchangesController < ApplicationController
                       coin_type: params[:cid] }
       @receiving_coin = current_player.wallets.find_by(receiving_target)
       @giving_coin = current_player.wallets.find_by(giving_target)
-
+      return false if @receiving_coin == nil || @giving_coin == nil
       @receiving_coin.coin_type == @giving_coin.coin_type &&
         @receiving_coin.league_id == @giving_coin.league_id
     end

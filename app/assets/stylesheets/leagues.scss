@@ -2,11 +2,12 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.is-horizontal {
+  .field {
+    padding-right: 1em;
+  }
+}
 
-
-// #leagues_index_values_row {
-//   // border-style:solid;
-//   background-color: #d6f5d6;
-//   border-color:#00802b;
-//   border-style: solid;
-// }
+.input {
+  max-width: 20em;
+}

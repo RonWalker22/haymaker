@@ -1,9 +1,5 @@
-<% if notice %>
+<% if flash[:notice] %>
   <p class="notification is-primary"><%= flash[:notice] %></p>
-<% end %>
-
-<% if notice %>
-  <p class="notification is-primary"><%= notice %></p>
 <% end %>
 
 <h1 class="index_title">Leagues</h1>
@@ -42,7 +38,7 @@
     <% @leagues.each do |league| %>
       <tr>
         <td>
-          <%=link_to league.name, league_path(league.id) %>                 
+          <%=link_to league.name, league_path(league.id) %>
         </td>
         <td><%= league.entry_fee %></td>
         <td>
@@ -56,7 +52,7 @@
         <td><%= league.players.count %></td>
         <td><%= league.exchanges.count %></td>
         <td>
-            <%= link_to Player.find(league.player_id).username, 
+            <%= link_to Player.find(league.player_id).username,
                         player_path(Player.find(league.player_id).id)%>
         </td>
 

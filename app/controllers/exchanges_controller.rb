@@ -349,12 +349,17 @@ class ExchangesController < ApplicationController
         @receiving_coin.league_id == @giving_coin.league_id
     end
 
+    def transfer_to_same_user?
+      @receiving_coin.player_id == @giving_coin.player_id
+    end
+
     def giving_coin_not_usd?
       @giving_coin.coin_type.upcase != 'USD'
     end
 
     def qualifying_transaction?
-      equivalent_pairs? && sufficient_funds_to_transfer? && giving_coin_not_usd?
+      equivalent_pairs? && sufficient_funds_to_transfer? &&
+        giving_coin_not_usd? && transfer_to_same_user?
     end
 
     def transfer_funds

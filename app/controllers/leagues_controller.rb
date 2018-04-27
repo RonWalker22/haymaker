@@ -26,12 +26,13 @@ class LeaguesController < ApplicationController
   # POST /leagues
   # POST /leagues.json
   def create
-    @league = League.new(league_params)
+    puts ">>>>>-------->>>>#{params}"
+    @league = League.new(league_params.slice(:name, :player_id, :start_date, :end_date))
     respond_to do |format|
       if @league.save
         create_exchange_league_table
         flash[:notice] = 'League was successfully created.'
-        @leaguePlayer = LeaguePlayer.create!({league_id:@league.id, 
+        @leaguePlayer = LeaguePlayer.create!({league_id:@league.id,
                                   player_id:current_player.id})
         format.html { redirect_to @league }
         format.json { render :show, status: :created, location: @league }
@@ -64,7 +65,7 @@ class LeaguesController < ApplicationController
   def destroy
     @league.destroy
     respond_to do |format|
-      flash[:notice] = 'League was successfully destroyed.' 
+      flash[:notice] = 'League was successfully destroyed.'
       format.html { redirect_to leagues_url}
       format.json { head :no_content }
     end
@@ -85,7 +86,7 @@ class LeaguesController < ApplicationController
   league = League.find(params[:league])
     if league.id == 1
       # flash[:notice] = 'League was successfully updated.'
-      flash[:reset_funds] = 
+      flash[:reset_funds] =
                   'Are you sure you want to reset your practice league funds?'
       respond_to do |format|
         format.html { redirect_to league_url(league.id)}
@@ -95,14 +96,14 @@ class LeaguesController < ApplicationController
       respond_to do |format|
         flash[:notice] = "Funds can only be reset in the practice league."
         format.html { redirect_to league_url(league.id) }
-        format.json { render json: @league.errors, 
+        format.json { render json: @league.errors,
                       status: :unprocessable_entity }
       end
     end
   end
 
   def reset_funds
-    wallets = Wallet.where player_id: current_player, league_id: 1 
+    wallets = Wallet.where player_id: current_player, league_id: 1
 
     wallets.each do |wallet|
       if wallet.coin_type == 'BTC'
@@ -125,12 +126,17 @@ class LeaguesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def league_params
       params.require(:league).permit(:name, :entry_fee, :commissioner,
-        :start_date, :player_id, :end_date, :rounds, :exchange_risk,
-        :exchange_fees, :high_be_score, :public_keys, :instant_deposits_withdraws, :lazy_picker)
+        :start_date, :player_id, :end_date, :rounds,
+        :exchange_fees, :public_keys, :"Binance Exchange", :"Gemini Exchange",
+        :"Hitbtc Exchange", :"GDAX Exchange")
     end
+
     def create_exchange_league_table
       Exchange.all.each do |x|
-        ExchangeLeague.create! league_id: @league.id, exchange_id: x.id  
-      end 
+        # binding.pry
+        if league_params["#{x.name} Exchange"].to_i == 1
+          ExchangeLeague.create! league_id: @league.id, exchange_id: x.id
+        end
+      end
     end
 end

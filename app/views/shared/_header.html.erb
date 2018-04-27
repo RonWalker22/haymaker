@@ -19,15 +19,17 @@
       <div class="navbar-end">
         <% if logged_in? %>
           <% if appropriate_environment?('funds') %>
-            <div class="navbar-item has-dropdown is-hoverable">
-              <a href="#" class=navbar-link>Exchange Switcher</a>
-              <div class="navbar-dropdown is-boxed">
-                <% League.find(params[:id]).exchanges.each do |x| %>
-                  <%= link_to "#{x.name} Exchange", switch_exchanges(x.id),
-                      :class =>"navbar-item" %>
-                <% end %>
+            <% if League.find(params[:id]).exchanges.size >= 2 %>
+              <div class="navbar-item has-dropdown is-hoverable">
+                <a href="#" class=navbar-link>Exchange Switcher</a>
+                <div class="navbar-dropdown is-boxed">
+                  <% League.find(params[:id]).exchanges.each do |x| %>
+                    <%= link_to "#{x.name} Exchange", switch_exchanges(x.id),
+                        :class =>"navbar-item" %>
+                  <% end %>
+                </div>
               </div>
-            </div>
+            <% end %>
             <div class="navbar-item has-dropdown is-hoverable">
               <a href="#" class=navbar-link>
                 <%= League.find(params[:id]).name%> Funds

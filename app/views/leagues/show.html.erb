@@ -17,7 +17,7 @@
     <% unless current_player.leagues.any? { |l| l.id == @league.id } %>
       <%= link_to "Join", join_path(league:@league.id), method: :post %>
     <% end %>
-    <%= link_to 'Trade', trade_path(@league.id,@league.exchanges.second.id, p:
+    <%= link_to 'Trade', trade_path(@league.id, @league.exchanges.first.id, p:
     'BTC-USDT'), class:"button is-primary is-small"%>
   </p>
 

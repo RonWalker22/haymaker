@@ -18,15 +18,29 @@
   <div class="field">
     <%= form.label :name, class: "label" %>
     <div class="control">
-      <%= form.text_field :name, id: :league_name, class: "input", required: true %>
+      <%= form.text_field :name, id: :league_name, class: "input is-small", required: true %>
     </div>
   </div>
 
   <div class="field">
+    <%= form.label :community, class: "label" %>
     <div class="control">
-      <%= form.label :entry_fee, class: "label" %>
-      <%= form.text_field :entry_fee, id: :league_entry_fee,
-        class: "input", disabled: true%>
+      <div class="select is-small">
+        <select disabled=true>
+          <%= options_for_select(['Public', 1], ['Private', 2])%>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="field">
+    <%= form.label :entry_fee, class: "label" %>
+    <div class="control">
+      <div class="select is-small">
+        <select class="" name="" disabled=true>
+          <%= options_for_select(['Free', 1], ['Paid', 2])%>
+        </select>
+      </div>
     </div>
   </div>
 
@@ -56,7 +70,7 @@
   <div class="field">
     <div class="control">
       <%= form.label :rounds, class: "label" %>
-      <%= form.number_field :rounds, id: :league_rounds, class:"input",
+      <%= form.number_field :rounds, id: :league_rounds, class:"input is-small",
       disabled: true%>
     </div>
   </div>

@@ -78,3 +78,5 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem "bulma-rails", "~> 0.6.2"
 
 gem 'httparty'
+
+gem 'faye-websocket'

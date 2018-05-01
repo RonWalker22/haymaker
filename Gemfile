@@ -80,3 +80,5 @@ gem "bulma-rails", "~> 0.6.2"
 gem 'httparty'
 
 gem 'faye-websocket'
+
+gem 'devise'

@@ -4,6 +4,9 @@ class CreateTickers < ActiveRecord::Migration[5.1]
       t.references :exchange, null: false
       t.decimal :price, default: 0.00, null: false
       t.string :pair, null: false
+      t.string :natural_pair, null: false
+      t.string :base_currency, null: false
+      t.string :quote_currency, null: false
 
       t.timestamps
     end

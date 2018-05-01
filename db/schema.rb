@@ -51,8 +51,8 @@ ActiveRecord::Schema.define(version: 20180430162531) do
     t.string "entry_fee", default: "free", null: false
     t.bigint "player_id"
     t.string "mode", default: "Fantasy Friendly", null: false
-    t.datetime "start_date", default: "2018-04-25 15:07:00", null: false
-    t.datetime "end_date", default: "2018-05-25 15:07:00", null: false
+    t.datetime "start_date", default: "2018-04-30 23:19:33", null: false
+    t.datetime "end_date", default: "2018-05-30 23:19:33", null: false
     t.integer "rounds", default: 1, null: false
     t.boolean "exchange_risk", default: false, null: false
     t.boolean "exchange_fees", default: false, null: false
@@ -95,6 +95,9 @@ ActiveRecord::Schema.define(version: 20180430162531) do
     t.bigint "exchange_id", null: false
     t.decimal "price", default: "0.0", null: false
     t.string "pair", null: false
+    t.string "natural_pair", null: false
+    t.string "base_currency", null: false
+    t.string "quote_currency", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["exchange_id"], name: "index_tickers_on_exchange_id"

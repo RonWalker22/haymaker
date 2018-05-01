@@ -1,7 +1,10 @@
 gdax = Exchange.find_by(name: 'GDAX')
+@gdax_threads ||= []
 
 Thread.new do
-  sleep(10)
+  @gdax_threads.each {|t| t.kill}
+  @gdax_threads = [Thread.current]
+  sleep(8)
   EM.run {
     ws = Faye::WebSocket::Client.new('wss://ws-feed.gdax.com')
 
@@ -38,11 +41,13 @@ Thread.new do
   ActiveRecord::Base.connection.close
 end
 
-
 binance = Exchange.find_by(name: 'Binance')
+@binance_threads ||= []
 
 Thread.new do
-  sleep(10)
+  @binance_threads.each {|t| t.kill}
+  @binance_threads = [Thread.current]
+  sleep(8)
   EM.run {
     # binance will disconnect after 24 hours.
     # Thanks for the pointer! In return, I offer this tip... do a WebSocket ping
@@ -80,11 +85,15 @@ end
 
 
 gemini = Exchange.find_by(name: 'Gemini')
+@gemini_threads ||= []
+
 gemini.tickers.each_with_index do |ticker, i|
 
   pair = ticker.natural_pair
   Thread.new do
-  sleep(10) if i == 0
+    @gemini_threads.each {|t| t.kill} if i == 0
+    @gemini_threads << Thread.current
+  sleep(8)
     EM.run {
     ws = Faye::WebSocket::Client.new("wss://api.gemini.com/v1/marketdata/#{pair}")
 

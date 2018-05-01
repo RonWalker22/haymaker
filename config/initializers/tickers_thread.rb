@@ -1,7 +1,11 @@
 gdax = Exchange.find_by name:'GDAX'
 gemini = Exchange.find_by name:'Gemini'
 binance = Exchange.find_by name:'Binance'
+@ticker_threads ||= []
 Thread.new do
+  @ticker_threads.each {|t| t.kill}
+  @ticker_threads = [Thread.current]
+  sleep(4)
   def format_pair(pair, match)
     mid_point = pair =~ /#{match}/
     coin_1_ticker = []

@@ -1,8 +1,3 @@
-<% if flash[:notice] %>
-  <p class="notification is-primary"><%= flash[:notice] %></p>
-<% elsif flash[:fail] %>
-  <p class="notification is-warning"><%= flash[:fail] %></p>
-<% end %>
 <h1>Withdrawal</h1>
 <h2><%= @exchange.name %> Exchange</h2>
 <div>
@@ -16,7 +11,7 @@
     <tbody>
       <tr>
         <% target =  {exchange_id: params[:xid], coin_type: params[:cid] } %>
-        <% coin = current_player.wallets.find_by(target) %>
+        <% coin = current_user.wallets.find_by(target) %>
         <td> <%= coin.coin_type  %> </td>
         <td> <%= coin.coin_quantity %> </td>
       </tr>

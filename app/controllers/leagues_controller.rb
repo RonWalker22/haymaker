@@ -1,6 +1,6 @@
 class LeaguesController < ApplicationController
   before_action :set_league, only: [:show, :edit, :update, :destroy]
-  before_action :check_logged_in, only: [:show, :edit, :update, :destroy,
+  before_action :user_signed_in?, only: [:show, :edit, :update, :destroy,
                                           :order, :index]
 
   # GET /leagues
@@ -27,13 +27,13 @@ class LeaguesController < ApplicationController
   # POST /leagues.json
   def create
     puts ">>>>>-------->>>>#{params}"
-    @league = League.new(league_params.slice(:name, :player_id, :start_date, :end_date))
+    @league = League.new(league_params.slice(:name, :user_id, :start_date, :end_date))
     respond_to do |format|
       if @league.save
         create_exchange_league_table
         flash[:notice] = 'League was successfully created.'
-        @leaguePlayer = LeaguePlayer.create!({league_id:@league.id,
-                                  player_id:current_player.id})
+        @leagueUser = LeagueUser.create!({league_id:@league.id,
+                                  user_id:current_user.id})
         format.html { redirect_to @league }
         format.json { render :show, status: :created, location: @league }
       else
@@ -72,7 +72,7 @@ class LeaguesController < ApplicationController
   end
 
   def join
-    new_palyer = LeaguePlayer.new({player_id:current_player.id,
+    new_palyer = LeagueUser.new({user_id:current_user.id,
                       league_id: params[:league]})
     if new_palyer.save
       flash[:notice] = 'You have successfully joined this league.'
@@ -103,7 +103,7 @@ class LeaguesController < ApplicationController
   end
 
   def reset_funds
-    wallets = Wallet.where player_id: current_player, league_id: 1
+    wallets = Wallet.where user_id: current_user, league_id: 1
 
     wallets.each do |wallet|
       if wallet.coin_type == 'BTC'
@@ -126,7 +126,7 @@ class LeaguesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def league_params
       params.require(:league).permit(:name, :entry_fee, :commissioner,
-        :start_date, :player_id, :end_date, :rounds,
+        :start_date, :user_id, :end_date, :rounds,
         :exchange_fees, :public_keys, :"Binance Exchange", :"Gemini Exchange",
         :"Hitbtc Exchange", :"GDAX Exchange")
     end

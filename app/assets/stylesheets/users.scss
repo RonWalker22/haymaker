@@ -1,21 +1,21 @@
-// Place all the styles related to the Players controller here.
+// Place all the styles related to the Users controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.new_player_fields {
+.new_user_fields {
   margin-bottom: 10px;
 }
 
-#new_player_username_field{
+#new_user_username_field{
   margin-right: 59px;
 }
-#new_player_email_field{
+#new_user_email_field{
   margin-right: 91px;
 }
-#new_player_password_field{
+#new_user_password_field{
   margin-right: 61px;
 }
-#new_player_confirm_password_field{
+#new_user_confirm_password_field{
   margin-right: 5px;
 }
 
@@ -31,11 +31,11 @@
   }
 }
 
-#edit_player_title {
+#edit_user_title {
   display: inline-block;
 }
 
-.pp-username {
+.pp-name {
   margin-bottom: 1em;
 }
 

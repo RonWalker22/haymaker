@@ -1,6 +1,6 @@
 class ExchangesController < ApplicationController
   before_action :set_exchange, except: [:create, :index, :new]
-  before_action :check_logged_in, only: [:show, :edit, :update, :destroy,
+  before_action :user_signed_in?, only: [:show, :edit, :update, :destroy,
                                           :order]
 
   def order
@@ -12,7 +12,7 @@ class ExchangesController < ApplicationController
     @price = params[:order_price].to_f
     return "Invaid price" if @price < 0.0
     @order_quantity = params[:order_quantity].to_f
-    @wallets = current_player.wallets.where(exchange_id: @exchange.id)
+    @wallets = current_user.wallets.where(exchange_id: @exchange.id)
     set_coin_tickers
     find_and_set_coins
     create_wallet_if_missing
@@ -26,7 +26,7 @@ class ExchangesController < ApplicationController
       transfer_funds
       flash[:notice] = 'Your transaction was successfully processed.'
     else
-      flash[:fail] = 'Your transaction was unsuccessful.'
+      flash[:alert] = 'Your transaction was unsuccessful.'
     end
     redirect_to request.original_fullpath
   end
@@ -40,7 +40,7 @@ class ExchangesController < ApplicationController
   def show
     @pair = params[:p]
     set_coin_tickers
-    @wallets = current_player.wallets.where(exchange_id:@exchange.id)
+    @wallets = current_user.wallets.where(exchange_id:@exchange.id)
     @wallet = @wallets.find_by(coin_type:@coin_1_ticker)
     find_and_set_coins
     get_full_coin_list
@@ -152,7 +152,7 @@ class ExchangesController < ApplicationController
         Wallet.create!({coin_type:  @coin_1_ticker,
                         coin_quantity: 0,
                         exchange_id: @exchange.id,
-                        player_id: current_player.id,
+                        user_id: current_user.id,
                         public_key: SecureRandom.hex(20),
                         league_id: 1
                       })
@@ -161,7 +161,7 @@ class ExchangesController < ApplicationController
         Wallet.create!({coin_type:  @coin_2_ticker,
                         coin_quantity: 0,
                         exchange_id: @exchange.id,
-                        player_id: current_player.id,
+                        user_id: current_user.id,
                         public_key: SecureRandom.hex(20),
                         league_id: 1
                       })
@@ -342,15 +342,15 @@ class ExchangesController < ApplicationController
       receiving_target = {public_key: params[:deposit_address]}
       giving_target = {exchange_id: params[:xid], league_id: params[:id],
                       coin_type: params[:cid] }
-      @receiving_coin = current_player.wallets.find_by(receiving_target)
-      @giving_coin = current_player.wallets.find_by(giving_target)
+      @receiving_coin = current_user.wallets.find_by(receiving_target)
+      @giving_coin = current_user.wallets.find_by(giving_target)
       return false if @receiving_coin == nil || @giving_coin == nil
       @receiving_coin.coin_type == @giving_coin.coin_type &&
         @receiving_coin.league_id == @giving_coin.league_id
     end
 
     def transfer_to_same_user?
-      @receiving_coin.player_id == @giving_coin.player_id
+      @receiving_coin.user_id == @giving_coin.user_id
     end
 
     def giving_coin_not_usd?

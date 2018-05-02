@@ -1,8 +1,3 @@
-<% if flash[:notice] %>
-  <p class="notification is-primary"><%= flash[:notice] %></p>
-<% elsif flash[:fail] %>
-  <p class="notification is-warning"><%= flash[:fail] %></p>
-<% end %>
 <h1>Balances</h1>
 <h2><%= @exchange.name %> Exchange</h2>
 <div>
@@ -17,7 +12,7 @@
       </tr>
     </thead>
     <tbody>
-      <% current_player.wallets.where(exchange_id: params[:xid]).each do |w| %>
+      <% current_user.wallets.where(exchange_id: params[:xid]).each do |w| %>
           <tr>
             <td> <%= w.coin_type  %> </td>
             <td> <%= w.coin_quantity %> </td>

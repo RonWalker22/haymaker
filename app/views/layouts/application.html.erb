@@ -11,9 +11,13 @@
   </head>
   <body>
     <%= render 'shared/header' %>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
     <div id='inner_body'>
+      <% if notice %>
+      <p class="notice notification is-primary"><%= notice %></p>
+      <% end %>
+      <% if alert %>
+      <p class="alert notification is-primary"><%= alert %></p>
+      <% end %>
       <%= yield %>
     </div>
     <%= render 'shared/footer' %>

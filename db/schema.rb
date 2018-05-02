@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180501194630) do
+ActiveRecord::Schema.define(version: 20180430162531) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,34 +36,26 @@ ActiveRecord::Schema.define(version: 20180501194630) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "league_players", force: :cascade do |t|
+  create_table "league_users", force: :cascade do |t|
     t.bigint "league_id"
-    t.bigint "player_id"
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["league_id", "player_id"], name: "index_league_players_on_league_id_and_player_id", unique: true
-    t.index ["league_id"], name: "index_league_players_on_league_id"
-    t.index ["player_id"], name: "index_league_players_on_player_id"
+    t.index ["league_id", "user_id"], name: "index_league_users_on_league_id_and_user_id", unique: true
+    t.index ["league_id"], name: "index_league_users_on_league_id"
+    t.index ["user_id"], name: "index_league_users_on_user_id"
   end
 
   create_table "leagues", force: :cascade do |t|
     t.string "name", null: false
-    t.string "entry_fee", default: "free", null: false
-    t.bigint "player_id"
-    t.string "mode", default: "Fantasy Friendly", null: false
-    t.datetime "start_date", default: "2018-04-30 23:19:33", null: false
-    t.datetime "end_date", default: "2018-05-30 23:19:33", null: false
+    t.string "entry_fee", default: "FREE", null: false
+    t.bigint "user_id"
+    t.datetime "start_date", default: "2018-05-01 21:44:23", null: false
+    t.datetime "end_date", default: "2018-06-01 21:44:23", null: false
     t.integer "rounds", default: 1, null: false
-    t.boolean "exchange_risk", default: false, null: false
-    t.boolean "exchange_fees", default: false, null: false
-    t.boolean "high_be_score", default: true, null: false
-    t.boolean "public_keys", default: false, null: false
-    t.boolean "instant_deposits_withdraws", default: true, null: false
-    t.boolean "lazy_picker", default: false, null: false
-    t.boolean "margin_trading", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["player_id"], name: "index_leagues_on_player_id"
+    t.index ["user_id"], name: "index_leagues_on_user_id"
   end
 
   create_table "orders", force: :cascade do |t|
@@ -77,18 +69,6 @@ ActiveRecord::Schema.define(version: 20180501194630) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["wallet_id"], name: "index_orders_on_wallet_id"
-  end
-
-  create_table "players", force: :cascade do |t|
-    t.string "username", null: false
-    t.string "email", null: false
-    t.string "password_digest"
-    t.string "password_confirmation"
-    t.integer "rank", default: -1
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "remember_digest"
-    t.boolean "admin", default: false
   end
 
   create_table "tickers", force: :cascade do |t|
@@ -141,16 +121,16 @@ ActiveRecord::Schema.define(version: 20180501194630) do
     t.string "coin_type", null: false
     t.decimal "coin_quantity", default: "0.0", null: false
     t.string "public_key", null: false
-    t.bigint "player_id"
+    t.bigint "user_id"
     t.bigint "exchange_id"
     t.bigint "league_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["coin_type", "player_id", "exchange_id", "league_id"], name: "unique_wallet", unique: true
+    t.index ["coin_type", "user_id", "exchange_id", "league_id"], name: "unique_wallet", unique: true
     t.index ["exchange_id"], name: "index_wallets_on_exchange_id"
     t.index ["league_id"], name: "index_wallets_on_league_id"
-    t.index ["player_id"], name: "index_wallets_on_player_id"
     t.index ["public_key"], name: "index_wallets_on_public_key", unique: true
+    t.index ["user_id"], name: "index_wallets_on_user_id"
   end
 
 end

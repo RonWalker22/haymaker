@@ -26,8 +26,8 @@
 
         <p>
           <strong>Commissioner:</strong>
-          <%= link_to Player.find(@league.player_id).username,
-                      player_path(Player.find(@league.player_id).id)%>
+          <%= link_to User.find(@league.user_id).name,
+                      user_path(User.find(@league.user_id).id)%>
         </p>
 
         <p>

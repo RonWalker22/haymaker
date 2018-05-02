@@ -1,7 +1,3 @@
-<% if flash[:notice] %>
-  <p class="notification is-primary"><%= flash[:notice] %></p>
-<% end %>
-
 <h1 class="index_title">Leagues</h1>
 
 <table class= 'table'>
@@ -12,7 +8,6 @@
       <th>Start date</th>
       <th>End date</th>
       <th>Rounds</th>
-      <th>Mode</th>
       <th>Players</th>
       <th>Exchanges</th>
       <th>Commissioner</th>
@@ -26,7 +21,6 @@
       <th>Start date</th>
       <th>End date</th>
       <th>Rounds</th>
-      <th>Mode</th>
       <th>Players</th>
       <th>Exchanges</th>
       <th>Commissioner</th>
@@ -48,16 +42,15 @@
           <%= league.end_date.strftime("%m/%d/%y %I:%M%p").downcase %>
         </td>
         <td><%= league.rounds %></td>
-        <td><%= league.mode %></td>
-        <td><%= league.players.count %></td>
+        <td><%= league.users.count %></td>
         <td><%= league.exchanges.count %></td>
         <td>
-            <%= link_to Player.find(league.player_id).username,
-                        player_path(Player.find(league.player_id).id)%>
+            <%= link_to User.find(league.user_id).name,
+                        user_path(User.find(league.user_id).id)%>
         </td>
 
         <td>
-            <% unless current_player.leagues.any? { |l| l.id == league.id } %>
+            <% unless current_user.leagues.any? { |l| l.id == league.id } %>
               <%= link_to "Join", join_path(league:league.id), method: :post,
                                             class: "button is-rounded is-small"
               %>

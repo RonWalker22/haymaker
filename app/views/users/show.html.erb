@@ -1,0 +1,16 @@
+<div id="profile_page">
+  <ul>
+    <li class="pp-name">
+      <%= @user.name %>
+      <% if user_signed_in? && current_user.id == @user.id %>
+      <%= link_to 'edit' , edit_user_registration_path(@user) %>
+      <% end %>
+    </li>
+    <% if user_signed_in? && current_user.id == @user.id %>
+      <li class="pp-other-data">
+        <strong>Email:</strong>
+        <%= @user.email %>
+      </li>
+    <% end %>
+  </ul>
+</div>

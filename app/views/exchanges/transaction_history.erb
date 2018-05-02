@@ -14,7 +14,7 @@
     <tbody>
       <% target = {exchange_id: params[:xid], league_id: params[:id],
                   coin_type: params[:cid]} %>
-      <% wallet = current_player.wallets.find_by(target)  %>
+      <% wallet = current_user.wallets.find_by(target)  %>
       <% if wallet %>
         <% wallet.transaction_histories.each do |w| %>
             <tr>

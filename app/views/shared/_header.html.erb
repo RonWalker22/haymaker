@@ -17,7 +17,7 @@
       </div>
 
       <div class="navbar-end">
-        <% if logged_in? %>
+        <% if user_signed_in? %>
           <% if appropriate_environment?('funds') %>
             <% if League.find(params[:id]).exchanges.size >= 2 %>
               <div class="navbar-item has-dropdown is-hoverable">
@@ -44,25 +44,25 @@
           <div class="navbar-item has-dropdown is-hoverable">
             <a href="#" class=navbar-link>My Leagues</a>
             <div class="navbar-dropdown is-boxed">
-              <% current_player.leagues.each do |l| %>
+              <% current_user.leagues.each do |l| %>
                 <%= link_to l.name, league_path(l.id), :class =>"navbar-item" %>
               <% end %>
             </div>
           </div>
           <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link" href="#">
-              <%= current_player.username%>
+              <%= current_user.name%>
             </a>
             <div class="navbar-dropdown is-boxed">
-              <%= link_to "My Profile", player_path(current_player.id),
+              <%= link_to "My Profile", user_path(current_user.id),
                           :class =>"navbar-item" %>
-              <%= link_to "Log out", logout_path, method: :delete,
+              <%= link_to "Log out", destroy_user_session_path, method: :delete,
                           :class =>"navbar-item" %>
             </div>
           </div>
         <% else %>
-          <%= link_to 'Login', login_path, :class => "navbar-item"%>
-          <%= link_to 'Sign up', new_player_path, :class => "navbar-item"%>
+          <%= link_to 'Login', new_user_session_path, :class => "navbar-item"%>
+          <%= link_to 'Sign up', new_user_registration_path, :class => "navbar-item"%>
         <% end %>
       </div>
     </div>

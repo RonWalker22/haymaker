@@ -44,6 +44,8 @@ class ExchangesController < ApplicationController
     @wallet = @wallets.find_by(coin_type:@coin_1_ticker)
     find_and_set_coins
     get_full_coin_list
+
+    ticker = Ticker.first
   end
 
   def new

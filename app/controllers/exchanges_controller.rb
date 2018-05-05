@@ -9,14 +9,13 @@ class ExchangesController < ApplicationController
     @coin_1_ticker = params[:coin_1_ticker]
     @coin_2_ticker = params[:coin_2_ticker]
     @order_type = params[:commit] == "Place Buy Order" ? 'Buy' : 'Sell'
-    @price = params[:order_price].to_f
-    return "Invaid price" if @price < 0.0
     @order_quantity = params[:order_quantity].to_f
     @wallets = current_user.wallets.where(exchange_id: @exchange.id)
+    @price = @exchange.tickers.find_by(exchange_id: @exchange.id, pair: @pair).price
     set_coin_tickers
     find_and_set_coins
     create_wallet_if_missing
-    execute_order if sufficient_funds?
+    execute_order if sufficient_trade_funds?
 
     redirect_to "/leagues/#{@league_id}/exchanges/#{@exchange.id}?p=#{@pair}"
   end
@@ -117,7 +116,7 @@ class ExchangesController < ApplicationController
       #
     end
 
-    def sufficient_funds?
+    def sufficient_trade_funds?
       n = 1
       if @order_type == "Sell"
         n = -1
@@ -131,8 +130,12 @@ class ExchangesController < ApplicationController
     end
 
     def execute_order
-      @coin_1.update_attributes!({coin_quantity: @coin_1_quantity_total})
-      @coin_2.update_attributes!({coin_quantity: @coin_2_quantity_total})
+      @coin_1.update_attributes!(
+                                {coin_quantity: @coin_1_quantity_total.round(8)}
+                                )
+      @coin_2.update_attributes!(
+                                {coin_quantity: @coin_2_quantity_total.round(8)}
+                                )
 
       update_order_history
     end
@@ -257,73 +260,6 @@ class ExchangesController < ApplicationController
         end
       end
     end
-
-    # def get_full_coin_list
-    #   @btc_coin_list = []
-    #   @bch_coin_list = []
-    #   @eth_coin_list = []
-    #   @ltc_coin_list = []
-    #   @usd_coin_list = []
-    #   @usdt_coin_list = []
-    #   @bnb_coin_list = []
-    #
-    #   case params[:xid].to_i
-    #   when 1
-    #     target_1, target_2,  = 'quote_currency', 'id'
-    #     response = HTTParty.get 'https://api.gdax.com/products'
-    #   when 2
-    #     target_1, target_2  = 'quote_currency', 'id'
-    #     response = HTTParty.get 'https://api.binance.com/api/v1/exchangeInfo'
-    #   when 3
-    #     target_1, target_2  = 'quote_currency', 'id'
-    #     response = HTTParty.get 'https://api.hitbtc.com/api/2/public/symbol'
-    #   when 4
-    #     target_1, target_2  = 'quote_currency', 'id'
-    #     response = HTTParty.get 'https://api.gemini.com/v1/symbols'
-    #   end
-    #
-    #   response = JSON.parse(response.to_s)
-    #   response.each do |hash|
-    #     next if hash['quote_currency'] == 'EUR' || hash['quote_currency'] == 'GBP'
-    #     if hash[target_1] == 'ETH'
-    #       @eth_coin_list << hash[target_2]
-    #       @eth_coin_list.sort!
-    #     elsif hash[target_1] == 'BTC'
-    #       @btc_coin_list << hash[target_2]
-    #       @btc_coin_list.sort!
-    #     elsif hash[target_1] == 'BCH'
-    #       @bch_coin_list << hash[target_2]
-    #       @bch_coin_list.sort!
-    #     elsif hash[target_1] == 'LTC'
-    #       @ltc_coin_list << hash[target_2]
-    #       @ltc_coin_list.sort!
-    #     elsif hash[target_1] == 'BNB'
-    #       @bnb_coin_list << format_pair(hash[target_2], 'BNB')
-    #       @bnb_coin_list.sort!
-    #     elsif hash[target_1] == 'USDT'
-    #       @usdt_coin_list << format_pair(hash[target_2], 'USDT')
-    #       @usdt_coin_list.sort!
-    #     elsif hash[target_1] == 'USD'
-    #       @usd_coin_list << format_pair(hash[target_2], 'USD')
-    #       @usd_coin_list.sort!
-    #     end
-    #   end
-    # end
-    #
-    # def push_and_sort(pair)
-    #   self << pair
-    #   self.sort!
-    # end
-    #
-    # def push_sort_and_format(pair, match)
-    #   self << format_pair(pair, match)
-    #   self.sort!
-    # end
-    #
-    # def push_sort_and_format(pair, match=nil)
-    #   @format_active ? self << format_pair(pair, match) : self << pair
-    #   self.sort!
-    # end
 
     def format_pair(pair, match)
       mid_point = pair =~ /#{match}/

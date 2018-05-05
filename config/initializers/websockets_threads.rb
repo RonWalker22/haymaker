@@ -3,7 +3,7 @@ gdax = Exchange.find_by(name: 'GDAX')
 
 Thread.new do
   exchange = gdax.name
-  sleep(20)
+  sleep(5)
   @gdax_threads.each {|t| t.kill}
   @gdax_threads = [Thread.current]
   EM.run {
@@ -47,7 +47,7 @@ binance = Exchange.find_by(name: 'Binance')
 @binance_threads ||= []
 
 Thread.new do
-  sleep(20)
+  sleep(5)
   @binance_threads.each {|t| t.kill}
   @binance_threads = [Thread.current]
   exchange = binance.name

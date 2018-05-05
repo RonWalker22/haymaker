@@ -82,5 +82,3 @@ gem 'httparty'
 gem 'faye-websocket'
 
 gem 'devise'
-
-gem 'redis'

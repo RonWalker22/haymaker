@@ -69,13 +69,15 @@ input {
 #price_label {
 }
 
-#ao_0 span {
+#ao_0 span,
+#ao_0 div {
   visibility: hidden;
   color: #ACB6E5;
   font-size: 0.8em;
 }
 
-#ao_1 span {
+#ao_1 span,
+#ao_1 div {
   visibility: hidden;
   color: #ACB6E5;
   font-size: 0.8em;

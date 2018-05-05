@@ -20,7 +20,7 @@
           <div id="ao_1" class="ao">
             <span id="after_order_sign_1" class="after_order_sign">+</span>
             <span id="after_order_value_1" class="after_order_value"></span>
-            <span id="ao_equal_sign_1" class="ao_equal_sign">=</span>
+            <div id="ao_equal_sign_1" class="ao_equal_sign">≈</div>
             <span id="after_order_total_1" class="after_order_total"></span>
           </div>
         </li>
@@ -32,7 +32,7 @@
           <div id="ao_0" class="ao">
             <span id="after_order_sign_0" class="after_order_sign">-</span>
             <span id="after_order_value_0" class="after_order_value"></span>
-            <span id="ao_equal_sign_0" class="ao_equal_sign">≈</span>
+            <div id="ao_equal_sign_0" class="ao_equal_sign">≈</div>
             <span id="after_order_total_0" class="after_order_total"></span>
           </div>
         </li>
@@ -47,9 +47,9 @@
         <%= button_tag "Sell", id: 'sell_btn', class: 'buy_sell_btns' %>
       </div>
       <span id='price_label'>Price</span>
-      <div id="coin_price">
+      <span id="coin_price">
         <%= @exchange.tickers.find_by(pair: params[:p]).price%>
-      </div>
+      </span>
         <i class="fas fa-arrow-up"></i>
         <i class="fas fa-arrow-down"></i>
     </div>

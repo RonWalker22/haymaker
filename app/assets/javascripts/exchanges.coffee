@@ -8,49 +8,45 @@ tryWebsocket  = ->
       Math.round(number * 10**precision) / 10**precision
     puts = (string) ->
       console.log string
-    already_ran = false
 
-    exchange = document.querySelector("#exchange")
     trading_pair = document.querySelector("#trading_pair").innerHTML
     cp1 =
       document.querySelector("#coin_1_balance_label").innerHTML.toLowerCase()
     cp0 =
       document.querySelector("#coin_0_balance_label").innerHTML.toLowerCase()
 
-    up_arrow = document.querySelector(".fa-arrow-up")
-    down_arrow = document.querySelector(".fa-arrow-down")
-    dynamic_price = document.querySelector(".dynamic_price")
-    buy_btn = document.querySelector('#buy_btn')
-    sell_btn = document.querySelector('#sell_btn')
-    coin_price = document.querySelector('#coin_price')
-    order_btn = document.querySelector('#order_btn')
-    coin_quantity = document.querySelector('#order_quantity')
-    coin_2_quantity =  coin_price.textContent
+    up_arrow        = document.querySelector(".fa-arrow-up")
+    down_arrow      = document.querySelector(".fa-arrow-down")
+    coin_price      = document.querySelector("#coin_price")
+    buy_btn         = document.querySelector('#buy_btn')
+    sell_btn        = document.querySelector('#sell_btn')
+    order_btn       = document.querySelector('#order_btn')
+    coin_quantity   = document.querySelector('#order_quantity')
 
     balance_pair_values_0 = document.querySelector('#balance_pair_values_0')
     balance_pair_values_1 = document.querySelector('#balance_pair_values_1')
 
-    after_order_sign = document.querySelector('.after_order_sign')
-    after_order_sign_0 = document.querySelector('#after_order_sign_0')
-    after_order_sign_1 = document.querySelector('#after_order_sign_1')
-    after_order_value = document.querySelector('.after_order_value')
+    after_order_sign    = document.querySelector('.after_order_sign')
+    after_order_sign_0  = document.querySelector('#after_order_sign_0')
+    after_order_sign_1  = document.querySelector('#after_order_sign_1')
+    after_order_value   = document.querySelector('.after_order_value')
     after_order_value_0 = document.querySelector('#after_order_value_0')
     after_order_value_1 = document.querySelector('#after_order_value_1')
-    after_order_total = document.querySelector('.after_order_total')
+    after_order_total   = document.querySelector('.after_order_total')
     after_order_total_0 = document.querySelector('#after_order_total_0')
     after_order_total_1 = document.querySelector('#after_order_total_1')
-    ao_equal_sign = document.querySelector('.ao_equal_sign')
-    ao_equal_sign_0 = document.querySelector('#ao_equal_sign_0')
-    ao_equal_sign_1 = document.querySelector('#ao_equal_sign_1')
+    ao_equal_sign       = document.querySelector('.ao_equal_sign')
+    ao_equal_sign_0     = document.querySelector('#ao_equal_sign_0')
+    ao_equal_sign_1     = document.querySelector('#ao_equal_sign_1')
 
-    pre_cap_25_btn = document.querySelector('#capital_percentage_25_')
-    pre_cap_50_btn = document.querySelector('#capital_percentage_50_')
-    pre_cap_75_btn = document.querySelector('#capital_percentage_75_')
+    pre_cap_25_btn  = document.querySelector('#capital_percentage_25_')
+    pre_cap_50_btn  = document.querySelector('#capital_percentage_50_')
+    pre_cap_75_btn  = document.querySelector('#capital_percentage_75_')
     pre_cap_100_btn = document.querySelector('#capital_percentage_100_')
-    cap_label_25 = document.querySelector('#cap_label_25')
-    cap_label_50 = document.querySelector('#cap_label_50')
-    cap_label_75 = document.querySelector('#cap_label_75')
-    cap_label_100 = document.querySelector('#cap_label_100')
+    cap_label_25    = document.querySelector('#cap_label_25')
+    cap_label_50    = document.querySelector('#cap_label_50')
+    cap_label_75    = document.querySelector('#cap_label_75')
+    cap_label_100   = document.querySelector('#cap_label_100')
 
     ao_0 = [after_order_sign_0, after_order_value_0, after_order_total_0,
             ao_equal_sign_0, ]
@@ -70,6 +66,7 @@ tryWebsocket  = ->
           label.style.background = "transparent"
       target.addEventListener 'click', ->
         if order_type == 'buy'
+          coin_price = document.querySelector('#coin_price')
           all_coin = +balance_pair_values_0.textContent / +coin_price.innerHTML
           coin_quantity.value = Math.roundTo all_coin * percent, 8
           after_order_execute()
@@ -85,38 +82,38 @@ tryWebsocket  = ->
       allo pre_cap_75_btn, 0.75, order_type, cap_label_75
       allo pre_cap_100_btn, 1, order_type, cap_label_100
 
+    activate_allocation_listeners('buy')
+
     after_order_execute = ->
-      if Number(coin_quantity.value) > 0
+      if +coin_quantity.value > 0
         elm.style.visibility = 'visible' for elm in ao_0
         elm.style.visibility = 'visible' for elm in ao_1
-        after_order_value_0.innerHTML = Number coin_quantity.value *
-          Number dynamic_price.value
+        after_order_value_0.innerHTML =
+          Math.roundTo +coin_quantity.value * +coin_price.innerHTML, 8
         after_order_value_1.innerHTML = coin_quantity.value
         if "#{order_btn.getAttribute 'value'}" == "Place Buy Order"
           after_order_total_0.innerHTML =
-            Number(balance_pair_values_0.innerHTML) -
-              Number(after_order_value_0.innerHTML)
+            Math.roundTo +balance_pair_values_0.innerHTML -
+              +after_order_value_0.innerHTML, 8
+            #
           after_order_total_1.innerHTML =
-            Number(balance_pair_values_1.innerHTML) +
-              Number(after_order_value_1.innerHTML)
+            Math.roundTo +balance_pair_values_1.innerHTML +
+              +after_order_value_1.innerHTML, 8
         else if "#{order_btn.getAttribute 'value'}" == "Place Sell Order"
           after_order_total_0.innerHTML =
-            Number(balance_pair_values_0.innerHTML) +
-              Number(after_order_value_0.innerHTML)
+            Math.roundTo +balance_pair_values_0.innerHTML +
+              +after_order_value_0.innerHTML, 8
+            #
           after_order_total_1.innerHTML =
-            Number(balance_pair_values_1.innerHTML) -
-              Number(after_order_value_1.innerHTML)
-       else if Number(coin_quantity.value) <= 0
+            Math.roundTo +balance_pair_values_1.innerHTML -
+              +after_order_value_1.innerHTML, 8
+       else if +coin_quantity.value <= 0
         elm.style.visibility = 'hidden' for elm in ao_0
         elm.style.visibility = 'hidden' for elm in ao_1
 
-    after_order_fun = ->
-      try
-        coin_quantity.addEventListener 'input', ->
-            after_order_execute()
-      catch nil
-        puts 'after_order_fun failed!'
-        after_order_fun
+    coin_quantity.addEventListener 'input', ->
+      after_order_execute()
+
 
     buy_btn.addEventListener 'click', ->
       sell_btn.style.cssText = "background: transparent; border-style: outset;"
@@ -128,11 +125,11 @@ tryWebsocket  = ->
       elm.style.color = "#ACB6E5" for elm in ao_0
       elm.style.color = "#ACB6E5" for elm in ao_1
       after_order_total_0.innerHTML =
-        Number(balance_pair_values_0.innerHTML) -
-          Number(after_order_value_0.innerHTML)
+        +balance_pair_values_0.innerHTML -
+          +after_order_value_0.innerHTML
       after_order_total_1.innerHTML =
-        Number(balance_pair_values_1.innerHTML) +
-          Number(after_order_value_1.innerHTML)
+        +balance_pair_values_1.innerHTML +
+          +after_order_value_1.innerHTML
       activate_allocation_listeners('buy')
 
 
@@ -146,105 +143,18 @@ tryWebsocket  = ->
       elm.style.color = "#cf8bf3" for elm in ao_0
       elm.style.color = "#cf8bf3" for elm in ao_1
       after_order_total_0.innerHTML =
-        Number(balance_pair_values_0.innerHTML) +
-          Number(after_order_value_0.innerHTML)
+        +balance_pair_values_0.innerHTML +
+          +after_order_value_0.innerHTML
       after_order_total_1.innerHTML =
-        Number(balance_pair_values_1.innerHTML) -
-          Number(after_order_value_1.innerHTML)
+        +balance_pair_values_1.innerHTML -
+          +after_order_value_1.innerHTML
       activate_allocation_listeners('sell')
 
-    dynamic_price = document.querySelector(".dynamic_price")
-    if exchange
-      past_price = 0
-
-      switch exchange.innerHTML.toLowerCase()
-        when 'gdax exchange'
-          socket = new WebSocket 'wss://ws-feed.gdax.com'
-          request = { "type": "subscribe",  "channels": [{ "name": "ticker",
-          "product_ids": [trading_pair] }]}
-          price_ws_target = "price"
-          puts '<--------->GDAX WebSocket!<--------->'
-        when 'binance exchange'
-          socket =
-            new WebSocket "wss://stream.binance.com:9443/ws/#{cp1}#{cp0}@trade"
-          price_ws_target = "p"
-          puts '<--------->BINANCE WebSocket!<--------->'
-        when 'hitbtc exchange'
-          socket = new WebSocket 'wss://api.hitbtc.com/api/2/ws'
-          request = {   "method": "subscribeTicker",
-          "params": {"symbol": "#{cp1}#{cp0}"}, "id": 123}
-          price_ws_target = "params"
-          target_2 = "last"
-          puts '<--------->HITBTC WebSocket!<--------->'
-        when 'gemini exchange'
-          socket = new WebSocket "wss://api.gemini.com/v1/marketdata/#{cp1}#{cp0}"
-          price_ws_target = 'events'
-          target_2 = 0
-          target_3 = 'price'
-          puts '<--------->GEMINI WebSocket!<--------->'
-
-      socket.onerror = (error) ->
-        puts "WebSocket Error: ${error}"
-
-      socket.onclose = (event) ->
-        puts 'Disconnected from WebSocket.'
-
-      socket.onopen = (event) ->
-        puts 'WebSocket is connected!'
-        socket.send JSON.stringify request if request
-
-
-      socket.onmessage = (event) ->
-        coin_price = document.querySelector("#coin_price")
-        message = JSON.parse(event.data)
-        after_order_fun()
-        if target_3
-          if exchange.innerHTML.toLowerCase() == 'gemini exchange'
-            if message[price_ws_target][target_2]['type'] == 'trade'
-              price = Math.roundTo parseFloat(message[price_ws_target][target_2][target_3]), 8
-          else
-            price = Math.roundTo parseFloat(message[price_ws_target][target_2][target_3]), 8
-        else if target_2
-          price = Math.roundTo parseFloat(message[price_ws_target][target_2]), 8
-        else
-          price = Math.roundTo parseFloat(message[price_ws_target]), 8
-        callback = ->
-          down_arrow.style.visibility = 'hidden'
-          up_arrow.style.visibility = 'hidden'
-        if !isNaN(price)
-          try
-            dynamic_price.setAttribute "value", price
-            coin_price.innerHTML = "#{price}"
-            activate_allocation_listeners('buy') unless already_ran
-            already_ran = true
-            puts price
-            if price > past_price
-              past_price = price
-              down_arrow.style.visibility = 'hidden'
-              up_arrow.style.cssText =
-                "visibility: visible; color:#5fff33;"
-              setTimeout callback, 1000
-            else if price < past_price
-              past_price = price
-              up_arrow.style.visibility = 'hidden'
-              down_arrow.style.cssText = "visibility: visible;
-              color:red;"
-              setTimeout callback, 1000
-          catch error
-            puts 'Waiting to reconnect'
-            socket.close()
-            callback = tryWebsocket
-            setTimeout callback, 3000
-    else
-      puts 'Waiting to connect'
-      callback = tryWebsocket
-      setTimeout callback, 3000
   catch error
     puts 'waiting to connect through click'
     callback = tryWebsocket
-    setTimeout callback, 3000
+    setTimeout callback, 1000
 
 
-
-window.addEventListener 'load', ->
+document.addEventListener 'turbolinks:load', ->
   tryWebsocket()

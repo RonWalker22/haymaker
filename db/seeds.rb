@@ -1,22 +1,5 @@
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-
-League.create!( name: 'Practice',
-                user_id: 1,
-                start_date: DateTime.now,
-                end_date: 100.years.from_now,
-              )
-
-3.times do |n|
-  case n
-  when 0 then name = 'GDAX'
-  when 1 then name = 'Binance'
-  when 2 then name = 'Gemini'
-  end
-  Exchange.create!( name: name )
-  ExchangeLeague.create!( exchange_id: n+1, league_id: 1)
-end
-
 20.times do |n|
   name = Faker::Name.name
   email = "example-#{n+1}@gmail.com"
@@ -32,6 +15,22 @@ end
                  password_confirmation: password,
                  admin: admin
                 )
+  if n == 0
+    League.create!( name: 'Practice',
+                    user_id: 1,
+                    start_date: DateTime.now,
+                    end_date: 100.years.from_now,
+                  )
+    3.times do |n|
+      case n
+      when 0 then name = 'GDAX'
+      when 1 then name = 'Binance'
+      when 2 then name = 'Gemini'
+      end
+      Exchange.create!( name: name )
+      ExchangeLeague.create!( exchange_id: n+1, league_id: 1)
+    end
+  end
 
   3.times do |inner_n|
     Wallet.create!( coin_type: 'BTC',

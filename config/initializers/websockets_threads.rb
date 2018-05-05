@@ -3,7 +3,7 @@
 #
 # Thread.new do
 #   exchange = gdax.name
-#   sleep(50)
+#   sleep(10)
 #   @gdax_threads.each {|t| t.kill}
 #   @gdax_threads = [Thread.current]
 #   EM.run {
@@ -47,7 +47,7 @@
 # @binance_threads ||= []
 #
 # Thread.new do
-#   sleep(50)
+#   sleep(10)
 #   @binance_threads.each {|t| t.kill}
 #   @binance_threads = [Thread.current]
 #   exchange = binance.name
@@ -95,7 +95,7 @@
 #
 #   pair = ticker.natural_pair
 #   Thread.new do
-#     sleep(50)
+#     sleep(10)
 #     @gemini_threads.each {|t| t.kill} if i == 0
 #     @gemini_threads << Thread.current
 #     exchange = gemini.name

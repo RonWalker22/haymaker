@@ -258,7 +258,7 @@ DEPENDENCIES
   rails (~> 5.1.4)
   rails-controller-testing
   rails-html-sanitizer (~> 1.0.4)
-  redis (~> 3.0)
+  redis (~> 3.3)
   sass-rails (~> 5.0)
   selenium-webdriver
   sidekiq

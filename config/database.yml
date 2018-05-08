@@ -84,5 +84,3 @@ production:
   username: paper_gains_2
   password: <%= ENV['PAPER_GAINS_2_DATABASE_PASSWORD'] %>
   pool: <%= ENV["DB_POOL"] || ENV['RAILS_MAX_THREADS'] || 20 %>
-  adapter: redis
-  url: redis://redistogo:e202cb47908817da758233f63758d41c@soldierfish.redistogo.com:10504/

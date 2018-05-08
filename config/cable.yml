@@ -7,4 +7,3 @@ test:
 production:
   adapter: redis
   url: <%= ENV["REDISTOGO_URL"] %>
-  channel_prefix: paper_gains_2_production

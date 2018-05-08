@@ -117,6 +117,7 @@ class ExchangesController < ApplicationController
     end
 
     def sufficient_trade_funds?
+      return false if @price <= 0.00
       n = 1
       if @order_type == "Sell"
         n = -1

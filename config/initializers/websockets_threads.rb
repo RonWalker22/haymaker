@@ -27,11 +27,12 @@ Thread.new do
           @old_price = @new_price
           ticker = tickers.find_by natural_pair: message["product_id"]
           ticker.price = @new_price
-          ticker.save
-          ActionCable.server.broadcast 'gdax_ticker_channel',
-                                                        {price: ticker.price,
-                                                         pair:  ticker.pair,
-                                                         exchange: exchange}
+          if ticker.save
+            ActionCable.server.broadcast 'gdax_ticker_channel',
+                                                          {price: ticker.price,
+                                                           pair:  ticker.pair,
+                                                           exchange: exchange}
+          end
         end
       end
 
@@ -72,11 +73,12 @@ Thread.new do
         message = JSON.parse event.data
         ticker = tickers.find_by natural_pair: message["s"]
         ticker.price = message["p"]
-        ticker.save
-        ActionCable.server.broadcast 'binance_ticker_channel',
-                                                      {price: ticker.price,
-                                                        pair:  ticker.pair,
-                                                        exchange: exchange}
+        if ticker.save
+          ActionCable.server.broadcast 'binance_ticker_channel',
+                                                        {price: ticker.price,
+                                                          pair:  ticker.pair,
+                                                          exchange: exchange}
+        end
       end
 
       ws.on :close do |event|
@@ -111,11 +113,12 @@ gemini.tickers.each_with_index do |ticker, i|
         new_price = message["events"][0]["price"].to_f.round(8)
         if message["events"][0]["type"] == 'trade'
           ticker.price = new_price
-          ticker.save
-          ActionCable.server.broadcast 'gemini_ticker_channel',
-                                                          {price: ticker.price,
-                                                          pair:  ticker.pair,
-                                                          exchange: exchange}
+          if ticker.save
+            ActionCable.server.broadcast 'gemini_ticker_channel',
+                                                            {price: ticker.price,
+                                                            pair:  ticker.pair,
+                                                            exchange: exchange}
+          end
         end
       end
 

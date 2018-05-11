@@ -3,7 +3,7 @@ gdax = Exchange.find_by(name: 'GDAX')
 
 Thread.new do
   exchange = gdax.name
-  sleep(15)
+  sleep(10)
   @gdax_threads.each {|t| t.kill}
   @gdax_threads = [Thread.current]
   EM.run {
@@ -27,12 +27,11 @@ Thread.new do
           @old_price = @new_price
           ticker = tickers.find_by natural_pair: message["product_id"]
           ticker.price = @new_price
-          if ticker.save
-            ActionCable.server.broadcast 'gdax_ticker_channel',
-                                                          {price: ticker.price,
-                                                           pair:  ticker.pair,
-                                                           exchange: exchange}
-          end
+          ticker.save
+          ActionCable.server.broadcast 'gdax_ticker_channel',
+                                                        {price: ticker.price,
+                                                         pair:  ticker.pair,
+                                                         exchange: exchange}
         end
       end
 
@@ -48,7 +47,7 @@ binance = Exchange.find_by(name: 'Binance')
 @binance_threads ||= []
 
 Thread.new do
-  sleep(15)
+  sleep(10)
   @binance_threads.each {|t| t.kill}
   @binance_threads = [Thread.current]
   exchange = binance.name
@@ -73,12 +72,11 @@ Thread.new do
         message = JSON.parse event.data
         ticker = tickers.find_by natural_pair: message["s"]
         ticker.price = message["p"]
-        if ticker.save
-          ActionCable.server.broadcast 'binance_ticker_channel',
-                                                        {price: ticker.price,
-                                                          pair:  ticker.pair,
-                                                          exchange: exchange}
-        end
+        ticker.save
+        ActionCable.server.broadcast 'binance_ticker_channel',
+                                                      {price: ticker.price,
+                                                        pair:  ticker.pair,
+                                                        exchange: exchange}
       end
 
       ws.on :close do |event|
@@ -97,7 +95,7 @@ gemini.tickers.each_with_index do |ticker, i|
 
   pair = ticker.natural_pair
   Thread.new do
-    sleep(15)
+    sleep(10)
     @gemini_threads.each {|t| t.kill} if i == 0
     @gemini_threads << Thread.current
     exchange = gemini.name
@@ -113,12 +111,11 @@ gemini.tickers.each_with_index do |ticker, i|
         new_price = message["events"][0]["price"].to_f.round(8)
         if message["events"][0]["type"] == 'trade'
           ticker.price = new_price
-          if ticker.save
-            ActionCable.server.broadcast 'gemini_ticker_channel',
-                                                            {price: ticker.price,
-                                                            pair:  ticker.pair,
-                                                            exchange: exchange}
-          end
+          ticker.save
+          ActionCable.server.broadcast 'gemini_ticker_channel',
+                                                          {price: ticker.price,
+                                                          pair:  ticker.pair,
+                                                          exchange: exchange}
         end
       end
 

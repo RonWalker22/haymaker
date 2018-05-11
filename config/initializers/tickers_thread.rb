@@ -3,7 +3,7 @@ gemini = Exchange.find_by name:'Gemini'
 binance = Exchange.find_by name:'Binance'
 @ticker_threads ||= []
 Thread.new do
-  sleep(7)
+  sleep(5)
   @ticker_threads.each {|t| t.kill}
   @ticker_threads = [Thread.current]
   def format_pair(pair, match)

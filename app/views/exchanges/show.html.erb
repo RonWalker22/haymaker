@@ -1,9 +1,11 @@
 <div class="wrapper">
+
   <div class="league_and_exchange_info">
-    <h1 id="exchange" class="center"><%= @exchange.name %> Exchange</h1>
-    <h2 class="center league_title"><%= League.find(params[:id]).name %> League
-    </h2>
+    <h1 id="exchange"><%= @exchange.name %> Exchange</h1>
+    <h2 class="league_title"><%= League.find(params[:id]).name %> League</h2>
   </div>
+
+  <div class="testing1">
   <div id="balance_block">
     <p id='trading_pair'><%= @pair %></p>
 
@@ -20,7 +22,8 @@
           <div id="ao_1" class="ao">
             <span id="after_order_sign_1" class="after_order_sign">+</span>
             <span id="after_order_value_1" class="after_order_value"></span>
-            <div id="ao_equal_sign_1" class="ao_equal_sign">≈</div>
+            <br>
+            <span id="ao_equal_sign_1" class="ao_equal_sign">≈</span>
             <span id="after_order_total_1" class="after_order_total"></span>
           </div>
         </li>
@@ -32,7 +35,8 @@
           <div id="ao_0" class="ao">
             <span id="after_order_sign_0" class="after_order_sign">-</span>
             <span id="after_order_value_0" class="after_order_value"></span>
-            <div id="ao_equal_sign_0" class="ao_equal_sign">≈</div>
+            <br>
+            <span id="ao_equal_sign_0" class="ao_equal_sign">≈</span>
             <span id="after_order_total_0" class="after_order_total"></span>
           </div>
         </li>
@@ -40,6 +44,7 @@
       </ul>
     </div>
   </div>
+
   <div id= "order_sec">
     <div>
       <div id= 'buy_sell_btns'>
@@ -86,7 +91,7 @@
       </div>
     </span>
   </div>
-
+</div>
   <!-- TradingView Widget BEGIN -->
   <div class="tradingview-widget-container">
     <div id="tradingview_7ef5b"></div>
@@ -121,33 +126,8 @@
     </script>
   </div>
   <!-- TradingView Widget END -->
-
-  <div class="coin_list_options">
-    <div class="buttons has-addons">
-      <span class="button has-addons is-info is-outlined">BTC</span>
-      <span class="button has-addons is-info is-outlined">ETH</span>
-      <span class="button has-addons is-info is-outlined">BNB</span>
-      <span class="button has-addons is-info is-outlined">USDT</span>
-    </div>
-  </div>
-  <div class="coin_list_table">
-    <table class="table">
-      <tbody>
-        <% @btc_coin_list.each do |pair| %>
-          <tr>
-            <td><i class="far fa-star"></i></td>
-            <td>
-              <%= link_to pair,trade_path(params[:id],
-                params[:xid], p: pair) %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
-
-  <div id="orders_sec">
-    <p>My Orders</p>
+  <div id="past_orders">
+    <p class="center">My Orders</p>
     <div>
       <table class="table is-narrow">
         <thead>
@@ -177,6 +157,43 @@
           <% end %>
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <div id="accordion" class="base_coins">
+    <div class="coin_list_options">
+      <div class="buttons has-addons">
+        <% @base_tickers.each_with_index do |ticker, i| %>
+        <button class="button is-rounded is-small" data-toggle="collapse"
+                data-target="#collapse<%= i %>" aria-expanded="true"
+                aria-controls="collapse<%= i %>">
+          <%= ticker %>
+        </button>
+        <% end %>
+      </div>
+    </div>
+
+    <% @coin_lists.each_with_index do |list, i| %>
+      <% if i == 0 %>
+        <div id="collapse<%= i %>" class="collapse show coin_list_table" aria-labelledby="heading<%= i %>" data-parent="#accordion">
+      <% else %>
+        <div id="collapse<%= i %>" class="collapse coin_list_table" aria-labelledby="heading<%= i %>" data-parent="#accordion">
+      <% end %>
+            <table class="table">
+              <tbody>
+                <% list.each do |pair| %>
+                  <tr>
+                    <td><i class="far fa-star"></i></td>
+                    <td>
+                      <%= link_to pair,trade_path(params[:id],
+                        params[:xid], p: pair) %>
+                    </td>
+                  </tr>
+                <% end %>
+                </tbody>
+              </table>
+          </div>
+      <% end %>
     </div>
   </div>
 </div>

@@ -1,6 +1,5 @@
-// Place all the styles related to the Exchanges controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
 html {
   box-sizing: border-box;
 }
@@ -234,7 +233,8 @@ input {
 
   .coin_list_table,
   .coin_list_table table {
-    max-height: 45vh;
+    margin-top: 2vh;
+    max-height: 40vh;
     max-width: 14.7em;
     overflow-y: scroll;
   }
@@ -243,50 +243,54 @@ input {
 
 /* Mobile Landscape Screen Sizes */
 @media only screen and (min-width: 480px)  {
+}
+/* Desktop screen Sizes */
+@media only screen and (min-width: 768px) {
   .wrapper {
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: .1fr .3fr .3fr .5fr;
+    grid-template-rows: .1fr .3fr .3fr;
   }
-  #order_sec {
-    grid-row:3/4;
-    align-self: start;
+
+  .league_and_exchange_info {
     justify-self: center;
+    grid-column: 2/4;
+    margin-bottom: 1em;
+  }
+
+  .testing1 {
+    grid-row: 2/3;
+    grid-column: 1/2;
+    align-self: start;
+    justify-self: end;
     width: 200px;
   }
 
   #balance_block {
     grid-row:2/3;
+    grid-column: 1/2;
     align-self: end;
-    justify-self: center;
+    justify-self: end;
   }
   .tradingview-widget-container {
     grid-row: 2/4;
     grid-column: 2/4;
     justify-self: center;
+    align-self: start;
   }
-  #orders_sec{
+  #past_orders {
     grid-column: 2/4;
-    grid-row: 4/5;
+    grid-row: 3/4;
     justify-content: center;
     align-self: start;
   }
-}
-/* Desktop screen Sizes */
-@media only screen and (min-width: 768px) {
-  .coin_list_options {
-    grid-column: 4/5;
-    grid-row: 1/2;
-    align-self: end;
-    // margin-top: 11em;
-    margin-left: 1em;
-  }
 
-  .coin_list_table {
+  .base_coins {
     grid-column: 4/5;
     grid-row: 2/3;
-    align-self: start;
-    // margin-top: 14em;
-    margin-left: 1em;
+    max-height: 45vh;
+    min-height: 45vh;
+    max-width: 14.7em;
+    overflow-y: hidden;
   }
 
   #tradingview_7ef5b {

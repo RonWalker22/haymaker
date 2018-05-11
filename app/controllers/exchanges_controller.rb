@@ -176,90 +176,19 @@ class ExchangesController < ApplicationController
     end
 
     def get_full_coin_list
-      if params[:xid].to_i == 1
-        @btc_coin_list = []
-        @bch_coin_list = []
-        @eth_coin_list = []
-        @ltc_coin_list = []
-
-        response = HTTParty.get('https://api.gdax.com/products')
-        response = JSON.parse(response.to_s)
-        response.each do |hash|
-          next if hash['quote_currency'] == 'EUR' || hash['quote_currency'] == 'GBP'
-          if hash['base_currency'] == 'ETH'
-            @eth_coin_list << hash['id']
-            @eth_coin_list.sort!
-          elsif hash['base_currency'] == 'BTC'
-            @btc_coin_list << hash['id']
-            @btc_coin_list.sort!
-          elsif hash['base_currency'] == 'BCH'
-            @bch_coin_list << hash['id']
-            @bch_coin_list.sort!
-          elsif hash['base_currency'] == 'LTC'
-            @ltc_coin_list << hash['id']
-            @ltc_coin_list.sort!
-          end
-        end
-      elsif params[:xid].to_i == 2
-        @btc_coin_list = []
-        @bnb_coin_list = []
-        @eth_coin_list = []
-        @usdt_coin_list = []
-
-        response = HTTParty.get('https://api.binance.com/api/v1/exchangeInfo')
-        response = JSON.parse(response.to_s)
-
-        response["symbols"].each do |hash|
-          if hash['quoteAsset'] == 'ETH'
-            @eth_coin_list << format_pair(hash['symbol'], 'ETH')
-            @eth_coin_list.sort!
-          elsif hash['quoteAsset'] == 'BNB'
-            @bnb_coin_list << format_pair(hash['symbol'], 'BNB')
-            @bnb_coin_list.sort!
-          elsif hash['quoteAsset'] == 'BTC'
-            @btc_coin_list << format_pair(hash['symbol'], 'BTC')
-            @btc_coin_list.sort!
-          elsif hash['quoteAsset'] == 'USDT'
-            @usdt_coin_list << format_pair(hash['symbol'], 'USDT')
-            @usdt_coin_list.sort!
-          end
-        end
-      elsif params[:xid].to_i == 3
-        @btc_coin_list = []
-        @bnb_coin_list = []
-        @eth_coin_list = []
-        @usdt_coin_list = []
-
-        response = HTTParty.get('https://api.hitbtc.com/api/2/public/symbol')
-        response = JSON.parse(response.to_s)
-
-        response.each do |hash|
-          if hash['quoteCurrency'] == 'ETH'
-            @eth_coin_list << format_pair(hash['id'], 'ETH')
-            @eth_coin_list.sort!
-          elsif hash['quoteCurrency'] == 'BTC'
-            @btc_coin_list << format_pair(hash['id'], 'BTC')
-            @btc_coin_list.sort!
-          elsif hash['quoteCurrency'] == 'USD'
-            @usdt_coin_list << format_pair(hash['id'], 'USD')
-            @usdt_coin_list.sort!
-          end
-        end
-      elsif params[:xid].to_i == 4
-        @btc_coin_list = []
-        @bnb_coin_list = []
-        @eth_coin_list = []
-        @usdt_coin_list = []
-
-        response = HTTParty.get('https://api.gemini.com/v1/symbols')
-        response = JSON.parse(response.to_s)
-
-        response.each do |pair|
-
-          @btc_coin_list << pair
-          @btc_coin_list.sort!
+      @coin_lists = {}
+      target = (@exchange.name == "Binance" ?  "quote_currency" : "base_currency")
+      @exchange.tickers.each do |ticker|
+        if @coin_lists[ticker[target]]
+          @coin_lists[ticker[target]] << ticker.pair
+        else
+          @coin_lists[ticker[target]] = [ticker.pair]
         end
       end
+      @base_tickers = @coin_lists.to_a
+      @base_tickers.each {|list| list.delete_at(1)}
+      @base_tickers.map! {|ticker| ticker[0]}
+      @coin_lists = @coin_lists.values
     end
 
     def format_pair(pair, match)

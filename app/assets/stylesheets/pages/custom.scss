@@ -1,7 +1,4 @@
 @import "bulma";
-@import "bootstrap-sprockets";
-@import "font-awesome-sprockets";
-@import "font-awesome";
 
 #inner_body {
   min-height: 75.5vh;
@@ -14,7 +11,10 @@
   max-width: 50%;
   position: unset;
   margin: auto;
+  background-color: transparent;
+  border: none ;
 }
+
 .withdrawal {
   background: hsl(48, 100%, 67%);
 }

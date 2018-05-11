@@ -37,7 +37,7 @@ Thread.new do
     new_ticker.save
   end
 
-  #BINANCE pairs
+ # BINANCE pairs
   response = HTTParty.get('https://api.binance.com/api/v1/exchangeInfo')
   response = JSON.parse(response.to_s)
   pairs = []

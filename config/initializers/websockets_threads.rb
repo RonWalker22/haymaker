@@ -87,17 +87,17 @@ Thread.new do
   ActiveRecord::Base.connection.close
 end
 
-
 gemini = Exchange.find_by(name: 'Gemini')
-@gemini_threads ||= []
 
 gemini.tickers.each_with_index do |ticker, i|
 
   pair = ticker.natural_pair
   Thread.new do
     sleep(10)
-    @gemini_threads.each {|t| t.kill} if i == 0
-    @gemini_threads << Thread.current
+    response = HTTParty.get("https://api.gemini.com/v1/pubticker/#{pair}")
+    response = JSON.parse(response.to_s)
+    ticker.price = response["last"].to_f.round(8)
+
     exchange = gemini.name
     EM.run {
     ws = Faye::WebSocket::Client.new("wss://api.gemini.com/v1/marketdata/#{pair}")

@@ -257,7 +257,7 @@ input {
     margin-bottom: 1em;
   }
 
-  .testing1 {
+  .order_and_balance_info {
     grid-row: 2/3;
     grid-column: 1/2;
     align-self: start;
@@ -290,6 +290,7 @@ input {
     max-height: 45vh;
     min-height: 45vh;
     max-width: 14.7em;
+    align-self: start;
     overflow-y: hidden;
   }
 

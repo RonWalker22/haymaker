@@ -50,8 +50,8 @@ ActiveRecord::Schema.define(version: 20180430162531) do
     t.string "name", null: false
     t.string "entry_fee", default: "FREE", null: false
     t.bigint "user_id"
-    t.datetime "start_date", default: "2018-05-05 17:48:20", null: false
-    t.datetime "end_date", default: "2018-06-05 17:48:20", null: false
+    t.datetime "start_date", default: "2018-05-16 01:27:13", null: false
+    t.datetime "end_date", default: "2018-06-16 01:27:13", null: false
     t.integer "rounds", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

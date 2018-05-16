@@ -28,9 +28,10 @@ class LeaguesController < ApplicationController
   def create
     puts ">>>>>-------->>>>#{params}"
     @league = League.new(league_params.slice(:name, :user_id, :start_date, :end_date))
+    exchange = Exchange.find_by name:'Binance'
     respond_to do |format|
       if @league.save
-        create_exchange_league_table
+        ExchangeLeague.create! league_id: @league.id, exchange_id: exchange.id
         flash[:notice] = 'League was successfully created.'
         @leagueUser = LeagueUser.create!({league_id:@league.id,
                                   user_id:current_user.id})
@@ -129,14 +130,5 @@ class LeaguesController < ApplicationController
         :start_date, :user_id, :end_date, :rounds,
         :exchange_fees, :public_keys, :"Binance Exchange", :"Gemini Exchange",
         :"Hitbtc Exchange", :"GDAX Exchange")
-    end
-
-    def create_exchange_league_table
-      Exchange.all.each do |x|
-        # binding.pry
-        if league_params["#{x.name} Exchange"].to_i == 1
-          ExchangeLeague.create! league_id: @league.id, exchange_id: x.id
-        end
-      end
     end
 end

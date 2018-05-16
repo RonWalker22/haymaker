@@ -5,7 +5,7 @@
     <h2 class="league_title"><%= League.find(params[:id]).name %> League</h2>
   </div>
 
-  <div class="testing1">
+  <div class="order_and_balance_info">
   <div id="balance_block">
     <p id='trading_pair'><%= @pair %></p>
 
@@ -93,7 +93,7 @@
   </div>
 </div>
   <!-- TradingView Widget BEGIN -->
-  <div class="tradingview-widget-container">
+<div class="tradingview-widget-container">
     <div id="tradingview_7ef5b"></div>
     <div class="tradingview-widget-copyright">
       <a href="https://www.tradingview.com/symbols/COINBASE-BTCUSD/"
@@ -121,11 +121,10 @@
     "allow_symbol_change": true,
     "save_image": false,
     "container_id": "tradingview_7ef5b"
-  }
-    );
+  });
     </script>
   </div>
-  <!-- TradingView Widget END -->
+ <!-- TradingView Widget END -->
   <div id="past_orders">
     <p class="center">My Orders</p>
     <div>
@@ -144,15 +143,17 @@
         <tbody>
           <% if @wallet %>
             <% @wallet.orders.order('created_at DESC').each do |o| %>
-              <tr>
-                <td> <%= o.buy ? 'buy' : 'sell' %> </td>
-                <td> <%= o.size.to_f.round(8) %> </td>
-                <td> <%= o.price.to_f.round(8) %> </td>
-                <td> <%= o.fee.to_f %> </td>
-                <td> <%= o.product %> </td>
-                <td> <%= o.when %> </td>
-                <td>100</td>
-              </tr>
+              <% if o.product == @pair %>
+                <tr>
+                  <td> <%= o.buy ? 'buy' : 'sell' %> </td>
+                  <td> <%= o.size.to_f.round(8) %> </td>
+                  <td> <%= o.price.to_f.round(8) %> </td>
+                  <td> <%= o.fee.to_f %> </td>
+                  <td> <%= o.product %> </td>
+                  <td> <%= o.when %> </td>
+                  <td>100</td>
+                </tr>
+              <% end %>
           <% end %>
           <% end %>
         </tbody>

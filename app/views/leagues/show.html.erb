@@ -12,10 +12,6 @@
   <div class="card-content">
     <div class="content">
       <div class='center'>
-        <% if notice %>
-          <p class="notification is-primary"><%= flash[:notice] %></p>
-        <% end %>
-
         <p class="notice center">
           <% if flash[:reset_funds] &&  %>
             <%= flash[:reset_funds] %>
@@ -56,6 +52,7 @@
 <footer class="card-footer">
   <% @league.exchanges.each do |x|%>
     <%= link_to "Enter #{x.name}-X", trade_path(@league.id, x.id, p:
-    'ETH-BTC'), class:"card-footer-item button is-info"%>
+    'ETH-BTC'), class:"card-footer-item button is-info",
+    data: { turbolinks: false }%>
   <% end %>
 </footer>

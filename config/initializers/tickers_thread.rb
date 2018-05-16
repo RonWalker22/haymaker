@@ -1,4 +1,5 @@
 Thread.new do
+  sleep(15)
   def format_pair(pair, match)
     mid_point = pair =~ /#{match}/
     coin_1_ticker = []

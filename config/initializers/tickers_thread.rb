@@ -32,11 +32,11 @@ Thread.new do
 end
 
 @binance_threads = []
-binance = Exchange.find_by name:'Binance'
 Thread.new do
   @binance_threads.each {|t| t.kill} if @binance_threads
   @binance_threads << Thread.current
   sleep(20)
+  binance = Exchange.find_by name:'Binance'
   loop do
     response = HTTParty.get('https://api.binance.com/api/v3/ticker/price')
     puts "start"

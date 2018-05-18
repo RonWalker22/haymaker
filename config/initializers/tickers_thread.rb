@@ -114,12 +114,12 @@ end
 
 
 
-# About delay about 2 seconds
+#Up to 2 seconds delay
 @binance_threads = []
 Thread.new do
   @binance_threads.each {|t| t.kill} if @binance_threads
   @binance_threads << Thread.current
-  sleep(10)
+  sleep(15)
   binance = Exchange.find_by name:'Binance'
   loop do
     response = HTTParty.get('https://api.binance.com/api/v3/ticker/price')
@@ -140,45 +140,19 @@ Thread.new do
   ActiveRecord::Base.connection.close
 end
 
-
-# Delay abount 1 second
-@poloniex_threads = []
-Thread.new do
-  @poloniex_threads.each {|t| t.kill} if @poloniex_threads
-  @poloniex_threads << Thread.current
-  sleep(10)
-  loop do
-    response = HTTParty.get('https://poloniex.com/public?command=returnTicker')
-    response = JSON.parse(response.to_s)
-
-    response.to_a.each do |arr|
-      ticker = @poloniex.tickers.find_by natural_pair: arr[0]
-      if ticker
-        ticker.price = arr[1]["last"].to_f.round(8)
-        ticker.save
-        ActionCable.server.broadcast 'poloniex_ticker_channel',
-                                                      {price: ticker.price,
-                                                      pair:  ticker.pair,
-                                                      exchange: @poloniex.name}
-      end
-    end
-  end
-  ActiveRecord::Base.connection.close
-end
-
-
-# About 2 seconds delay
+#Up to 3 seconds delay
 @bitfinex_threads = []
 Thread.new do
   @bitfinex_threads.each {|t| t.kill} if @bitfinex_threads
   @bitfinex_threads << Thread.current
-  sleep(10)
+  sleep(15)
   base = "https://api.bitfinex.com/v2/tickers?symbols="
   pairs = []
   @bitfinex.tickers.each {|t| pairs << "t#{t.natural_pair.upcase}"}
   pairs = pairs.join(",")
   loop do
     response = HTTParty.get("#{base}#{pairs}")
+    start_time = Time.now
     response = JSON.parse(response.to_s)
     response.each do |pair|
       pair_target = pair[0].delete('t').downcase
@@ -192,7 +166,24 @@ Thread.new do
                                                       exchange: @bitfinex.name}
       end
     end
-    sleep(1)
+
+    response = HTTParty.get('https://poloniex.com/public?command=returnTicker')
+    response = JSON.parse(response.to_s)
+
+    response.to_a.each do |arr|
+      ticker = @poloniex.tickers.find_by natural_pair: arr[0]
+      if ticker
+        ticker.price = arr[1]["last"].to_f.round(8)
+        ticker.save
+        ActionCable.server.broadcast 'poloniex_ticker_channel',
+                                                      {price: ticker.price,
+                                                      pair:  ticker.pair,
+                                                      exchange: @poloniex.name}
+     end
+   end
+   end_time = Time.now
+   puts "------------#{end_time - start_time} ------------------------"
+   sleep(1)
   end
   ActiveRecord::Base.connection.close
 end

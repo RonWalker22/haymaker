@@ -179,7 +179,7 @@ class ExchangesController < ApplicationController
     def get_full_coin_list
       @coin_lists = {}
       case @exchange.name
-      when "Gdax"     then target = "base_currency"
+      when "GDAX"     then target = "base_currency"
       when "Binance"  then target = "quote_currency"
       when "Poloniex" then target = "quote_currency"
       when "Bitfinex" then target = "quote_currency"

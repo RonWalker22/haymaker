@@ -83,5 +83,3 @@ gem 'devise'
 gem 'sidekiq'
 
 gem 'bootstrap'
-
-gem 'cryptoexchange'

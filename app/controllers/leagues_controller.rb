@@ -28,10 +28,9 @@ class LeaguesController < ApplicationController
   def create
     puts ">>>>>-------->>>>#{params}"
     @league = League.new(league_params.slice(:name, :user_id, :start_date, :end_date))
-    exchange = Exchange.find_by name:'Binance'
     respond_to do |format|
       if @league.save
-        ExchangeLeague.create! league_id: @league.id, exchange_id: exchange.id
+        create_exchange_league_table
         flash[:notice] = 'League was successfully created.'
         @leagueUser = LeagueUser.create!({league_id:@league.id,
                                   user_id:current_user.id})
@@ -119,16 +118,22 @@ class LeaguesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_league
       @league = League.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
     def league_params
       params.require(:league).permit(:name, :entry_fee, :commissioner,
         :start_date, :user_id, :end_date, :rounds,
-        :exchange_fees, :public_keys, :"Binance Exchange", :"Gemini Exchange",
-        :"Hitbtc Exchange", :"GDAX Exchange")
+        :exchange_fees, :public_keys, :"Binance Exchange", :"Poloniex Exchange",
+        :"Bitfinex Exchange", :"GDAX Exchange")
+    end
+
+    def create_exchange_league_table
+      Exchange.all.each do |x|
+        if league_params["#{x.name} Exchange"].to_i == 1
+          ExchangeLeague.create! league_id: @league.id, exchange_id: x.id
+        end
+      end
     end
 end

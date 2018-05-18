@@ -178,7 +178,13 @@ class ExchangesController < ApplicationController
 
     def get_full_coin_list
       @coin_lists = {}
-      target = (@exchange.name == "Binance" ?  "quote_currency" : "base_currency")
+      case @exchange.name
+      when "Gdax"     then target = "base_currency"
+      when "Binance"  then target = "quote_currency"
+      when "Poloniex" then target = "quote_currency"
+      when "Bitfinex" then target = "quote_currency"
+      end
+
       @exchange.tickers.each do |ticker|
         if @coin_lists[ticker[target]]
           @coin_lists[ticker[target]] << ticker.pair

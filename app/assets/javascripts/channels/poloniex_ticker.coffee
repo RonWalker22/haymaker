@@ -1,4 +1,4 @@
-App.gemini_ticker = App.cable.subscriptions.create "GeminiTickerChannel",
+App.poloniex_ticker = App.cable.subscriptions.create "PoloniexTickerChannel",
   connected: ->
     console.log 'Connected'
 

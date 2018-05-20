@@ -49,9 +49,14 @@ ActiveRecord::Schema.define(version: 20180430162531) do
   create_table "leagues", force: :cascade do |t|
     t.string "name", null: false
     t.string "entry_fee", default: "FREE", null: false
+    t.string "prize", default: "Bragging Rights", null: false
+    t.decimal "starting_balance", default: "1.0", null: false
+    t.boolean "balance_revivable", default: false, null: false
+    t.boolean "exchange_fees", default: true, null: false
+    t.boolean "exchange_risk", default: true, null: false
     t.bigint "user_id"
-    t.datetime "start_date", default: "2018-05-16 01:27:13", null: false
-    t.datetime "end_date", default: "2018-06-16 01:27:13", null: false
+    t.datetime "start_date", default: "2018-05-20 20:35:20", null: false
+    t.datetime "end_date", default: "2018-06-20 20:35:20", null: false
     t.integer "rounds", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

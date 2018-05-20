@@ -18,7 +18,7 @@
   if n == 0
     League.create!( name: 'Practice',
                     user_id: 1,
-                    start_date: DateTime.now,
+                    balance_revivable: true,
                     end_date: 100.years.from_now,
                   )
     4.times do |n|
@@ -35,7 +35,7 @@
 
   4.times do |inner_n|
     Wallet.create!( coin_type: 'BTC',
-                    coin_quantity: '1.00',
+                    coin_quantity: 1.00,
                     user_id: n + 1,
                     exchange_id: inner_n + 1,
                     league_id: 1,

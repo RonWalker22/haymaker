@@ -1,8 +1,15 @@
 Rails.application.routes.draw do
 
-  root 'users#index'
+  devise_for :users, controllers: { registrations: 'users/registrations' }
 
-  devise_for :users
+  unauthenticated do
+   root :to => 'users#index'
+  end
+
+  authenticated do
+    root :to => 'leagues#index'
+  end
+
   resources :leagues
   resources :exchanges
   resources :wallets

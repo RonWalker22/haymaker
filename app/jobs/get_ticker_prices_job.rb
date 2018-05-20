@@ -43,7 +43,6 @@ class GetTickerPricesJob < ApplicationJob
       pairs = pairs.join(",")
       loop do
         response = HTTParty.get("#{base}#{pairs}")
-        start_time = Time.now
         response = JSON.parse(response.to_s)
         response.each do |pair|
           pair_target = pair[0].delete('t').downcase
@@ -72,9 +71,6 @@ class GetTickerPricesJob < ApplicationJob
                                                           exchange: @poloniex.name}
          end
        end
-       end_time = Time.now
-       puts "------------#{end_time - start_time} ------------------------"
-       sleep(1)
       end
       ActiveRecord::Base.connection.close
     end

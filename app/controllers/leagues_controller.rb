@@ -1,5 +1,6 @@
 class LeaguesController < ApplicationController
-  before_action :set_league, only: [:show, :edit, :update, :destroy]
+  before_action :set_league, only: [:show, :edit, :update, :destroy, :set_up,
+                                    :join]
   before_action :user_signed_in?, only: [:show, :edit, :update, :destroy,
                                           :order, :index]
 
@@ -12,6 +13,7 @@ class LeaguesController < ApplicationController
   # GET /leagues/1
   # GET /leagues/1.json
   def show
+    @league_user = LeagueUser.find_by(league_id:@league, user_id: current_user.id)
   end
 
   # GET /leagues/new
@@ -34,6 +36,10 @@ class LeaguesController < ApplicationController
         flash[:notice] = 'League was successfully created.'
         @leagueUser = LeagueUser.create!({league_id:@league.id,
                                   user_id:current_user.id})
+        create_btc_wallets
+        if @league.exchanges.count == 1
+          create_set_up_balance
+        end
         format.html { redirect_to @league }
         format.json { render :show, status: :created, location: @league }
       else
@@ -73,13 +79,17 @@ class LeaguesController < ApplicationController
 
   def join
     new_palyer = LeagueUser.new({user_id:current_user.id,
-                      league_id: params[:league]})
+                      league_id: @league.id})
     if new_palyer.save
+      create_btc_wallets
+      if @league.exchanges.count == 1
+        create_set_up_balance
+      end
       flash[:notice] = 'You have successfully joined this league.'
     else
       flash[:notice] = 'You have aleady joined this league.'
     end
-      redirect_to league_path(params[:league])
+    redirect_to league_path(@league)
   end
 
   def request_reset
@@ -117,6 +127,12 @@ class LeaguesController < ApplicationController
     redirect_to league_url(1)
   end
 
+  def set_up
+    create_set_up_balance
+
+    redirect_to league_url(@league)
+  end
+
   private
     def set_league
       @league = League.find(params[:id])
@@ -126,7 +142,11 @@ class LeaguesController < ApplicationController
       params.require(:league).permit(:name, :entry_fee, :commissioner,
         :start_date, :user_id, :end_date, :rounds,
         :exchange_fees, :public_keys, :"Binance Exchange", :"Poloniex Exchange",
-        :"Bitfinex Exchange", :"GDAX Exchange")
+        :"Bitfinex Exchange", :"GDAX Exchange", :exchange_starter)
+    end
+
+    def setup_params
+      params.permit(:exchange_starter, :league)
     end
 
     def create_exchange_league_table
@@ -134,6 +154,40 @@ class LeaguesController < ApplicationController
         if league_params["#{x.name} Exchange"].to_i == 1
           ExchangeLeague.create! league_id: @league.id, exchange_id: x.id
         end
+      end
+    end
+
+    def create_set_up_balance
+      if @league.exchanges.count == 1
+        wallet = Wallet.find_by(user_id: current_user.id,
+                                league_id: @league.id,
+                                coin_type: 'BTC')
+      else
+        exchange_id = setup_params[:exchange_starter].to_i
+        wallet = Wallet.find_by(user_id: current_user.id,
+                                league_id: @league.id,
+                                exchange_id: exchange_id,
+                                coin_type: 'BTC')
+      end
+
+      wallet.coin_quantity = @league.starting_balance
+      if wallet.save
+        league_user = LeagueUser.find_by(league_id: @league.id,
+                                        user_id: current_user.id)
+        league_user.update_attributes set_up: true, ready: true
+        flash[:notice] = 'Your starting balance have been set up.'
+      end
+    end
+
+    def create_btc_wallets
+      @league.exchanges.each do |exchange|
+        Wallet.create!(user_id: current_user.id,
+                        league_id: @league.id,
+                        exchange_id: exchange.id,
+                        coin_type: 'BTC',
+                        coin_quantity: 0.00,
+                        public_key: SecureRandom.hex(20)
+                        )
       end
     end
 end

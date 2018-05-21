@@ -43,5 +43,5 @@
                   )
   end
 
-  LeagueUser.create!(user_id: n + 1, league_id: 1)
+  LeagueUser.create!(user_id: n + 1, league_id: 1, set_up: true, ready: true)
 end

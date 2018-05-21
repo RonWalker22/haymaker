@@ -38,6 +38,8 @@ Rails.application.routes.draw do
 
   get 'users/:id'                                     => 'users#show',
                                                     :as => 'user'
+  post 'league/setup'                                => 'leagues#set_up',
+                                                    :as => 'setup'
 
   # get 'profile' => 'players#'
   # get 'profile/edit' => 'players#'

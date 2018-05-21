@@ -39,6 +39,9 @@ ActiveRecord::Schema.define(version: 20180430162531) do
   create_table "league_users", force: :cascade do |t|
     t.bigint "league_id"
     t.bigint "user_id"
+    t.boolean "ready", default: false, null: false
+    t.boolean "set_up", default: false, null: false
+    t.string "status", default: "alive", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["league_id", "user_id"], name: "index_league_users_on_league_id_and_user_id", unique: true
@@ -51,12 +54,13 @@ ActiveRecord::Schema.define(version: 20180430162531) do
     t.string "entry_fee", default: "FREE", null: false
     t.string "prize", default: "Bragging Rights", null: false
     t.decimal "starting_balance", default: "1.0", null: false
+    t.string "starting_exchange", default: "any", null: false
     t.boolean "balance_revivable", default: false, null: false
     t.boolean "exchange_fees", default: true, null: false
     t.boolean "exchange_risk", default: true, null: false
     t.bigint "user_id"
-    t.datetime "start_date", default: "2018-05-20 20:35:20", null: false
-    t.datetime "end_date", default: "2018-06-20 20:35:20", null: false
+    t.datetime "start_date", default: "2018-05-21 17:48:37", null: false
+    t.datetime "end_date", default: "2018-06-21 17:48:37", null: false
     t.integer "rounds", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

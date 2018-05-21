@@ -51,7 +51,7 @@
 
         <td>
             <% unless current_user.leagues.any? { |l| l.id == league.id } %>
-              <%= link_to "Join", join_path(league:league.id), method: :post,
+              <%= link_to "Join", join_path(id:league.id), method: :post,
                                             class: "button is-rounded is-small"
               %>
             <% end %>

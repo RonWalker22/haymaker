@@ -3,8 +3,8 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
-  has_many :wallets
-  has_many :league_users
+  has_many :wallets, dependent: :delete_all
+  has_many :league_users, dependent: :delete_all
   has_many :leagues, :through => :league_users
 
   def coin_total(coin)

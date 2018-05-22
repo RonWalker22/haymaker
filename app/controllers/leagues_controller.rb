@@ -1,8 +1,8 @@
 class LeaguesController < ApplicationController
-  before_action :set_league, only: [:show, :edit, :update, :destroy, :set_up,
-                                    :join]
   before_action :user_signed_in?, only: [:show, :edit, :update, :destroy,
                                           :order, :index]
+  before_action :set_league_variables, except: [:create, :new, :index, :join]
+  before_action :set_league, only: [:join]
 
   # GET /leagues
   # GET /leagues.json
@@ -13,7 +13,6 @@ class LeaguesController < ApplicationController
   # GET /leagues/1
   # GET /leagues/1.json
   def show
-    @league_user = LeagueUser.find_by(league_id:@league, user_id: current_user.id)
   end
 
   # GET /leagues/new
@@ -34,7 +33,7 @@ class LeaguesController < ApplicationController
       if @league.save
         create_exchange_league_table
         flash[:notice] = 'League was successfully created.'
-        @leagueUser = LeagueUser.create!({league_id:@league.id,
+        @league_user = LeagueUser.create!({league_id:@league.id,
                                   user_id:current_user.id})
         create_btc_wallets
         if @league.exchanges.count == 1
@@ -72,15 +71,15 @@ class LeaguesController < ApplicationController
     @league.destroy
     respond_to do |format|
       flash[:notice] = 'League was successfully destroyed.'
-      format.html { redirect_to leagues_url}
+      format.html { redirect_to leagues_path}
       format.json { head :no_content }
     end
   end
 
   def join
-    new_palyer = LeagueUser.new({user_id:current_user.id,
+    @new_league_user = LeagueUser.new({user_id:current_user.id,
                       league_id: @league.id})
-    if new_palyer.save
+    if @new_league_user.save
       create_btc_wallets
       if @league.exchanges.count == 1
         create_set_up_balance
@@ -99,13 +98,13 @@ class LeaguesController < ApplicationController
       flash[:reset_funds] =
                   'Are you sure you want to reset your practice league funds?'
       respond_to do |format|
-        format.html { redirect_to league_url(league.id)}
+        format.html { redirect_to league_path(league.id)}
         format.json { render :show, status: :ok, location: league }
       end
     else
       respond_to do |format|
         flash[:notice] = "Funds can only be reset in the practice league."
-        format.html { redirect_to league_url(league.id) }
+        format.html { redirect_to league_path(league.id) }
         format.json { render json: @league.errors,
                       status: :unprocessable_entity }
       end
@@ -113,29 +112,61 @@ class LeaguesController < ApplicationController
   end
 
   def reset_funds
-    wallets = Wallet.where user_id: current_user, league_id: 1
+    league = League.find(1)
+    league_user = LeagueUser.find_by league_id: 1, user_id: current_user.id
+    wallets = Wallet.where league_user_id: league_user.id
 
     wallets.each do |wallet|
       if wallet.coin_type == 'BTC'
-        wallet.update_attributes coin_quantity: 100.00
+        wallet.update_attributes coin_quantity: league.starting_balance
       else
         wallet.update_attributes coin_quantity: 0
       end
       flash[:notice] = 'Funds in Practice League have been reset.'
     end
 
-    redirect_to league_url(1)
+    redirect_to league_path(1)
   end
 
   def set_up
     create_set_up_balance
 
-    redirect_to league_url(@league)
+    redirect_to league_path(@league)
+  end
+
+  def request_leave
+    flash[:request_leave] =
+                "Are you sure you want to leave the #{@league.name} league?"
+    respond_to do |format|
+      format.html { redirect_to league_path(@league.id)}
+      format.json { render :show, status: :ok, location: league }
+    end
+  end
+
+  def leave
+    league_user = LeagueUser.find_by(league_id: params[:id],
+                                      user_id: params[:pid])
+    if league_user.destroy
+      flash[:notice] = "You have left the #{@league.name} league."
+    end
+    redirect_to leagues_path
   end
 
   private
+    def set_league_variables
+      set_league
+      set_league_user
+    end
+
     def set_league
       @league = League.find(params[:id])
+    end
+
+    def set_league_user
+      if current_user
+        @league_user = LeagueUser.find_by(league_id: @league.id,
+                                          user_id: current_user.id)
+      end
     end
 
     def league_params
@@ -158,31 +189,30 @@ class LeaguesController < ApplicationController
     end
 
     def create_set_up_balance
+      league_user = @league_user || @new_league_user
       if @league.exchanges.count == 1
-        wallet = Wallet.find_by(user_id: current_user.id,
-                                league_id: @league.id,
+        wallet = Wallet.find_by(league_user_id: league_user.id,
                                 coin_type: 'BTC')
       else
         exchange_id = setup_params[:exchange_starter].to_i
-        wallet = Wallet.find_by(user_id: current_user.id,
-                                league_id: @league.id,
+
+        wallet = Wallet.find_by(league_user_id: league_user.id,
                                 exchange_id: exchange_id,
                                 coin_type: 'BTC')
       end
 
       wallet.coin_quantity = @league.starting_balance
       if wallet.save
-        league_user = LeagueUser.find_by(league_id: @league.id,
-                                        user_id: current_user.id)
         league_user.update_attributes set_up: true, ready: true
-        flash[:notice] = 'Your starting balance have been set up.'
+        exchange = Exchange.find(setup_params[:exchange_starter].to_i)
+        flash[:notice] = "Your starting balance have been set up at #{exchange.name}."
       end
     end
 
     def create_btc_wallets
       @league.exchanges.each do |exchange|
-        Wallet.create!(user_id: current_user.id,
-                        league_id: @league.id,
+        league_user = @league_user || @new_league_user
+        Wallet.create!(league_user_id: league_user.id,
                         exchange_id: exchange.id,
                         coin_type: 'BTC',
                         coin_quantity: 0.00,

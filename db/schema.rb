@@ -59,8 +59,8 @@ ActiveRecord::Schema.define(version: 20180430162531) do
     t.boolean "exchange_fees", default: true, null: false
     t.boolean "exchange_risk", default: true, null: false
     t.bigint "user_id"
-    t.datetime "start_date", default: "2018-05-21 23:19:14", null: false
-    t.datetime "end_date", default: "2018-06-21 23:19:14", null: false
+    t.datetime "start_date", default: "2018-05-22 14:52:44", null: false
+    t.datetime "end_date", default: "2018-06-22 14:52:44", null: false
     t.integer "rounds", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -130,16 +130,14 @@ ActiveRecord::Schema.define(version: 20180430162531) do
     t.string "coin_type", null: false
     t.decimal "coin_quantity", default: "0.0", null: false
     t.string "public_key", null: false
-    t.bigint "user_id"
+    t.bigint "league_user_id"
     t.bigint "exchange_id"
-    t.bigint "league_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["coin_type", "user_id", "exchange_id", "league_id"], name: "unique_wallet", unique: true
+    t.index ["coin_type", "exchange_id", "league_user_id"], name: "unique_wallet", unique: true
     t.index ["exchange_id"], name: "index_wallets_on_exchange_id"
-    t.index ["league_id"], name: "index_wallets_on_league_id"
+    t.index ["league_user_id"], name: "index_wallets_on_league_user_id"
     t.index ["public_key"], name: "index_wallets_on_public_key", unique: true
-    t.index ["user_id"], name: "index_wallets_on_user_id"
   end
 
 end

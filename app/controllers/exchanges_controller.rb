@@ -39,8 +39,11 @@ class ExchangesController < ApplicationController
   def show
     @pair = params[:p]
     set_coin_tickers
-    @wallets = current_user.wallets.where(exchange_id: @exchange.id,
-                                          league_id: params[:id])
+    league_user = LeagueUser.find_by(user_id: current_user.id,
+                                    league_id: params[:id])
+
+    @wallets = league_user.wallets.where(exchange_id: @exchange.id)
+    
     @wallet = @wallets.find_by(coin_type:@coin_1_ticker)
     find_and_set_coins
     get_full_coin_list

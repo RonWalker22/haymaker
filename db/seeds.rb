@@ -33,15 +33,15 @@
     end
   end
 
+  LeagueUser.create!(user_id: n + 1, league_id: 1, set_up: true, ready: true)
+
   4.times do |inner_n|
     Wallet.create!( coin_type: 'BTC',
                     coin_quantity: 1.00,
-                    user_id: n + 1,
                     exchange_id: inner_n + 1,
-                    league_id: 1,
+                    league_user_id: n + 1,
                     public_key: SecureRandom.hex(20)
                   )
   end
 
-  LeagueUser.create!(user_id: n + 1, league_id: 1, set_up: true, ready: true)
 end

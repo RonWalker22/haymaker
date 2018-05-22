@@ -1,26 +1,12 @@
 <header class="card-header">
   <p class="card-header-title is-centered">
     <%= @league.name %> League
-    <% if @league.id == 1 %>
-      <%= link_to "Reset Funds", reset_path(league:@league.id), class:"button
-      is-danger is-small"%>
-    <% end %>
   </p>
 </header>
 <div class="card">
   <div class="card-content">
     <div class="content">
       <div class='center'>
-        <p class="notice center">
-          <% if flash[:reset_funds]%>
-            <%= flash[:reset_funds] %>
-           <%= link_to "Yes", reset_path(league:@league.id), method: :post,
-                        class:"button is-rounded is-danger is-small"%>
-           <%= link_to "No", league_path(league:@league.id),
-                        class:"button is-rounded is-info is-inverted is-small"%>
-          <% end %>
-        </p>
-
         <p>
           <strong>Commissioner:</strong>
           <%= link_to User.find(@league.user_id).name,
@@ -57,12 +43,58 @@
                         setup_path(id: @league.id,
                                     exchange_starter: exchange.id),
                         method: :post,
-                        class:"button is-rounded is-info  is-small" %>
+                        class:"button is-rounded is-info is-small" %>
             <%unless i == @league.exchanges.count - 1%>
               <span>| |</span>
             <% end %>
           <% end %>
         <% end %>
+
+        <% if @league_user.set_up? %>
+          <p>
+            <button class="button is-info is-small is-rounded" type="button"
+                      data-toggle="collapse" data-target="#collapseExample"
+                      aria-expanded="false" aria-controls="collapseExample">
+              League Settings
+            </button>
+          </p>
+          <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+              <% if @league.id == 1 %>
+                <%= link_to "Reset Funds", reset_path(league:@league.id),
+                                        class:"button is-danger is-small"%>
+                <% else %>
+                <%=  link_to "Leave League",
+                              request_leave_path(@league),
+                              class:"button is-danger is-small"%>
+              <% end %>
+
+
+            </div>
+          </div>
+
+          <p class="notice center">
+            <% if flash[:reset_funds]%>
+              <%= flash[:reset_funds] %>
+             <%= link_to "Yes", reset_path(league:@league.id), method: :post,
+                          class:"button is-rounded is-danger is-small"%>
+             <%= link_to "No", league_path(league:@league.id),
+                          class:"button is-rounded is-info is-inverted is-small"%>
+            <% end %>
+          </p>
+
+          <p class="notice center">
+            <% if flash[:request_leave]%>
+              <%= flash[:request_leave] %>
+              <%=  link_to "Yes",
+                            leave_path(id:@league.id, pid: current_user.id ),
+                            class:"button  is-rounded is-danger is-small",
+                              method: :delete%>
+             <%= link_to "No", league_path(league:@league.id),
+                          class:"button is-rounded is-info is-inverted is-small"%>
+            <% end %>
+          </p>
+        <%end %>
       </div>
     </div>
   </div>

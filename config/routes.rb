@@ -16,7 +16,8 @@ Rails.application.routes.draw do
 
   get  '/leaderboards'                             => 'users#index'
   get  '/about'                                    => 'static_pages#about'
-  post '/join'                                     => 'leagues#join'
+  post '/leagues/:id/join'                         => 'leagues#join',
+                                                            :as => 'join'
   get  '/reset'                                    => 'leagues#request_reset'
   post '/reset'                                    => 'leagues#reset_funds'
   get  'leagues/:id/exchanges/:xid'                => 'exchanges#show',
@@ -38,11 +39,13 @@ Rails.application.routes.draw do
 
   get 'users/:id'                                     => 'users#show',
                                                     :as => 'user'
-  post 'league/setup'                                => 'leagues#set_up',
+  post 'leagues/:id/setup'                            => 'leagues#set_up',
                                                     :as => 'setup'
 
-  # get 'profile' => 'players#'
-  # get 'profile/edit' => 'players#'
+  delete 'leagues/:id/players/:pid'                => 'leagues#leave',
+                                                    :as => 'leave'
+  get 'leagues/:id/request_leave'                 => 'leagues#request_leave',
+                                                    :as => 'request_leave'
 
   mount ActionCable.server => '/cable'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

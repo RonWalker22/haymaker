@@ -114,11 +114,10 @@ class ExchangesController < ApplicationController
     end
 
     def find_and_set_coins
-      unless !@wallets
+      if @wallets
         @coin_1 = @wallets.find_by({coin_type:@coin_1_ticker})
         @coin_2 = @wallets.find_by({coin_type:@coin_2_ticker})
       end
-      #
     end
 
     def sufficient_trade_funds?
@@ -159,22 +158,22 @@ class ExchangesController < ApplicationController
     end
 
     def create_wallet_if_missing
+      league_user = LeagueUser.find_by league_id: params[:id].to_i,
+                                       user_id: current_user.id
       unless @coin_1
         Wallet.create!({coin_type:  @coin_1_ticker,
                         coin_quantity: 0,
                         exchange_id: @exchange.id,
-                        user_id: current_user.id,
-                        public_key: SecureRandom.hex(20),
-                        league_id: 1
+                        league_user_id: league_user.id,
+                        public_key: SecureRandom.hex(20)
                       })
       end
       unless @coin_2
         Wallet.create!({coin_type:  @coin_2_ticker,
                         coin_quantity: 0,
                         exchange_id: @exchange.id,
-                        user_id: current_user.id,
-                        public_key: SecureRandom.hex(20),
-                        league_id: 1
+                        league_user_id: league_user.id,
+                        public_key: SecureRandom.hex(20)
                       })
       end
       find_and_set_coins

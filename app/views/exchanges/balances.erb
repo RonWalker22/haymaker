@@ -12,8 +12,10 @@
       </tr>
     </thead>
     <tbody>
+      <% league_user = LeagueUser.find_by user_id:   current_user.id,
+                                          league_id: params[:id]%>
       <% current_user.wallets.where(exchange_id: params[:xid],
-                                    league_id: params[:id]).each do |w| %>
+                                    league_user: league_user).each do |w| %>
           <tr>
             <td> <%= w.coin_type  %> </td>
             <td> <%= w.coin_quantity %> </td>

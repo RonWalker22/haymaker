@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180430162531) do
+ActiveRecord::Schema.define(version: 20180522192655) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "exchange_leagues", force: :cascade do |t|
-    t.bigint "exchange_id"
-    t.bigint "league_id"
+    t.bigint "exchange_id", null: false
+    t.bigint "league_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["exchange_id", "league_id"], name: "index_exchange_leagues_on_exchange_id_and_league_id", unique: true
@@ -36,9 +36,22 @@ ActiveRecord::Schema.define(version: 20180430162531) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "league_invites", force: :cascade do |t|
+    t.bigint "league_id", null: false
+    t.bigint "receiver_id", null: false
+    t.bigint "sender_id", null: false
+    t.string "status", default: "pending", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["league_id", "receiver_id"], name: "index_league_invites_on_league_id_and_receiver_id", unique: true
+    t.index ["league_id"], name: "index_league_invites_on_league_id"
+    t.index ["receiver_id"], name: "index_league_invites_on_receiver_id"
+    t.index ["sender_id"], name: "index_league_invites_on_sender_id"
+  end
+
   create_table "league_users", force: :cascade do |t|
-    t.bigint "league_id"
-    t.bigint "user_id"
+    t.bigint "league_id", null: false
+    t.bigint "user_id", null: false
     t.boolean "ready", default: false, null: false
     t.boolean "set_up", default: false, null: false
     t.string "status", default: "alive", null: false
@@ -58,13 +71,13 @@ ActiveRecord::Schema.define(version: 20180430162531) do
     t.boolean "balance_revivable", default: false, null: false
     t.boolean "exchange_fees", default: true, null: false
     t.boolean "exchange_risk", default: true, null: false
-    t.bigint "user_id"
-    t.datetime "start_date", default: "2018-05-22 14:52:44", null: false
-    t.datetime "end_date", default: "2018-06-22 14:52:44", null: false
+    t.bigint "commissioner_id", null: false
+    t.datetime "start_date", default: "2018-05-24 19:40:21", null: false
+    t.datetime "end_date", default: "2018-06-24 19:40:21", null: false
     t.integer "rounds", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_leagues_on_user_id"
+    t.index ["commissioner_id"], name: "index_leagues_on_commissioner_id"
   end
 
   create_table "orders", force: :cascade do |t|
@@ -140,4 +153,7 @@ ActiveRecord::Schema.define(version: 20180430162531) do
     t.index ["public_key"], name: "index_wallets_on_public_key", unique: true
   end
 
+  add_foreign_key "league_invites", "users", column: "receiver_id"
+  add_foreign_key "league_invites", "users", column: "sender_id"
+  add_foreign_key "leagues", "users", column: "commissioner_id"
 end

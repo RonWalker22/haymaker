@@ -16,4 +16,11 @@ class ApplicationController < ActionController::Base
       transaction_history_path(params[:id], x_id, params[:cid])
     end
   end
+
+  def check_signed_in
+    if !user_signed_in?
+      flash[:notice] = "You must be signed in to access that area."
+      return redirect_to(new_user_session_path)
+    end
+  end
 end

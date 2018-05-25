@@ -1,6 +1,5 @@
 class LeaguesController < ApplicationController
-  before_action :user_signed_in?, only: [:show, :edit, :update, :destroy,
-                                          :order, :index]
+  before_action :check_signed_in
   before_action :set_league_variables, except: [:create, :new, :index, :join]
   before_action :set_league, only: [:join]
 
@@ -28,7 +27,8 @@ class LeaguesController < ApplicationController
   # POST /leagues.json
   def create
     puts ">>>>>-------->>>>#{params}"
-    @league = League.new(league_params.slice(:name, :user_id, :start_date, :end_date))
+    @league = League.new(league_params.slice(:name, :commissioner_id,
+                                              :start_date, :end_date))
     respond_to do |format|
       if @league.save
         create_exchange_league_table
@@ -80,6 +80,7 @@ class LeaguesController < ApplicationController
     @new_league_user = LeagueUser.new({user_id:current_user.id,
                       league_id: @league.id})
     if @new_league_user.save
+      accpet_league_invite
       create_btc_wallets
       if @league.exchanges.count == 1
         create_set_up_balance
@@ -171,7 +172,7 @@ class LeaguesController < ApplicationController
 
     def league_params
       params.require(:league).permit(:name, :entry_fee, :commissioner,
-        :start_date, :user_id, :end_date, :rounds,
+        :start_date, :user_id, :commissioner_id, :end_date, :rounds,
         :exchange_fees, :public_keys, :"Binance Exchange", :"Poloniex Exchange",
         :"Bitfinex Exchange", :"GDAX Exchange", :exchange_starter)
     end
@@ -194,18 +195,19 @@ class LeaguesController < ApplicationController
         wallet = Wallet.find_by(league_user_id: league_user.id,
                                 coin_type: 'BTC')
       else
-        exchange_id = setup_params[:exchange_starter].to_i
-
+        exchange = Exchange.find(setup_params[:exchange_starter].to_i)
         wallet = Wallet.find_by(league_user_id: league_user.id,
-                                exchange_id: exchange_id,
+                                exchange_id: exchange.id,
                                 coin_type: 'BTC')
       end
-
       wallet.coin_quantity = @league.starting_balance
+
       if wallet.save
         league_user.update_attributes set_up: true, ready: true
-        exchange = Exchange.find(setup_params[:exchange_starter].to_i)
-        flash[:notice] = "Your starting balance have been set up at #{exchange.name}."
+        if exchange
+          flash[:notice] =
+            "Your starting balance have been set up at #{exchange.name}."
+        end
       end
     end
 
@@ -218,6 +220,15 @@ class LeaguesController < ApplicationController
                         coin_quantity: 0.00,
                         public_key: SecureRandom.hex(20)
                         )
+      end
+    end
+
+    def accpet_league_invite
+      league_invite = LeagueInvite.find_by league_id: @league.id,
+                                            receiver_id: current_user.id
+      if league_invite
+        league_invite.status = "accepted"
+        league_invite.save
       end
     end
 end

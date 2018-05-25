@@ -2,17 +2,32 @@
 
 #inner_body {
   min-height: 75.5vh;
-  background: #0082c8;
+  background: #56ab2f;
 }
 
 .card {
-  background: linear-gradient(to right, #108dc7, #0082c8, #0082c8, #108dc7);
+  background: linear-gradient(to right, #3CA55C, #56ab2f, #56ab2f, #3CA55C);
   box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
   max-width: 50%;
   position: unset;
   margin: auto;
   background-color: transparent;
-  border: none ;
+  border: none;
+}
+
+.button {
+  color:green;
+
+  &:hover {
+    background-color: whitesmoke;
+  }
+}
+
+.level-item {
+   background-color: white;
+   &:hover {
+     background-color: whitesmoke;
+   }
 }
 
 .withdrawal {
@@ -33,7 +48,8 @@
 }
 
 .table {
-  background: linear-gradient(to right, #108dc7, #0082c8, #0082c8, #108dc7);
+  background: linear-gradient(to right, #3CA55C, #56ab2f, #56ab2f, #3CA55C);
+  color: #4a4a4a;
 }
 
 html {
@@ -48,12 +64,9 @@ html {
 }
 
 a {
-  color:#ACB6E5;
+  color: #6be585;
   &:hover {
-    color:white;
-  }
-  &:visited {
-    color:#ACB6E5;
+    color: white;
   }
 }
 

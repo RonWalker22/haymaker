@@ -1,4 +1,5 @@
 class ExchangesController < ApplicationController
+  before_action :check_signed_in
   before_action :set_exchange, except: [:create, :index, :new]
   before_action :user_signed_in?, only: [:show, :edit, :update, :destroy,
                                           :order]
@@ -43,7 +44,7 @@ class ExchangesController < ApplicationController
                                     league_id: params[:id])
 
     @wallets = league_user.wallets.where(exchange_id: @exchange.id)
-    
+
     @wallet = @wallets.find_by(coin_type:@coin_1_ticker)
     find_and_set_coins
     get_full_coin_list

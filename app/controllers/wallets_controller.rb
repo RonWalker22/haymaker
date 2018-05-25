@@ -1,4 +1,5 @@
 class WalletsController < ApplicationController
+  before_action :check_signed_in
   before_action :set_wallet, only: [:show, :edit, :update, :destroy]
 
   # GET /wallets

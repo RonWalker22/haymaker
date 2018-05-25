@@ -17,7 +17,7 @@
                 )
   if n == 0
     League.create!( name: 'Practice',
-                    user_id: 1,
+                    commissioner_id: 1,
                     balance_revivable: true,
                     end_date: 100.years.from_now,
                   )
@@ -44,4 +44,14 @@
                   )
   end
 
+end
+
+League.create!( name: 'Second',
+                commissioner_id: 1,
+                balance_revivable: true,
+                end_date: 100.years.from_now,
+              )
+ExchangeLeague.create!( exchange_id: 1, league_id: 2)
+2.times do |n|
+  LeagueInvite.create!(receiver_id: n + 2, sender_id: n + 1, league_id: 2)
 end

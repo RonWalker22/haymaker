@@ -1,8 +1,8 @@
 class CreateLeagueUsers < ActiveRecord::Migration[5.1]
   def change
     create_table :league_users do |t|
-      t.references :league
-      t.references :user
+      t.references :league, null: false
+      t.references :user, null: false
       t.boolean :ready,  default: false, null: false
       t.boolean :set_up, default: false, null: false
       t.string :status,  default: "alive", null: false

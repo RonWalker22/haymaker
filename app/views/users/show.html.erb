@@ -1,16 +1,161 @@
-<div id="profile_page">
-  <ul>
-    <li class="pp-name">
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
       <%= @user.name %>
-      <% if user_signed_in? && current_user.id == @user.id %>
-      <%= link_to 'edit' , edit_user_registration_path(@user) %>
+      <br>
+      <% if current_user.id == @user.id %>
+        <%= link_to ' edit' , edit_user_registration_path(@user)%>
       <% end %>
-    </li>
-    <% if user_signed_in? && current_user.id == @user.id %>
-      <li class="pp-other-data">
-        <strong>Email:</strong>
-        <%= @user.email %>
-      </li>
-    <% end %>
-  </ul>
+    </p>
+      <p>
+        <%= @user.created_at.strftime("Join: %F")  %>
+      </p>
+  </header>
+  <div class="card-content">
+    <div class="content">
+      <% if current_user.id == @user.id %>
+      <p>Active Leagues where you are competing:</p>
+      <% else %>
+      <p>Active Leagues where <%= @user.name%> is competing:</p>
+      <% end %>
+      <table class="table is-narrow">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>ID</th>
+            <th>Commissioner</th>
+            <th>Rank</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @user.leagues.each do |l| %>
+            <% league_user = LeagueUser.find_by(user_id: @user.id,
+                                              league_id: l.id ) %>
+            <% if league_user.status == 'alive' %>
+              <tr>
+                <td><%= l.name %></td>
+                <td><%= l.id %></td>
+                <td><%= User.find(l.commissioner_id).name %></td>
+                <td>?</td>
+              </tr>
+            <% end  %>
+          <% end %>
+        </tbody>
+      </table>
+      <% unless current_user.id == @user.id %>
+        <a class="level-item button"
+                data-toggle="collapse" data-target="#collapseInvite"
+                aria-expanded="false" aria-controls="collapseInvite">
+         Invite <%= @user.name %> to a League
+        </a>
+      <% end %>
+      <% if current_user.id != @user.id %>
+        <table class="table is-narrow collapse" id="collapseInvite">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>ID</th>
+              <th>Commissioner</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% available_invite_leagues(@user).each do |l| %>
+                <tr>
+                  <td><%= l.name %></td>
+                  <td><%= l.id %></td>
+                  <td><%= User.find(l.commissioner_id).name %></td>
+                  <td>
+                    <%= link_to 'Invite',
+                        send_league_invite_path(id:l.id,
+                                                rid: @user.id,
+                                                sid:current_user.id),
+                        class: "button is-small is-warning", method: 'post'%>
+                  </td>
+                </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+
+      <% if current_user.id == @user.id %>
+      <a class="level-item button"
+              data-toggle="collapse" data-target="#collapseReceived"
+              aria-expanded="false" aria-controls="collapseReceived">
+      Leauge Invites Received
+      </a>
+      <div class="collapse show" id="collapseReceived">
+          <% if flash[:confirmation] %>
+          <div class="notification">
+            <p class="notice">
+              <%= flash[:confirmation] %>
+            </p>
+            <%= link_to "Join", join_path(params[:lid]), method: :post,
+                        class: "button is-warning is-rounded is-small"%>
+            <%= link_to "Cancel",user_path(current_user),
+                        class: "button is-rounded is-small"%>
+          </div>
+          <% end %>
+          <table class="table is-narrow is-hoverable">
+            <thead>
+              <tr>
+                <th>Requester</th>
+                <th>League</th>
+                <th>Invite Created</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% current_user.received_league_invites.each do |league_invite| %>
+                <% next unless league_invite.status == 'pending' %>
+                  <tr>
+                    <td><%= User.find(league_invite.sender_id).name  %></td>
+                    <td><%= League.find( league_invite.league_id).name %></td>
+                    </td>
+                    <td><%= league_invite.created_at.strftime("%B %d, %Y") %></td>
+                    <td>
+                      <%= link_to "Accept", join_path(league_invite.league_id), method: :post,
+                                      class: "button is-rounded is-warning is-small"
+                      %>
+                    </td>
+                    <td>
+                      <%= link_to 'Decline',
+                          decline_league_invite_path(league_invite),
+                          class: "button is-small is-danger", method: 'post'%>
+                    </td>
+                  </tr>
+              <% end %>
+            </tbody>
+          </table>
+
+        </div>
+      <a class="level-item button"
+              data-toggle="collapse" data-target="#collapseSent"
+              aria-expanded="false" aria-controls="collapseSent">
+      League Invites Sent
+      </a>
+      <div class="collapse show" id="collapseSent">
+          <table class="table is-narrow is-hoverable">
+            <thead>
+              <tr>
+                <th>Recipient</th>
+                <th>League</th>
+                <th>Status</th>
+                <th>Invite Created</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% current_user.sent_league_invites.each do |league_invite| %>
+                  <tr>
+                    <td><%= User.find(league_invite.receiver_id).name  %></td>
+                    <td><%= League.find( league_invite.league_id).name %></td>
+                    <td><%= league_invite.status.capitalize %></td>
+                    <td><%= league_invite.created_at.strftime("%B %d, %Y") %></td>
+                  </tr>
+              <% end %>
+            </tbody>
+          </table>
+
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>

@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_action :check_signed_in, only: [:show]
   before_action :set_user, only: [:show]
 
   def index
@@ -6,6 +7,10 @@ class UsersController < ApplicationController
   end
 
   def show
+  end
+
+  def current_user_home
+    redirect_to current_user
   end
 
   private

@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   end
 
   authenticated do
-    root :to => 'leagues#index'
+    root to: 'users#current_user_home'
   end
 
   resources :leagues
@@ -17,9 +17,10 @@ Rails.application.routes.draw do
   get  '/leaderboards'                             => 'users#index'
   get  '/about'                                    => 'static_pages#about'
   post '/leagues/:id/join'                         => 'leagues#join',
-                                                            :as => 'join'
-  get  '/reset'                                    => 'leagues#request_reset'
-  post '/reset'                                    => 'leagues#reset_funds'
+                                                    :as => 'join'
+  get  '/leagues/:id/reset'                        => 'leagues#request_reset',
+                                                    :as => 'reset'
+  post '/leagues/:id/reset'                        => 'leagues#reset_funds'
   get  'leagues/:id/exchanges/:xid'                => 'exchanges#show',
                                                             :as => 'trade'
   post 'leagues/:id/exchanges/:xid/order'          => 'exchanges#order',
@@ -46,6 +47,10 @@ Rails.application.routes.draw do
                                                     :as => 'leave'
   get 'leagues/:id/request_leave'                 => 'leagues#request_leave',
                                                     :as => 'request_leave'
+  post 'league_invites/:id/:sid/:rid/create'      => 'league_invites#create',
+                                                   :as => 'send_league_invite'
+  post 'league_invites/:lid/decline'              => 'league_invites#decline',
+                                                  :as => 'decline_league_invite'
 
   mount ActionCable.server => '/cable'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

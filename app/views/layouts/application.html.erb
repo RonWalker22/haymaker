@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>HayMakerX</title>
+    <title>HayMaker</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <%= favicon_link_tag %>
     <%= csrf_meta_tags %>
@@ -13,10 +13,10 @@
     <%= render 'shared/header' %>
     <div id='inner_body'>
       <% if notice %>
-      <p class="notice notification is-primary"><%= notice %></p>
+      <p class="notice notification is-black"><%= notice %></p>
       <% end %>
       <% if alert %>
-      <p class="alert notification is-primary"><%= alert %></p>
+      <p class="alert notification is-black"><%= alert %></p>
       <% end %>
       <%= yield %>
     </div>

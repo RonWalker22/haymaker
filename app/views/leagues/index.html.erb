@@ -45,8 +45,8 @@
         <td><%= league.users.count %></td>
         <td><%= league.exchanges.count %></td>
         <td>
-            <%= link_to User.find(league.user_id).name,
-                        user_path(User.find(league.user_id).id)%>
+            <%= link_to User.find(league.commissioner_id).name,
+                        user_path(User.find(league.commissioner_id).id)%>
         </td>
 
         <td>

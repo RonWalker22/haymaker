@@ -2,7 +2,7 @@ class CreateWallets < ActiveRecord::Migration[5.1]
   def change
     create_table :wallets do |t|
       t.string  :coin_type, null: false
-      t.numeric :coin_quantity, default: 0, null: false
+      t.numeric :coin_quantity, precision:1000, scale: 8, default: 0, null: false
       t.string :public_key, null: false
       t.references :league_user
       t.references :exchange

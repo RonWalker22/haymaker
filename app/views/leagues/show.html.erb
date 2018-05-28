@@ -103,15 +103,46 @@
             <% end %>
         <%end %>
       </div>
+
+
     </div>
   </div>
 </div>
 <% if @league_user.set_up? %>
 <div class="card-footer">
   <% @league.exchanges.each do |x|%>
-    <%= link_to "Enter #{x.name}-X", trade_path(@league.id, x.id, p:
+    <%= link_to "Trade #{x.name}-X", trade_path(@league.id, x.id, p:
     'ETH-BTC'), class:"card-footer-item button",
     data: { turbolinks: false }%>
   <% end %>
 </div>
 <% end %>
+<div class="card">
+  <div class="card-content">
+    <div class="content">
+      <h2>Leaderboards</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <td>Player</td>
+            <td>Rank</td>
+            <td>BTC</td>
+          </tr>
+        </thead>
+        <tbody>
+          <% leader_boards(@league).each_with_index do |hash, i| %>
+          <% name = hash.keys.first %>
+            <tr>
+              <td>
+                <%= link_to name, user_path(User.find_by(name: name)) %>
+
+              </td>
+              <td><%= i + 1 %></td>
+              <td><%= hash.values.first %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

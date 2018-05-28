@@ -36,7 +36,7 @@
                 <td><%= l.name %></td>
                 <td><%= l.id %></td>
                 <td><%= User.find(l.commissioner_id).name %></td>
-                <td>?</td>
+                <td><%= current_rank(@user, l) %></td>
               </tr>
             <% end  %>
           <% end %>

@@ -55,3 +55,61 @@ ExchangeLeague.create!( exchange_id: 1, league_id: 2)
 2.times do |n|
   LeagueInvite.create!(receiver_id: n + 2, sender_id: n + 1, league_id: 2)
 end
+
+4.times do |inner_n|
+  Wallet.create!( coin_type: 'ETH',
+                  coin_quantity: 3.554,
+                  exchange_id: inner_n + 1,
+                  league_user_id: 1,
+                  public_key: SecureRandom.hex(20)
+                )
+end
+4.times do |inner_n|
+  Wallet.create!( coin_type: 'LTC',
+                  coin_quantity: 4.8394828,
+                  exchange_id: inner_n + 1,
+                  league_user_id: 1,
+                  public_key: SecureRandom.hex(20)
+                )
+end
+4.times do |inner_n|
+  Wallet.create!( coin_type: 'ADA',
+                  coin_quantity: 5000.8459,
+                  exchange_id: inner_n + 1,
+                  league_user_id: 1,
+                  public_key: SecureRandom.hex(20)
+                )
+end
+4.times do |inner_n|
+  Wallet.create!( coin_type: 'XRP',
+                  coin_quantity: 100.989797,
+                  exchange_id: inner_n + 1,
+                  league_user_id: 1,
+                  public_key: SecureRandom.hex(20)
+                )
+end
+
+4.times do |inner_n|
+  Wallet.create!( coin_type: 'LTC',
+                  coin_quantity: 12.98979,
+                  exchange_id: inner_n + 1,
+                  league_user_id: 4,
+                  public_key: SecureRandom.hex(20)
+                )
+end
+4.times do |inner_n|
+  Wallet.create!( coin_type: 'LTC',
+                  coin_quantity: 5.9897,
+                  exchange_id: inner_n + 1,
+                  league_user_id: 3,
+                  public_key: SecureRandom.hex(20)
+                )
+end
+4.times do |inner_n|
+  Wallet.create!( coin_type: 'LTC',
+                  coin_quantity: 15.99797,
+                  exchange_id: inner_n + 1,
+                  league_user_id: 2,
+                  public_key: SecureRandom.hex(20)
+                )
+end

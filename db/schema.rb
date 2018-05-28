@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(version: 20180522192655) do
     t.boolean "ready", default: false, null: false
     t.boolean "set_up", default: false, null: false
     t.string "status", default: "alive", null: false
+    t.integer "rank", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["league_id", "user_id"], name: "index_league_users_on_league_id_and_user_id", unique: true
@@ -72,8 +73,8 @@ ActiveRecord::Schema.define(version: 20180522192655) do
     t.boolean "exchange_fees", default: true, null: false
     t.boolean "exchange_risk", default: true, null: false
     t.bigint "commissioner_id", null: false
-    t.datetime "start_date", default: "2018-05-24 19:40:21", null: false
-    t.datetime "end_date", default: "2018-06-24 19:40:21", null: false
+    t.datetime "start_date", default: "2018-05-27 16:08:25", null: false
+    t.datetime "end_date", default: "2018-06-27 16:08:25", null: false
     t.integer "rounds", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -141,7 +142,7 @@ ActiveRecord::Schema.define(version: 20180522192655) do
 
   create_table "wallets", force: :cascade do |t|
     t.string "coin_type", null: false
-    t.decimal "coin_quantity", default: "0.0", null: false
+    t.decimal "coin_quantity", precision: 1000, scale: 8, default: "0.0", null: false
     t.string "public_key", null: false
     t.bigint "league_user_id"
     t.bigint "exchange_id"

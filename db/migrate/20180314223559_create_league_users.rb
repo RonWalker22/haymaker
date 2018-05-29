@@ -7,6 +7,7 @@ class CreateLeagueUsers < ActiveRecord::Migration[5.1]
       t.boolean :set_up, default: false, null: false
       t.string :status,  default: "alive", null: false
       t.integer :rank,  default: 0, null: false
+      t.numeric :btce, default: 0.0, null: false
 
       t.timestamps
     end

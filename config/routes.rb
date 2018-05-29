@@ -1,11 +1,13 @@
 Rails.application.routes.draw do
+  require 'sidekiq/web'
 
   devise_for :users, controllers: { registrations: 'users/registrations' }
+
+  mount Sidekiq::Web => '/sidekiq'
 
   unauthenticated do
    root :to => 'users#index'
   end
-
   authenticated do
     root to: 'users#current_user_home'
   end

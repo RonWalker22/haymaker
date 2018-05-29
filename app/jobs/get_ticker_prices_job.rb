@@ -1,7 +1,7 @@
 class GetTickerPricesJob < ApplicationJob
   queue_as :default
 
-  def perform(*args)
+  def perform
     @gdax     = Exchange.find_by name:'GDAX'
     @poloniex = Exchange.find_by name:'Poloniex'
     @bitfinex = Exchange.find_by name:'Bitfinex'

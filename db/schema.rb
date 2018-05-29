@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(version: 20180522192655) do
     t.boolean "set_up", default: false, null: false
     t.string "status", default: "alive", null: false
     t.integer "rank", default: 0, null: false
+    t.decimal "btce", default: "0.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["league_id", "user_id"], name: "index_league_users_on_league_id_and_user_id", unique: true

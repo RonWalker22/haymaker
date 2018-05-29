@@ -19,6 +19,7 @@
     League.create!( name: 'Practice',
                     commissioner_id: 1,
                     balance_revivable: true,
+                    start_date: Time.now,
                     end_date: 100.years.from_now,
                   )
     4.times do |n|
@@ -49,6 +50,7 @@ end
 League.create!( name: 'Second',
                 commissioner_id: 1,
                 balance_revivable: true,
+                start_date: Time.now,
                 end_date: 100.years.from_now,
               )
 ExchangeLeague.create!( exchange_id: 1, league_id: 2)

@@ -20,12 +20,12 @@
 
         <p>
           <strong>Start date:</strong>
-          <%= @league.start_date.strftime("%m/%d/%y %I:%M%p").downcase  %>
+          <%= @league.start_date.strftime("%m/%d/%y %I:%M%p").downcase  %> UTC
         </p>
 
         <p>
           <strong>End date:</strong>
-          <%= @league.end_date.strftime("%m/%d/%y %I:%M%p").downcase  %>
+          <%= @league.end_date.strftime("%m/%d/%y %I:%M%p").downcase  %> UTC
         </p>
 
         <p>
@@ -65,10 +65,12 @@
               <% if @league.id == 1 %>
                 <%= link_to "Reset Funds", reset_path(league:@league.id),
                                         class:"button is-danger is-small"%>
-                <% else %>
-                <%=  link_to "Leave League",
-                              request_leave_path(@league),
-                              class:"button is-danger is-small"%>
+              <% else %>
+                <% if @league.start_date.future?  %>
+                  <%=  link_to "Leave League",
+                                request_leave_path(@league),
+                                class:"button is-danger is-small"%>
+                <% end %>
               <% end %>
 
 
@@ -102,47 +104,58 @@
             </div>
             <% end %>
         <%end %>
+
+        <br>
+        <% if @league.start_date.future? %>
+          <p>Trading options will open here on
+            <%= @league.start_date.strftime("%m/%d/%y %I:%M%p").downcase %> UTC
+          </p>
+        <% elsif @league.end_date.past?%>
+        <p>The trading window has closed.</p>
+        <% end %>
       </div>
 
 
     </div>
   </div>
 </div>
-<% if @league_user.set_up? %>
-<div class="card-footer">
-  <% @league.exchanges.each do |x|%>
-    <%= link_to "Trade #{x.name}-X", trade_path(@league.id, x.id, p:
-    'ETH-BTC'), class:"card-footer-item button",
-    data: { turbolinks: false }%>
-  <% end %>
-</div>
-<% end %>
-<div class="card">
-  <div class="card-content">
-    <div class="content">
-      <h2>Leaderboards</h2>
-      <table class="table">
-        <thead>
-          <tr>
-            <td>Player</td>
-            <td>Rank</td>
-            <td>BTC</td>
-          </tr>
-        </thead>
-        <tbody>
-          <% leader_boards(@league).each_with_index do |hash, i| %>
-          <% name = hash.keys.first %>
-            <tr>
-              <td>
-                <%= link_to name, user_path(User.find_by(name: name)) %>
-
-              </td>
-              <td><%= i + 1 %></td>
-              <td><%= hash.values.first %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+<% if @league.start_date.past? && @league.end_date.future? %>
+  <% if @league_user.set_up? %>
+    <div class="card-footer">
+      <% @league.exchanges.each do |x|%>
+        <%= link_to "Trade @ #{x.name}", trade_path(@league.id, x.id, p:
+        'ETH-BTC'), class:"card-footer-item button",
+        data: { turbolinks: false }%>
+      <% end %>
     </div>
-  </div>
-</div>
+  <% end %>
+    <div class="card">
+      <div class="card-content">
+        <div class="content">
+          <h2>Leaderboards</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <td>Player</td>
+                <td>Rank</td>
+                <td>BTC</td>
+              </tr>
+            </thead>
+            <tbody>
+              <% leader_boards(@league).each_with_index do |hash, i| %>
+              <% name = hash.keys.first %>
+                <tr>
+                  <td>
+                    <%= link_to name, user_path(User.find_by(name: name)) %>
+
+                  </td>
+                  <td><%= i + 1 %></td>
+                  <td><%= hash.values.first %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+<% end %>

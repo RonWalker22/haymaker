@@ -13,8 +13,8 @@ class CreateLeagues < ActiveRecord::Migration[5.1]
                     index: true,
                     foreign_key: {to_table: :users},
                     null: false
-      t.datetime :start_date,       default: DateTime.now,      null: false
-      t.datetime :end_date,         default: 1.month.from_now,  null: false
+      t.datetime :start_date,                                   null: false
+      t.datetime :end_date,                                     null: false
       t.integer :rounds,            default: 1,                 null: false
       t.timestamps
     end

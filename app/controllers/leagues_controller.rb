@@ -77,6 +77,10 @@ class LeaguesController < ApplicationController
   end
 
   def join
+    if @league.start_date.past?
+      flash[:notice] = "This league is no longer accepting new players."
+      return redirect_to leagues_url
+    end
     @new_league_user = LeagueUser.new({user_id:current_user.id,
                       league_id: @league.id})
     if @new_league_user.save
@@ -145,6 +149,11 @@ class LeaguesController < ApplicationController
   end
 
   def leave
+    if @league.start_date.past?
+      flash[:notice] = "You are unable leave a league which has already started.
+                        Ask for mercy instead."
+      return redirect_to league_url(@league)
+    end
     league_user = LeagueUser.find_by(league_id: params[:id],
                                       user_id: params[:pid])
     if league_user.destroy

@@ -1,6 +1,7 @@
 class ExchangesController < ApplicationController
   before_action :check_signed_in
   before_action :set_exchange, except: [:create, :index, :new]
+  before_action :check_trading_window, only: [:order]
   before_action :user_signed_in?, only: [:show, :edit, :update, :destroy,
                                           :order]
 
@@ -11,12 +12,17 @@ class ExchangesController < ApplicationController
     @coin_2_ticker = params[:coin_2_ticker]
     @order_type = params[:commit] == "Place Buy Order" ? 'Buy' : 'Sell'
     @order_quantity = params[:order_quantity].to_f
-    @wallets = current_user.wallets.where(exchange_id: @exchange.id)
+    league_user = LeagueUser.find_by(user_id: current_user.id,
+                                    league_id: params[:id].to_i)
+
+    @wallets = current_user.wallets.where(exchange_id: @exchange.id,
+                                          league_user_id: league_user.id )
     @price = @exchange.tickers.find_by(exchange_id: @exchange.id, pair: @pair).price
     set_coin_tickers
     find_and_set_coins
     create_wallet_if_missing
     execute_order if sufficient_trade_funds?
+    # binding.pry
 
     redirect_to "/leagues/#{@league_id}/exchanges/#{@exchange.id}?p=#{@pair}"
   end
@@ -41,7 +47,7 @@ class ExchangesController < ApplicationController
     @pair = params[:p]
     set_coin_tickers
     league_user = LeagueUser.find_by(user_id: current_user.id,
-                                    league_id: params[:id])
+                                    league_id: params[:id].to_i)
 
     @wallets = league_user.wallets.where(exchange_id: @exchange.id)
 
@@ -262,5 +268,16 @@ class ExchangesController < ApplicationController
                       address: @receiving_coin.public_key,
                       coin: @receiving_coin.coin_type, deposit_type:true}
       TransactionHistory.create!(target_hash)
+    end
+
+    def check_trading_window
+      league = League.find(params[:id])
+      if league.start_date.future? || league.end_date.past?
+        flash[:notice] = "You are unable to trade at this time. The trading
+                          window is closed."
+        return redirect_to league_path(league)
+      else
+        nil
+      end
     end
 end

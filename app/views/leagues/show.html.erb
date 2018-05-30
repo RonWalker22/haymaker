@@ -119,8 +119,7 @@
     </div>
   </div>
 </div>
-<% if @league.start_date.past? && @league.end_date.future? %>
-  <% if @league_user.set_up? %>
+  <% if @league_user.set_up? && @league.start_date.past? && @league.end_date.future? %>
     <div class="card-footer">
       <% @league.exchanges.each do |x|%>
         <%= link_to "Trade @ #{x.name}", trade_path(@league.id, x.id, p:
@@ -129,6 +128,7 @@
       <% end %>
     </div>
   <% end %>
+  <% if @league.start_date.past?%>
     <div class="card">
       <div class="card-content">
         <div class="content">

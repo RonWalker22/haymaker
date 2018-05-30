@@ -45,7 +45,7 @@ class GetTickerPricesJob < ApplicationJob
         response = HTTParty.get("#{base}#{pairs}")
         response = JSON.parse(response.to_s)
         response.each do |pair|
-          pair_target = pair[0].delete('t').downcase
+          pair_target = pair[0].delete('t').downcase if pair[0]
           ticker = @bitfinex.tickers.find_by natural_pair: pair_target
           if ticker
             ticker.price = pair[-4].to_f.round(8)

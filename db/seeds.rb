@@ -16,11 +16,11 @@
                  admin: admin
                 )
   if n == 0
-    League.create!( name: 'Practice',
+    @league = League.create!( name: 'Practice',
                     commissioner_id: 1,
                     balance_revivable: true,
                     start_date: Time.now,
-                    end_date: 100.years.from_now,
+                    end_date: 1.minute.from_now,
                   )
     4.times do |n|
       case n
@@ -115,3 +115,4 @@ end
                   public_key: SecureRandom.hex(20)
                 )
 end
+EndGameJob.set(wait_until: @league.end_date).perform_later(@league)

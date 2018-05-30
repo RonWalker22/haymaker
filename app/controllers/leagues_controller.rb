@@ -39,6 +39,7 @@ class LeaguesController < ApplicationController
         if @league.exchanges.count == 1
           create_set_up_balance
         end
+        EndGameJob.set(wait_until: @league.end_date).perform_later(@league)
         format.html { redirect_to @league }
         format.json { render :show, status: :created, location: @league }
       else

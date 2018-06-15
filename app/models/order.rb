@@ -1,13 +1,13 @@
 class Order < ApplicationRecord
-  belongs_to :wallet
+  belongs_to :base_currency,  class_name: "Wallet", foreign_key: "base_currency_id"
 
   def when
     seconds = (self.created_at - Time.now).round(0) * -1
     # binding.pry
-    if (seconds >= 0) && (seconds < 60)  
+    if (seconds >= 0) && (seconds < 60)
       suffix = seconds > 1 ? "seconds ago" : "second ago"
       "#{seconds} #{suffix}"
-    elsif (seconds >= 60) && (seconds < 3_600) 
+    elsif (seconds >= 60) && (seconds < 3_600)
       minutes = (seconds / 60).round(0)
       suffix = minutes > 1 ? "minutes ago" : "minute ago"
       "#{minutes} #{suffix}"

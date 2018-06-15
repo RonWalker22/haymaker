@@ -31,14 +31,12 @@ class LeaguesController < ApplicationController
                                               :start_date, :end_date))
     respond_to do |format|
       if @league.save
-        create_exchange_league_table
+        ExchangeLeague.create! league_id: @league.id, exchange_id: 1
         flash[:notice] = 'League was successfully created.'
         @league_user = LeagueUser.create!({league_id:@league.id,
                                   user_id:current_user.id})
         create_btc_wallets
-        if @league.exchanges.count == 1
-          create_set_up_balance
-        end
+        create_set_up_balance
         EndGameJob.set(wait_until: @league.end_date).perform_later(@league)
         format.html { redirect_to @league }
         format.json { render :show, status: :created, location: @league }
@@ -87,9 +85,7 @@ class LeaguesController < ApplicationController
     if @new_league_user.save
       accpet_league_invite
       create_btc_wallets
-      if @league.exchanges.count == 1
-        create_set_up_balance
-      end
+      create_set_up_balance
       flash[:notice] = 'You have successfully joined this league.'
     else
       flash[:notice] = 'You have aleady joined this league.'
@@ -191,46 +187,25 @@ class LeaguesController < ApplicationController
       params.permit(:exchange_starter, :league)
     end
 
-    def create_exchange_league_table
-      Exchange.all.each do |x|
-        if league_params["#{x.name} Exchange"].to_i == 1
-          ExchangeLeague.create! league_id: @league.id, exchange_id: x.id
-        end
-      end
-    end
-
     def create_set_up_balance
       league_user = @league_user || @new_league_user
-      if @league.exchanges.count == 1
-        wallet = Wallet.find_by(league_user_id: league_user.id,
-                                coin_type: 'BTC')
-      else
-        exchange = Exchange.find(setup_params[:exchange_starter].to_i)
-        wallet = Wallet.find_by(league_user_id: league_user.id,
-                                exchange_id: exchange.id,
-                                coin_type: 'BTC')
-      end
+      wallet = Wallet.find_by(league_user_id: league_user.id,
+                              coin_type: 'BTC')
       wallet.coin_quantity = @league.starting_balance
 
       if wallet.save
         league_user.update_attributes set_up: true, ready: true
-        if exchange
-          flash[:notice] =
-            "Your starting balance have been set up at #{exchange.name}."
-        end
       end
     end
 
     def create_btc_wallets
-      @league.exchanges.each do |exchange|
-        league_user = @league_user || @new_league_user
-        Wallet.create!(league_user_id: league_user.id,
-                        exchange_id: exchange.id,
-                        coin_type: 'BTC',
-                        coin_quantity: 0.00,
-                        public_key: SecureRandom.hex(20)
-                        )
-      end
+      league_user = @league_user || @new_league_user
+      Wallet.create!(league_user_id: league_user.id,
+                      exchange_id: 1,
+                      coin_type: 'BTC',
+                      coin_quantity: 0.00,
+                      public_key: SecureRandom.hex(20)
+                      )
     end
 
     def accpet_league_invite

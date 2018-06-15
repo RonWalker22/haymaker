@@ -1,6 +1,6 @@
 App.binance_ticker = App.cable.subscriptions.create "BinanceTickerChannel",
   connected: ->
-    console.log 'Connected'
+    console.log 'Connected to B ticker'
 
   disconnected: ->
     console.log 'Disconnected'
@@ -16,7 +16,7 @@ App.binance_ticker = App.cable.subscriptions.create "BinanceTickerChannel",
       down_arrow.style.visibility = 'hidden'
       up_arrow.style.visibility = 'hidden'
 
-    if data.pair == trading_pair && data.exchange == exchange.split(' ')[0]
+    if data.pair == trading_pair && data.exchange == exchange.split(' ')[4]
       coin_price.innerHTML = data.price
       console.log data.price
       if parseFloat data.price < parseFloat

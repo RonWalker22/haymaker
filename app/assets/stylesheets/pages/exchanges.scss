@@ -1,5 +1,3 @@
-
-
 html {
   box-sizing: border-box;
 }
@@ -49,6 +47,28 @@ input {
   outline-color: black;
 }
 
+.buy_side {
+  background-color: #149a19;
+  background: linear-gradient(to right, #149a19 50%, transparent 0);
+  min-width: 1em;
+  background-size: 0.8em auto;
+  background-repeat: no-repeat;
+}
+
+.sell_side {
+  background-color: #de6161;
+  background: linear-gradient(to right, #de6161 50%, transparent 0);
+  min-width: 1em;
+  background-size: 0.8em auto;
+  background-repeat: no-repeat;
+}
+
+.coin_list_options {
+  background: #19547b;
+  background: -webkit-linear-gradient(to right, #19547b, #0b6892);
+  background: linear-gradient(to right, #19547b, #0b6892);
+}
+
 .inline_block_s {
   display: inline-block;
 }
@@ -68,24 +88,45 @@ input {
 #price_label {
 }
 
-#ao_0 span,
-#ao_0 div {
-  visibility: hidden;
-  color: #ACB6E5;
-  font-size: 0.8em;
+#balance_sec {
+  min-height: 208px
 }
 
-#ao_1 span,
-#ao_1 div {
+#price_limit {
+  margin-bottom: 3em;
+}
+
+#price_target {
+  margin-bottom: 3em;
+}
+
+#price_limit_container {
+  margin-top: -2em
+}
+
+.ao_sign_totals {
+  display: block
+}
+
+#ao_0 {
   visibility: hidden;
-  color: #ACB6E5;
+  color: white;
   font-size: 0.8em;
+  min-height: 4em;
+}
+
+#ao_1 {
+  visibility: hidden;
+  color: white;
+  font-size: 0.8em;
+  min-height: 4em;
 }
 
 #trading_pair {
   border: solid;
   text-align: center;
   width: 9em;
+  margin: auto;
 }
 
 #exchange {
@@ -100,66 +141,54 @@ input {
   padding: .5em .7em 0em .7em;
 }
 
-#coin_price {
-  color: black;
-  margin-bottom: 2em;
-  margin-left: 1.7em;
+#past_orders_title {
+  margin-right: auto
 }
 
 #buy_btn {
-  margin-bottom: 1em;
-  background: #ACB6E5;
-  border-style: outset;
-  margin-right: 2em;
+  background: rgb(20, 154, 25);
+  color: #f5ebcd;
 }
 
-.balance_pair_values {
- color: black;
+#custom_order {
+  margin-left: 3.6em;
 }
 
-
-.buy_sell_btns {
-  outline: none;
+#buy_sell_btns {
+  margin-left: 2.75em;
+  margin-top: 1em;
 }
 
 #sell_btn {
-  margin-right: 10px;
-  background: transparent;
-  border-style: inset;
+  color: #f5ebcd;
 }
 
 #capital_percentage {
   margin-top: 1em;
   label {
-    border-style: outset;
-    border-width: thin;
-    font-size: 0.55em;
+    font-size: 0.7em;
     padding: .4em;
-    background: transparent;
   }
-  input {
-    opacity: 0;
-    position: absolute;
-    margin-top: .4em;
-    cursor: pointer;
-    margin-left: -2em;
-    width: 45px;
-    height: 20px;
+}
+
+.cap_btns {
+  width: 2.5em;
+  &:hover {
+    background: "#ACB6E5";
   }
 }
 
 #allocation_box {
   margin: 1em;
+  margin-left: 2.3em;
 }
 
 #order_btn {
   display: block;
-  outline: none;
-  margin-top: 1em;
-  margin-bottom: 1em;
-  background: #ACB6E5;
-  border-style: groove;
-  margin-left: 2.5em;
+  background: rgb(20, 154, 25);
+  color: #f5ebcd;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #coin_quantity {
@@ -172,7 +201,14 @@ input {
   font-weight: normal;
 }
 
+#exchange_info {
+  background: #19547b;
+  background: linear-gradient(to right,#2C5364, #19547b, #19547b,#19547b, #2C5364);
+}
 
+#price_limit_max {
+  margin-right: .2em;
+}
 .spinner {
   height: 15px;
   display: inline-block;
@@ -223,20 +259,18 @@ input {
   align-items: center;
 
   #order_sec {
-    padding-top: 1em;
+    padding-top: 0.5em;
+    height: 30.09em;
     border-top: solid thin;
-    background: linear-gradient(to right, #3CA55C, #56ab2f, #56ab2f, #3CA55C);
-  }
-  #balance_block {
-    background: linear-gradient(to right, #3CA55C, #56ab2f, #56ab2f, #3CA55C);
+    background:  #2C5364;
+    background: transparent;
   }
 
   .coin_list_table,
   .coin_list_table table {
-    margin-top: 2vh;
-    max-height: 40vh;
     max-width: 14.7em;
-    overflow-y: scroll;
+    max-height: 41em;
+    overflow-y: auto;
   }
 
 }
@@ -247,55 +281,74 @@ input {
 /* Desktop screen Sizes */
 @media only screen and (min-width: 768px) {
   .wrapper {
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: .1fr .3fr .3fr;
-  }
-
-  .league_and_exchange_info {
-    justify-self: center;
-    grid-column: 2/4;
-    margin-bottom: 1em;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: .6fr .6fr .6fr .1fr;
   }
 
   .order_and_balance_info {
-    grid-row: 2/3;
+    grid-row: 1/4;
     grid-column: 1/2;
     align-self: start;
     justify-self: end;
-    width: 200px;
+    width: 13em;
+    background: #19547b;
+    background: -webkit-linear-gradient(to left, #19547b, #0b6892);
+    background: linear-gradient(to left, #19547b, #0b6892);
   }
 
   #balance_block {
-    grid-row:2/3;
+    grid-row:1/2;
     grid-column: 1/2;
     align-self: end;
     justify-self: end;
+    background: transparent;
   }
   .tradingview-widget-container {
-    grid-row: 2/4;
-    grid-column: 2/4;
+    grid-row: 1/3;
+    grid-column: 2/3;
     justify-self: center;
     align-self: start;
   }
   #past_orders {
-    grid-column: 2/4;
+    grid-column: 2/3;
     grid-row: 3/4;
+    height: 16em;
+    overflow-y: hidden;
     justify-content: center;
     align-self: start;
+    background: #19547b;
+    margin-left: 2em;
+    margin-right: 2em;
+  }
+
+  #price_target_label {
+    display: block;
+  }
+
+  #direction_div {
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
+  .orders {
+    height: 13em;
+    overflow-y: auto;
   }
 
   .base_coins {
-    grid-column: 4/5;
-    grid-row: 2/3;
-    max-height: 45vh;
-    min-height: 45vh;
-    max-width: 14.7em;
+    grid-row: 1/4;
+    grid-column: 3/4;
+    height: 42.9em;
+    justify-self: left;
+    width: 13em;
     align-self: start;
     overflow-y: hidden;
+    background: #19547b;
+    background: -webkit-linear-gradient(to right, #19547b, #0b6892);
+    background: linear-gradient(to right, #19547b, #0b6892);
   }
 
   #tradingview_7ef5b {
-    height: 36vh;
-    width: 70vh;
+    height: 25.6em;
+    width: 90vh;
   }
 }

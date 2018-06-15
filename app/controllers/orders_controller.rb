@@ -1,6 +1,6 @@
 class OrdersController < ApplicationController
   before_action :check_signed_in
-  before_action :set_order, only: [:show, :edit, :update, :destroy]
+  before_action :set_order, only: [:show, :edit, :update]
 
   # GET /orders
   # GET /orders.json
@@ -55,11 +55,20 @@ class OrdersController < ApplicationController
   # DELETE /orders/1
   # DELETE /orders/1.json
   def destroy
-    @order.destroy
-    respond_to do |format|
-      format.html { redirect_to orders_url, notice: 'Order was successfully destroyed.' }
-      format.json { head :no_content }
+    @order = current_user.orders.find params[:id]
+    if @order
+      if @order.side == 'buy'
+        reserve_coin = current_user.wallets.find @order.quote_currency_id
+      else
+        reserve_coin = current_user.wallets.find @order.base_currency_id
+      end
+      reserve_coin.decrement! 'reserve_quantity', @order.reserve_size
+      @order.destroy
+    else
+      flash[:warning] =
+            "Order could not be cancelled and may no longer be active."
     end
+    redirect_back(fallback_location: root_path)
   end
 
   private

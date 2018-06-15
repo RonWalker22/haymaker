@@ -83,16 +83,21 @@ ActiveRecord::Schema.define(version: 20180522192655) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.bigint "wallet_id", null: false
+    t.bigint "base_currency_id", null: false
+    t.bigint "quote_currency_id", null: false
     t.boolean "open", default: true, null: false
     t.decimal "size", null: false
+    t.decimal "reserve_size", default: "0.0", null: false
     t.decimal "price", null: false
     t.decimal "fee", default: "0.0", null: false
     t.string "product", null: false
-    t.boolean "buy", null: false
+    t.string "side", default: "buy", null: false
+    t.string "kind", default: "market", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["wallet_id"], name: "index_orders_on_wallet_id"
+    t.index ["base_currency_id", "quote_currency_id", "id"], name: "index_orders_on_base_currency_id_and_quote_currency_id_and_id", unique: true
+    t.index ["base_currency_id"], name: "index_orders_on_base_currency_id"
+    t.index ["quote_currency_id"], name: "index_orders_on_quote_currency_id"
   end
 
   create_table "tickers", force: :cascade do |t|
@@ -143,7 +148,8 @@ ActiveRecord::Schema.define(version: 20180522192655) do
 
   create_table "wallets", force: :cascade do |t|
     t.string "coin_type", null: false
-    t.decimal "coin_quantity", precision: 1000, scale: 8, default: "0.0", null: false
+    t.decimal "total_quantity", precision: 1000, scale: 8, default: "0.0", null: false
+    t.decimal "reserve_quantity", precision: 1000, scale: 8, default: "0.0", null: false
     t.string "public_key", null: false
     t.bigint "league_user_id"
     t.bigint "exchange_id"
@@ -158,4 +164,6 @@ ActiveRecord::Schema.define(version: 20180522192655) do
   add_foreign_key "league_invites", "users", column: "receiver_id"
   add_foreign_key "league_invites", "users", column: "sender_id"
   add_foreign_key "leagues", "users", column: "commissioner_id"
+  add_foreign_key "orders", "wallets", column: "base_currency_id"
+  add_foreign_key "orders", "wallets", column: "quote_currency_id"
 end

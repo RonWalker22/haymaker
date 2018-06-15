@@ -75,18 +75,6 @@
     </div>
   </div>
 
-  <div class="field is-horizontal">
-    <% Exchange.all.each do |x| %>
-      <div class="field">
-        <div class="control">
-          <%= form.label "#{x.name} Exchange", class: "label" %>
-          <%= form.check_box "#{x.name} Exchange", id: x.name + 'picker',
-          class:"checkbox"%>
-        </div>
-      </div>
-    <% end %>
-  </div>
-
   <div class="field is-grouped">
     <div class="control">
       <%= form.submit class:"button is-info is-inverted is-outlined" %>

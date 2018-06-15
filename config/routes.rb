@@ -53,7 +53,7 @@ Rails.application.routes.draw do
                                                    :as => 'send_league_invite'
   post 'league_invites/:lid/decline'              => 'league_invites#decline',
                                                   :as => 'decline_league_invite'
-
+  delete 'orders/:id'               => 'orders#destroy', :as => 'cancel_order'
   mount ActionCable.server => '/cable'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

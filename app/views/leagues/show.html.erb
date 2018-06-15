@@ -33,77 +33,56 @@
           <%= @league.rounds %>
         </p>
 
-        <% unless @league_user.set_up?%>
-        <div class="notification">
-          <p class="notice">On which exchange would you like your starting
-            balance of <%= @league.starting_balance %> BTC to be
-            available? This decision is irreversible.
-          </p>
-          <% @league.exchanges.each_with_index do |exchange, i| %>
-            <%= link_to exchange.name,
-                        setup_path(id: @league.id,
-                                    exchange_starter: exchange.id),
-                        method: :post,
-                        class:"button is-rounded is-black is-small" %>
-            <%unless i == @league.exchanges.count - 1%>
-              <span>| |</span>
+        <p>
+          <button class="button is-black is-small is-rounded" type="button"
+                    data-toggle="collapse" data-target="#collapseSettting"
+                    aria-expanded="false" aria-controls="collapseSettting">
+            League Settings
+          </button>
+        </p>
+        <div class="collapse" id="collapseSettting">
+          <div class="card card-body">
+            <% if @league.id == 1 %>
+              <%= link_to "Reset Funds", reset_path(league:@league.id),
+                                      class:"button is-danger is-small"%>
+            <% else %>
+              <% if @league.start_date.future?  %>
+                <%=  link_to "Leave League",
+                              request_leave_path(@league),
+                              class:"button is-danger is-small"%>
+              <% end %>
             <% end %>
-          <% end %>
+
+
+          </div>
+        </div>
+
+        <% if flash[:reset_funds]%>
+        <div class="notification">
+          <p class="notice center">
+            <%= flash[:reset_funds] %>
+           <%= link_to "Yes", reset_path(@league), method: :post,
+                        class:"button is-rounded is-danger is-small"%>
+           <%= link_to "No", league_path(@league),
+                        class:"button is-rounded is-black is-inverted is-small"%>
+          </p>
         </div>
         <% end %>
 
-        <% if @league_user.set_up? %>
-          <p>
-            <button class="button is-black is-small is-rounded" type="button"
-                      data-toggle="collapse" data-target="#collapseSettting"
-                      aria-expanded="false" aria-controls="collapseSettting">
-              League Settings
-            </button>
-          </p>
-          <div class="collapse" id="collapseSettting">
-            <div class="card card-body">
-              <% if @league.id == 1 %>
-                <%= link_to "Reset Funds", reset_path(league:@league.id),
-                                        class:"button is-danger is-small"%>
-              <% else %>
-                <% if @league.start_date.future?  %>
-                  <%=  link_to "Leave League",
-                                request_leave_path(@league),
-                                class:"button is-danger is-small"%>
-                <% end %>
-              <% end %>
-
-
-            </div>
-          </div>
-
-          <% if flash[:reset_funds]%>
+        <p class="notice center">
+          <% if flash[:request_leave]%>
           <div class="notification">
             <p class="notice center">
-              <%= flash[:reset_funds] %>
-             <%= link_to "Yes", reset_path(@league), method: :post,
-                          class:"button is-rounded is-danger is-small"%>
-             <%= link_to "No", league_path(@league),
-                          class:"button is-rounded is-black is-inverted is-small"%>
+            <%= flash[:request_leave] %>
+            <%=  link_to "Yes",
+                          leave_path(id:@league.id, pid: current_user.id ),
+                          class:"button  is-rounded is-danger is-small",
+                            method: :delete%>
+           <%= link_to "No", league_path(league:@league.id),
+                        class:"button is-rounded is-black is-inverted is-small"%>
             </p>
           </div>
           <% end %>
-
-          <p class="notice center">
-            <% if flash[:request_leave]%>
-            <div class="notification">
-              <p class="notice center">
-              <%= flash[:request_leave] %>
-              <%=  link_to "Yes",
-                            leave_path(id:@league.id, pid: current_user.id ),
-                            class:"button  is-rounded is-danger is-small",
-                              method: :delete%>
-             <%= link_to "No", league_path(league:@league.id),
-                          class:"button is-rounded is-black is-inverted is-small"%>
-              </p>
-            </div>
-            <% end %>
-        <%end %>
 
         <br>
         <% if @league.start_date.future? %>

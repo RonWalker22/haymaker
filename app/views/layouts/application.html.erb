@@ -13,10 +13,10 @@
     <%= render 'shared/header' %>
     <div id='inner_body'>
       <% if notice %>
-      <p class="notice notification is-black"><%= notice %></p>
+      <p class="notice notification is-success"><%= notice %></p>
       <% end %>
       <% if alert %>
-      <p class="alert notification is-black"><%= alert %></p>
+      <p class="alert notification is-warning"><%= alert %></p>
       <% end %>
       <%= yield %>
     </div>

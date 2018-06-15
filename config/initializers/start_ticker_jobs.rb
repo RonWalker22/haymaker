@@ -1,6 +1,6 @@
 Thread.new do
-  sleep(20)
-  GetTickersJob.perform_now
   sleep(10)
+  GetTickersJob.perform_later
+  sleep(15)
   GetTickerPricesJob.perform_now
 end

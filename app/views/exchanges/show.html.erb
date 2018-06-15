@@ -1,107 +1,158 @@
+<header id='exchange_info' class="card-header">
+  <h1 class="card-header-title is-centered" id='exchange'>
+    <%= @exchange.name %> Exchange @ <%=League.find(params[:id]).name%> League
+  </h1>
+</header>
 <div class="wrapper">
-
-  <div class="league_and_exchange_info">
-    <h1 id="exchange"><%= @exchange.name %> Exchange</h1>
-    <h2 class="league_title"><%= League.find(params[:id]).name %> League</h2>
-  </div>
-
   <div class="order_and_balance_info">
   <div id="balance_block">
     <p id='trading_pair'><%= @pair %></p>
-
     <div id="balance">
-      <p>Balance</p>
-      <ul>
-        <div>
-        <li><span id= 'coin_1_balance_label'><%= @coin_1_ticker %></span>
-          <div class='inline_block_s balance_pair_values_div'>
-            <span id="balance_pair_values_1" class="balance_pair_values">
-             <%= @coin_1 ? @coin_1.coin_quantity : 0%>
-            </span>
-          </div>
-          <div id="ao_1" class="ao">
-            <span id="after_order_sign_1" class="after_order_sign">+</span>
-            <span id="after_order_value_1" class="after_order_value"></span>
-            <br>
+      <h2 class="center">Available Balance</h2>
+      <span id= 'coin_1_balance_label'><%= @coin_1_ticker %></span>
+        <div class='inline_block_s balance_pair_values_div'>
+          <span id="balance_pair_values_1" class="balance_pair_values">
+           <%= @coin_1 ? @coin_1.available_quantity : 0%>
+          </span>
+        </div>
+        <div class="">
+          total = <%=  @coin_1 ? @coin_1.total_quantity : 0 %>
+
+        </div>
+        <div class="">
+          reserve_quantity = <%= @coin_1 ? @coin_1.reserve_quantity : 0 %>
+        </div>
+        <div id="ao_1" class="ao">
+          <span id="after_order_sign_1" class="after_order_sign">+</span>
+          <span id="after_order_value_1" class="after_order_value"></span>
+          <div class="ao_sign_totals">
             <span id="ao_equal_sign_1" class="ao_equal_sign">≈</span>
             <span id="after_order_total_1" class="after_order_total"></span>
           </div>
-        </li>
-        <li><span id='coin_0_balance_label'><%= @coin_2_ticker %></span>
-            <div class='inline_block_s balance_pair_values_div'>
-              <span id="balance_pair_values_0"class="balance_pair_values">
-                <%= @coin_2 ? @coin_2.coin_quantity : 0%></span>
-            </div>
-          <div id="ao_0" class="ao">
-            <span id="after_order_sign_0" class="after_order_sign">-</span>
-            <span id="after_order_value_0" class="after_order_value"></span>
-            <br>
+        </div>
+      <span id='coin_0_balance_label'><%= @coin_2_ticker %></span>
+          <div class='inline_block_s balance_pair_values_div'>
+            <span id="balance_pair_values_0"class="balance_pair_values">
+              <%= @coin_2 ? @coin_2.available_quantity : 0%></span>
+          </div>
+          <div class=>
+            total = <%= @coin_2 ? @coin_2.total_quantity : 0%>
+          </div>
+          <div class="">
+            reserve_quantity = <%= @coin_2 ? @coin_2.reserve_quantity : 0%>
+          </div>
+        <div id="ao_0" class="ao">
+          <span id="after_order_sign_0" class="after_order_sign">-</span>
+          <span id="after_order_value_0" class="after_order_value"></span>
+          <div class="ao_sign_totals">
             <span id="ao_equal_sign_0" class="ao_equal_sign">≈</span>
             <span id="after_order_total_0" class="after_order_total"></span>
           </div>
-        </li>
         </div>
-      </ul>
     </div>
   </div>
 
   <div id= "order_sec">
+    <button class="button is-rounded is-small" data-toggle="collapse"
+            data-target="#collapseCustom" aria-expanded="true"
+            aria-controls="collapseCustom" id="custom_order">
+      Custom Order
+    </button>
+
+
     <div>
-      <div id= 'buy_sell_btns'>
-        <%= button_tag "Buy", id: 'buy_btn', class: 'buy_sell_btns' %>
-        <%= button_tag "Sell", id: 'sell_btn', class: 'buy_sell_btns' %>
+      <div id = "buy_sell_btns" class="buttons has-addons">
+        <span id = "buy_btn" class = "button">Buy</span>
+        <span id = "sell_btn" class = "button">Sell</span>
       </div>
-      <span id='price_label'>Price</span>
+      <span id='price_label'>Current Price:</span>
       <span id="coin_price">
         <%= @exchange.tickers.find_by(pair: params[:p]).price%>
       </span>
         <i class="fas fa-arrow-up"></i>
         <i class="fas fa-arrow-down"></i>
     </div>
-    <span>
-      <div class="field">
+    <div>
+      <div>
         <%= form_tag(order_path(params[:id], params[:xid]), method: "post",
                                 :class => "order_form") do %>
           <%= hidden_field_tag :pair, params[:p] %>
           <%= hidden_field_tag :coin_1_ticker, @coin_1_ticker %>
           <%= hidden_field_tag :coin_2_ticker, @coin_2_ticker %>
-          <%= label_tag :coin_quantity, 'Amount:', id: 'amount_label'%>
-          <p class="control has-icons-right">
-            <%= number_field_tag :order_quantity, nil, placeholder: 0.0000,
-              step: 0.00000001, min: 0.01, autofocus: 'autofocus',
-              class: 'input is-small'%>
-            <span class="icon is-right">
+          <%= label_tag :coin_quantity, 'Quantity:', id: 'amount_label'%>
+          <div class="field has-addons">
+            <p class="control">
+              <%= number_field_tag :order_quantity, nil, placeholder: 0.0000,
+                step: 0.00000001, min: 0.01, autofocus: 'autofocus',
+                class: 'input is-small'%>
+            </p>
+            <p class="control">
+              <a class="button is-static is-small" >
                 <%= @coin_1_ticker %>
-            </span>
-          </p>
+              </a>
+            </p>
+          </div>
           <div id='allocation_box'>
             <div id= "capital_percentage">
-              <%= label_tag(:capital_percentage, "25%", id: 'cap_label_25') %>
-              <%= radio_button_tag(:capital_percentage, "25%")%>
-              <%= label_tag(:capital_percentage, "50%", id: 'cap_label_50') %>
-              <%= radio_button_tag(:capital_percentage, "50%")%>
-              <%= label_tag(:capital_percentage, "75%", id: 'cap_label_75') %>
-              <%= radio_button_tag(:capital_percentage, "75%")%>
-              <%= label_tag(:capital_percentage, "100%", id: 'cap_label_100') %>
-              <%= radio_button_tag(:capital_percentage, "100%")%>
+              <button type="button" id = 'cap_25' name="25%"
+                      class = "button is-small cap_btns">25%</button>
+              <button type="button" id = 'cap_50' name="50%"
+                      class = "button is-small cap_btns">50%</button>
+              <button type="button" id = 'cap_75' name="75"
+                      class = "button is-small cap_btns">75%</button>
+              <button type="button" id = 'cap_100' name="100"
+                      class = "button is-small cap_btns">100%</button>
             </div>
           </div>
-          <%= submit_tag "Place Buy Order", id: 'order_btn'%>
+          <div id="collapseCustom" class="collapse"
+                aria-labelledby="headingCustom" data-parent="#order_sec">
+            <div class="select is-small" id="direction_div">
+              <!-- <%= select_tag(:direction, options_for_select(['Price falls within',
+                                                            'Price climbs within']) ) %> -->
+              <select class="" name="" id="direction">
+                <option value="price_falls" id="price_falls">Price falls to</option>
+                <option value="price_climbs" id="price_climbs">Price climbs within</option>
+              </select>
+            </div>
+
+            <%= label_tag(:price_target, "Target:", id: "price_target_label") %>
+            <%= number_field_tag :price_target, nil, placeholder: 0.0000,
+              step: 0.00000001, min: 0.01, autofocus: 'autofocus',
+              class: 'input is-small'%>
+
+
+            <div id="price_limit_container">
+              <%= label_tag(:price_limit, "Floor:",
+                                          id: 'price_limit_label') %>
+              <div class="field has-addons">
+                <p class="control">
+                  <%= number_field_tag :price_limit, nil, placeholder: 0.0000,
+                    step: 0.00000001, min: 0, autofocus: 'autofocus',
+                    class: 'input is-small'%>
+                </p>
+                <p class="control">
+                  <a id='price_limit_max' class="button is-small">
+                    max
+                  </a>
+                </p>
+                <p class="control">
+                  <a id='price_limit_min' class="button is-small">
+                    min
+                  </a>
+                </p>
+              </div>
+            </div>
+          </div>
+          <%= submit_tag "Place Buy Order", id: 'order_btn',
+                          class: 'button'%>
         <% end %>
       </div>
-    </span>
+    </div>
   </div>
 </div>
   <!-- TradingView Widget BEGIN -->
 <div class="tradingview-widget-container">
     <div id="tradingview_7ef5b"></div>
-    <div class="tradingview-widget-copyright">
-      <a href="https://www.tradingview.com/symbols/COINBASE-BTCUSD/"
-        rel="noopener" target="_blank">
-            <span class="blue-text"><%=params[:p]%></span>
-            <span class="blue-text">chart</span> by TradingView
-      </a>
-    </div>
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js">
     </script>
     <script type="text/javascript">
@@ -111,47 +162,92 @@
     "symbol": "<%=Exchange.find(params[:xid]).name.upcase == 'GDAX' ? 'COINBASE' : Exchange.find(params[:xid]).name.upcase%>:<%= strip_dash_from_pair %>",
     "interval": "D",
     "timezone": "Etc/UTC",
-    "theme": "Light",
+    "theme": "Dark",
     "style": "1",
     "locale": "en",
-    "toolbar_bg": "#f1f3f6",
     "enable_publishing": false,
     "withdateranges": true,
     "hide_side_toolbar": false,
     "allow_symbol_change": true,
     "save_image": false,
-    "container_id": "tradingview_7ef5b"
+    "container_id": "tradingview_7ef5b",
   });
     </script>
   </div>
  <!-- TradingView Widget END -->
   <div id="past_orders">
-    <p class="center">My Orders</p>
-    <div>
-      <table class="table is-narrow">
+    <div class="buttons is-right has-addons">
+      <h2 id='past_orders_title'>Filled Orders</h2>
+      <button class="button is-small" data-toggle="collapse"
+              data-target="#openOrders" aria-expanded="true"
+              aria-controls="openOrders" id='open-orders-btn'>
+      Open Orders
+      </button>
+      <button class="button is-small" data-toggle="collapse"
+              data-target="#past_orders_inner" aria-expanded="true"
+              aria-controls="past_orders_inner" id='filled-orders-btn'>
+      Filled Orders
+      </button>
+    </div>
+    <div id="past_orders_inner" class="collapse orders " aria-labelledby="headingFilledOrders" data-parent="#past_orders">
+
+      <table class="table is-fullwidth is-striped" id="table_test">
         <thead>
           <tr>
-            <th>Type</th>
             <th>size</th>
             <th>price</th>
             <th>fee</th>
-            <th>product</th>
             <th>Time</th>
-            <th>filled%</th>
           </tr>
         </thead>
         <tbody>
           <% if @wallet %>
-            <% @wallet.orders.order('created_at DESC').each do |o| %>
+            <% @wallet.orders.where(open:false).order('created_at DESC').each do |o| %>
               <% if o.product == @pair %>
+                <% side = o.side %>
                 <tr>
-                  <td> <%= o.buy ? 'buy' : 'sell' %> </td>
-                  <td> <%= o.size.to_f.round(8) %> </td>
+                  <td class="<%=side%>_side"> <%= o.size.to_f.round(8) %> </td>
                   <td> <%= o.price.to_f.round(8) %> </td>
                   <td> <%= o.fee.to_f %> </td>
-                  <td> <%= o.product %> </td>
                   <td> <%= o.when %> </td>
-                  <td>100</td>
+                </tr>
+              <% end %>
+          <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div id="openOrders" class="collapse show orders " aria-labelledby="headingOpenOrders" data-parent="#past_orders">
+      <br>
+      <table class="table is-striped is-fullwidth" id="table_test">
+        <thead>
+          <tr>
+            <th>size</th>
+            <th>filled(<%= @coin_1_ticker.downcase %>)</th>
+            <th>price</th>
+            <th>fee</th>
+            <th>Time</th>
+            <th>Reserve</th>
+            <th>Cancel</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @wallet %>
+            <% @wallet.orders.where(open:true).order('created_at DESC').each do |o| %>
+              <% if o.product == @pair %>
+                <% side = o.side %>
+                <tr>
+                  <td class="<%=side%>_side"> <%= o.size.to_f.round(8) %> </td>
+                  <td>0%</td>
+                  <td> <%= o.price.to_f.round(8) %> </td>
+                  <td> <%= o.fee.to_f %> </td>
+                  <td> <%= o.when %></td>
+                  <td><%= o.reserve_size %></td>
+                  <td>
+                    <%= link_to cancel_order_path(o.id), method: "delete" do %>
+                      <button class="delete is-medium"></button>
+                    <% end %>
+                  </td>
                 </tr>
               <% end %>
           <% end %>
@@ -163,13 +259,19 @@
 
   <div id="accordion" class="base_coins">
     <div class="coin_list_options">
-      <div class="buttons has-addons">
+      <div class="buttons has-addons is-centered">
         <% @base_tickers.each_with_index do |ticker, i| %>
-        <button class="button is-rounded is-small" data-toggle="collapse"
-                data-target="#collapse<%= i %>" aria-expanded="true"
-                aria-controls="collapse<%= i %>">
+          <% if i == 0 || ticker == @base_tickers[-1] %>
+          <button class="button is-rounded is-small" data-toggle="collapse"
+                  data-target="#collapse<%= i %>" aria-expanded="true"
+                  aria-controls="collapse<%= i %>">
+          <% else  %>
+          <button class="button is-small" data-toggle="collapse"
+                  data-target="#collapse<%= i %>" aria-expanded="true"
+                  aria-controls="collapse<%= i %>">
+          <% end %>
           <%= ticker %>
-        </button>
+          </button>
         <% end %>
       </div>
     </div>
@@ -184,7 +286,6 @@
               <tbody>
                 <% list.each do |pair| %>
                   <tr>
-                    <td><i class="far fa-star"></i></td>
                     <td>
                       <%= link_to pair,trade_path(params[:id],
                         params[:xid], p: pair) %>

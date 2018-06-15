@@ -18,7 +18,7 @@
                                     league_user: league_user).each do |w| %>
           <tr>
             <td> <%= w.coin_type  %> </td>
-            <td> <%= w.coin_quantity %> </td>
+            <td> <%= w.total_quantity %> </td>
             <td> <%= w.public_key %> </td>
             <td> <%= link_to 'Withdrawal',
                   withdrawal_path(params[:id], params[:xid], w.coin_type),

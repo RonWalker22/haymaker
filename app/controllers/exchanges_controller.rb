@@ -2,6 +2,7 @@ class ExchangesController < ApplicationController
   before_action :check_signed_in
   before_action :set_exchange, except: [:create, :index, :new]
   before_action :check_trading_window, only: [:order]
+  before_action :order_params, only: [:order]
   before_action :user_signed_in?, only: [:show, :edit, :update, :destroy,
                                           :order]
 
@@ -10,19 +11,29 @@ class ExchangesController < ApplicationController
     @league_id = params[:id]
     @coin_1_ticker = params[:coin_1_ticker]
     @coin_2_ticker = params[:coin_2_ticker]
-    @order_type = params[:commit] == "Place Buy Order" ? 'Buy' : 'Sell'
+    @order_type = params[:commit] == "Place Buy Order" ? 'buy' : 'sell'
     @order_quantity = params[:order_quantity].to_f
+
     league_user = LeagueUser.find_by(user_id: current_user.id,
                                     league_id: params[:id].to_i)
 
     @wallets = current_user.wallets.where(exchange_id: @exchange.id,
                                           league_user_id: league_user.id )
-    @price = @exchange.tickers.find_by(exchange_id: @exchange.id, pair: @pair).price
+    establish_price
     set_coin_tickers
     find_and_set_coins
     create_wallet_if_missing
-    execute_order if sufficient_trade_funds?
-    # binding.pry
+    if sufficient_trade_funds?
+      if custom_order?
+        update_reserves
+      else
+        execute_order
+      end
+      update_order_history
+    else
+      flash[:alert] =
+          'Your account does not have sufficient funds to cover your order.'
+    end
 
     redirect_to "/leagues/#{@league_id}/exchanges/#{@exchange.id}?p=#{@pair}"
   end
@@ -37,6 +48,16 @@ class ExchangesController < ApplicationController
     redirect_to request.original_fullpath
   end
 
+  def delete_custom_order
+    @order = current_user.orders.find order_params[:oid]
+    if @order
+      remove_reserve
+      @order.destroy
+    else
+      flash[:warning] = "You can only cancel orders which belong to you."
+    end
+    redirect_back(fallback_location: root_path)
+  end
 
   def index
     @exchanges = Exchange.all
@@ -107,6 +128,14 @@ class ExchangesController < ApplicationController
       params.fetch(:exchange, {})
     end
 
+    def order_params
+      params.permit(:price_target, :direction, :price_limit, :oid)
+    end
+
+    def remove_reserve
+
+    end
+
     def set_coin_tickers
       mid_point = @pair =~ /-/
       @coin_1_ticker = []
@@ -128,39 +157,49 @@ class ExchangesController < ApplicationController
 
     def sufficient_trade_funds?
       return false if @price <= 0.00
-      n = 1
-      if @order_type == "Sell"
-        n = -1
-      end
-      @coin_1_quantity_total  = @coin_1.coin_quantity + (@order_quantity *
-                                n)
-      @coin_2_quantity_total = @coin_2.coin_quantity - ((@price *
-                                @order_quantity) * n)
 
-      (@coin_1_quantity_total >= 0.00) && (@coin_2_quantity_total >= 0.00)
+      n = (@order_type == "buy" ? 1 : -1)
+
+      @coin_1_increment = @order_quantity * n
+      @coin_2_decrement = ((@price * @order_quantity).round(8) * n)
+
+      coin_1_quantity_total  = @coin_1.total_quantity + @coin_1_increment
+      coin_2_quantity_total = @coin_2.total_quantity - @coin_2_decrement
+
+      (coin_1_quantity_total >= 0.00) && (coin_2_quantity_total >= 0.00)
     end
 
     def execute_order
-      @coin_1.update_attributes!(
-                                {coin_quantity: @coin_1_quantity_total.round(8)}
-                                )
-      @coin_2.update_attributes!(
-                                {coin_quantity: @coin_2_quantity_total.round(8)}
-                                )
-
-      update_order_history
+      @coin_1.increment! 'total_quantity', @coin_1_increment
+      @coin_2.decrement! 'total_quantity', @coin_2_decrement
     end
 
     def update_order_history
-      wallet = @wallets.find_by(coin_type:@coin_1_ticker)
-      type = wallet.coin_type
-      product = @pair
-      Order.create!(wallet_id: wallet.id,
-                    product: @pair,
+      establish_reserve_size
+      wallet       = @wallets.find_by(coin_type:@coin_1_ticker)
+      type         = wallet.coin_type
+      product      = @pair
+      kind         = (custom_order? ? 'limit' : 'market' )
+      order_open   = (custom_order? ? true : false )
+      Order.create!(product: @pair,
                     size: @order_quantity,
                     price: @price,
-                    buy: @order_type == 'Buy',
-                    open: false)
+                    side: @order_type,
+                    open: order_open,
+                    kind: kind,
+                    reserve_size: @reserve_size,
+                    base_currency_id: @coin_1.id,
+                    quote_currency_id: @coin_2.id )
+    end
+
+    def establish_reserve_size
+      return @reserve_size = 0 unless custom_order?
+
+      if @order_type == 'buy'
+        @reserve_size = @coin_2_decrement.abs
+      else
+        @reserve_size = @order_quantity
+      end
     end
 
     def create_wallet_if_missing
@@ -168,7 +207,7 @@ class ExchangesController < ApplicationController
                                        user_id: current_user.id
       unless @coin_1
         Wallet.create!({coin_type:  @coin_1_ticker,
-                        coin_quantity: 0,
+                        total_quantity: 0,
                         exchange_id: @exchange.id,
                         league_user_id: league_user.id,
                         public_key: SecureRandom.hex(20)
@@ -176,7 +215,7 @@ class ExchangesController < ApplicationController
       end
       unless @coin_2
         Wallet.create!({coin_type:  @coin_2_ticker,
-                        coin_quantity: 0,
+                        total_quantity: 0,
                         exchange_id: @exchange.id,
                         league_user_id: league_user.id,
                         public_key: SecureRandom.hex(20)
@@ -219,7 +258,7 @@ class ExchangesController < ApplicationController
     end
 
     def sufficient_funds_to_transfer?
-      @giving_coin.coin_quantity >= params[:withdrawal_quantity].to_f
+      @giving_coin.total_quantity >= params[:withdrawal_quantity].to_f
     end
 
     def equivalent_pairs?
@@ -248,15 +287,19 @@ class ExchangesController < ApplicationController
 
     def transfer_funds
       @transfer_quanity = params[:withdrawal_quantity].to_f
-      updated_quantity = @receiving_coin.coin_quantity  + @transfer_quanity
+      updated_quantity = @receiving_coin.total_quantity  + @transfer_quanity
 
-      @receiving_coin.coin_quantity = updated_quantity
+      @receiving_coin.total_quantity = updated_quantity
       if @receiving_coin.save
-        updated_quantity = @giving_coin.coin_quantity  - @transfer_quanity
-        @giving_coin.coin_quantity = updated_quantity
+        updated_quantity = @giving_coin.total_quantity  - @transfer_quanity
+        @giving_coin.total_quantity = updated_quantity
         @giving_coin.save
         update_transaction_history
       end
+    end
+
+    def method_name
+
     end
 
     def update_transaction_history
@@ -278,6 +321,37 @@ class ExchangesController < ApplicationController
         return redirect_to league_path(league)
       else
         nil
+      end
+    end
+
+    def custom_order_without_limit?
+      order_params[:price_target] != "" && order_params[:price_limit] == ""
+    end
+
+    def custom_order_with_limit?
+      order_params[:price_target] !=  "" && order_params[:price_limit] != ""
+    end
+
+    def establish_price
+      if custom_order_without_limit?
+        @price = order_params[:price_target].to_f
+      elsif custom_order_with_limit?
+        @price = order_params[:price_limit].to_f
+      else
+        @price = @exchange.tickers.find_by(exchange_id: @exchange.id,
+                                           pair: @pair).price
+      end
+    end
+
+    def custom_order?
+      order_params[:price_target] != ""
+    end
+
+    def update_reserves
+      if @order_type == 'buy'
+        @coin_2.increment! 'reserve_quantity', @coin_2_decrement.abs
+      else
+        @coin_1.increment! 'reserve_quantity', @coin_1_increment.abs
       end
     end
 end

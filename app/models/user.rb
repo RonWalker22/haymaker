@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_many :league_users,                                 dependent: :delete_all
   has_many :leagues,            :through => :league_users
   has_many :wallets,            :through => :league_users
+  has_many :orders,             :through => :wallets
   has_many :received_league_invites,
             foreign_key: "receiver_id",
             class_name: "LeagueInvite"
@@ -17,8 +18,8 @@ class User < ApplicationRecord
     league_user = LeagueUser.find_by user_id: self.id
     arr = []
     league_user.wallets.where({coin_type: coin}).each do
-        |wallet| arr << wallet.coin_quantity.to_i
-     end
+      |wallet| arr << wallet.total_quantity.to_f
+    end
     arr.sum
   end
 end

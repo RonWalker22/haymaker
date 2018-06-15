@@ -16,7 +16,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       LeagueUser.create!({league_id: 1, user_id: current_user.id})
       4.times do |inner_n|
         Wallet.create!( coin_type: 'BTC',
-                        coin_quantity: '1.00',
+                        total_quantity: '1.00',
                         user_id: current_user.id,
                         exchange_id: inner_n + 1,
                         league_id: 1,

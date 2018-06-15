@@ -1,26 +1,56 @@
+$table-striped-row-even-background-color: #0b6892;
+$table-striped-row-even-hover-background-color: #0b6892;
+$table-color: #f5ebcd;
+$table-background-color: transparent;
+
 @import "bulma";
+
+
+html {
+  background-color: transparent;
+}
 
 #inner_body {
   min-height: 75.5vh;
-  background: #56ab2f;
+  background: #19547b;
+  // background: -webkit-linear-gradient(to right,#19547b, #2C5364,#2C5364,#19547b);
+  // background: linear-gradient(to right, #19547b, #2C5364,#2C5364,#19547b);
+  color: #f5ebcd;
 }
 
+
+//hide scroll bar start
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+html {overflow: -moz-scrollbars-none;}
+
+
+//hide scroll bar end
+
 .card {
-  background: linear-gradient(to right, #3CA55C, #56ab2f, #56ab2f, #3CA55C);
+  background: #0b6892;
   box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
   max-width: 50%;
   position: unset;
   margin: auto;
-  background-color: transparent;
   border: none;
 }
 
 .button {
-  color:green;
-
+  color: #f5ebcd;
+  background: #4B79A1;
+  border: none;
   &:hover {
-    background-color: whitesmoke;
+    background-color: #3273dc;
+    color: #f5ebcd;
   }
+}
+
+.buttons.has-addons .button:not(:last-child) {
+    margin-right: .1em;
 }
 
 .level-item {
@@ -47,14 +77,6 @@
   margin: -1px;
 }
 
-.table {
-  background: linear-gradient(to right, #3CA55C, #56ab2f, #56ab2f, #3CA55C);
-  color: #4a4a4a;
-}
-
-html {
-  background-color: transparent;
-}
 .center {
   text-align: center;
 }
@@ -64,7 +86,7 @@ html {
 }
 
 a {
-  color: greenyellow;
+  color: #f5ebcd;
   &:hover {
     color: white;
   }
@@ -107,7 +129,7 @@ ul {
 }
 
 .container-fluid {
-  background: white;
+  // background: white;
   padding-left: 5em;
   padding-right: 5em;
 }

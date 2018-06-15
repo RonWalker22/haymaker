@@ -51,7 +51,7 @@ class ApplicationController < ActionController::Base
     arr = []
 
     @user.wallets.where(coin_type: 'BTC', league_user_id: @league_user.id).each do |w|
-      arr << w.coin_quantity
+      arr << w.total_quantity
     end
     arr.empty? ? 0 : arr.reduce(:+).round(8)
   end
@@ -68,10 +68,10 @@ class ApplicationController < ActionController::Base
       next if ticker.nil?
 
       if hash["#{w.coin_type}#{w.exchange_id}"]
-        hash["#{w.coin_type}#{w.exchange_id}"][0] += w.coin_quantity
+        hash["#{w.coin_type}#{w.exchange_id}"][0] += w.total_quantity
       else
         hash["#{w.coin_type}#{w.exchange_id}"] =
-                                [w.coin_quantity, ticker.price]
+                                [w.total_quantity, ticker.price]
       end
     end
     hash.each do |k, v|

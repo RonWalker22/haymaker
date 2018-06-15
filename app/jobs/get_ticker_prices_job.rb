@@ -25,7 +25,7 @@ class GetTickerPricesJob < ApplicationJob
                                                          {price: ticker.price,
                                                            pair:  ticker.pair,
                                                            exchange: exchange}
-           # LimitOrdersJob.perform_later(ticker.pair, ticker.price)
+           LimitOrdersJob.perform_later(ticker.pair, ticker.price)
          end
 
          ws.on :close do |event|

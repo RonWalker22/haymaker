@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: 'users/registrations' }
 
   mount Sidekiq::Web => '/sidekiq'
+  mount ActionCable.server => '/cable'
 
   unauthenticated do
    root :to => 'users#index'
@@ -54,6 +55,7 @@ Rails.application.routes.draw do
   post 'league_invites/:lid/decline'              => 'league_invites#decline',
                                                   :as => 'decline_league_invite'
   delete 'orders/:id'               => 'orders#destroy', :as => 'cancel_order'
-  mount ActionCable.server => '/cable'
+
+  get 'admin'                       => 'users#admin', :as => 'admin'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

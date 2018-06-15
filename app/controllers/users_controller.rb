@@ -13,6 +13,18 @@ class UsersController < ApplicationController
     redirect_to current_user
   end
 
+  def admin
+    if current_user.admin?
+      Thread.new do
+        GetTickersJob.perform_later
+        sleep(10)
+        GetTickerPricesJob.perform_now
+        flash[:notice] = 'Tickers live!'
+      end
+    end
+    redirect_back fallback_location: root_path
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user

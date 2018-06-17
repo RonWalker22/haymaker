@@ -3,8 +3,11 @@ Rails.application.routes.draw do
 
   devise_for :users, controllers: { registrations: 'users/registrations' }
 
-  mount Sidekiq::Web => '/sidekiq'
   mount ActionCable.server => '/cable'
+
+  authenticate :user, lambda { |u| u.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   unauthenticated do
    root :to => 'users#index'

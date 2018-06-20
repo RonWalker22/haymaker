@@ -13,13 +13,15 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def create
     super
     if current_user
-      LeagueUser.create!({league_id: 1, user_id: current_user.id})
-      4.times do |inner_n|
+      league_user = LeagueUser.create!({league_id: 1,
+                                        user_id: current_user.id,
+                                        ready: true,
+                                        set_up: true})
+      Exchange.all.each do |exchange|
         Wallet.create!( coin_type: 'BTC',
                         total_quantity: '1.00',
-                        user_id: current_user.id,
-                        exchange_id: inner_n + 1,
-                        league_id: 1,
+                        league_user_id: league_user.id,
+                        exchange_id: exchange.id,
                         public_key: SecureRandom.hex(20)
                       )
       end

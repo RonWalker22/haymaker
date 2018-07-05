@@ -10,10 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180522192655) do
+ActiveRecord::Schema.define(version: 20180702021858) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "bets", force: :cascade do |t|
+    t.bigint "leverage_id", null: false
+    t.bigint "league_user_id", null: false
+    t.decimal "baseline", null: false
+    t.decimal "liquidation", null: false
+    t.decimal "post_value", null: false
+    t.integer "round", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["league_user_id"], name: "index_bets_on_league_user_id"
+    t.index ["leverage_id"], name: "index_bets_on_leverage_id"
+    t.index ["round", "league_user_id"], name: "index_bets_on_round_and_league_user_id", unique: true
+  end
 
   create_table "exchange_leagues", force: :cascade do |t|
     t.bigint "exchange_id", null: false
@@ -34,6 +48,22 @@ ActiveRecord::Schema.define(version: 20180522192655) do
     t.decimal "deposit_fee", default: "0.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "fistfights", force: :cascade do |t|
+    t.bigint "league_id", null: false
+    t.bigint "attacker_id", null: false
+    t.bigint "defender_id", null: false
+    t.integer "round", null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attacker_id"], name: "index_fistfights_on_attacker_id"
+    t.index ["defender_id", "attacker_id"], name: "index_fistfights_on_defender_id_and_attacker_id", unique: true
+    t.index ["defender_id"], name: "index_fistfights_on_defender_id"
+    t.index ["league_id"], name: "index_fistfights_on_league_id"
+    t.index ["round", "attacker_id"], name: "index_fistfights_on_round_and_attacker_id", unique: true
+    t.index ["round", "defender_id"], name: "index_fistfights_on_round_and_defender_id", unique: true
   end
 
   create_table "league_invites", force: :cascade do |t|
@@ -77,9 +107,18 @@ ActiveRecord::Schema.define(version: 20180522192655) do
     t.datetime "start_date", null: false
     t.datetime "end_date", null: false
     t.integer "rounds", default: 1, null: false
+    t.integer "round", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["commissioner_id"], name: "index_leagues_on_commissioner_id"
+  end
+
+  create_table "leverages", force: :cascade do |t|
+    t.string "kind", null: false
+    t.decimal "size", null: false
+    t.decimal "liquidation", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "orders", force: :cascade do |t|
@@ -161,6 +200,8 @@ ActiveRecord::Schema.define(version: 20180522192655) do
     t.index ["public_key"], name: "index_wallets_on_public_key", unique: true
   end
 
+  add_foreign_key "fistfights", "users", column: "attacker_id"
+  add_foreign_key "fistfights", "users", column: "defender_id"
   add_foreign_key "league_invites", "users", column: "receiver_id"
   add_foreign_key "league_invites", "users", column: "sender_id"
   add_foreign_key "leagues", "users", column: "commissioner_id"

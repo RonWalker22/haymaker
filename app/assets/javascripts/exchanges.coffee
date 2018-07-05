@@ -239,4 +239,6 @@ tryWebsocket  = ->
 
 
 document.addEventListener 'turbolinks:load', ->
-  tryWebsocket()
+  body = document.querySelector("body")
+  if body.className == "exchanges_show"
+    tryWebsocket()

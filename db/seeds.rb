@@ -92,3 +92,12 @@ Wallet.create!( coin_type: 'LTC',
                 league_user_id: 2,
                 public_key: SecureRandom.hex(20)
               )
+
+Leverage.create!(  kind: 'Jab',                size: 1.5, liquidation: 0.4288)
+Leverage.create!(  kind: 'Cross',              size: 2,   liquidation: 0.331)
+Leverage.create!(  kind: 'Hook',               size: 3,   liquidation: 0.2472)
+Leverage.create!(  kind: 'Hammer Fist',        size: 5,   liquidation: 0.1632)
+Leverage.create!(  kind: 'Spinning Back Fist', size: 10,  liquidation: 0.0867)
+Leverage.create!(  kind: 'Upper Cut',          size: 25,  liquidation: 0.0338)
+Leverage.create!(  kind: 'Superman Punch',     size: 50,  liquidation: 0.0147)
+Leverage.create!(  kind: 'Haymaker',           size: 100, liquidation: 0.0049)

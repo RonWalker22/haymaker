@@ -1,12 +1,12 @@
-
 <div class="columns is-centered">
   <div class="column is-8">
     <div class="box">
       <div class="tabs is-centered is-fullwidth">
         <ul>
-          <li class='is-active'><%= link_to 'Future Leagues', leagues_path%>
+          <li><%= link_to 'Future Leagues', leagues_path %></li>
+          <li class='is-active'><%= link_to 'Current Leagues',
+                                            current_leagues_path%>
           </li>
-          <li><%= link_to 'Current Leagues', current_leagues_path%></li>
           <li><%= link_to 'Past Leagues', past_leagues_path %> </li>
         </ul>
       </div>
@@ -32,7 +32,7 @@
 
           <tbody>
             <% @leagues.each do |league| %>
-              <% next unless league.start_date.future?%>
+              <% next unless league.start_date.past? && league.end_date.future?%>
               <tr>
                 <td>
                   <%=link_to league.name, league_path(league.id) %>

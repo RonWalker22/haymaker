@@ -10,17 +10,18 @@
     <div id="balance">
       <h2 class="center">Available Balance</h2>
       <span id= 'coin_1_balance_label'><%= @coin_1_ticker %></span>
-        <div class='inline_block_s balance_pair_values_div'>
-          <span id="balance_pair_values_1" class="balance_pair_values">
-           <%= @coin_1 ? @coin_1.available_quantity : 0%>
-          </span>
-        </div>
         <div class="">
-          total = <%=  @coin_1 ? @coin_1.total_quantity : 0 %>
+          Total <%=  @coin_1 ? @coin_1.total_quantity : 0 %>
 
         </div>
         <div class="">
-          reserve_quantity = <%= @coin_1 ? @coin_1.reserve_quantity : 0 %>
+          Reserve <%= @coin_1 ? @coin_1.reserve_quantity : 0 %>
+        </div>
+        <div class='inline_block_s balance_pair_values_div'>
+          <span>Available</span>
+          <span id="balance_pair_values_1" class="balance_pair_values">
+           <%= @coin_1 ? @coin_1.available_quantity : 0%>
+          </span>
         </div>
         <div id="ao_1" class="ao">
           <span id="after_order_sign_1" class="after_order_sign">+</span>
@@ -31,15 +32,16 @@
           </div>
         </div>
       <span id='coin_0_balance_label'><%= @coin_2_ticker %></span>
-          <div class='inline_block_s balance_pair_values_div'>
-            <span id="balance_pair_values_0"class="balance_pair_values">
-              <%= @coin_2 ? @coin_2.available_quantity : 0%></span>
-          </div>
           <div class=>
-            total = <%= @coin_2 ? @coin_2.total_quantity : 0%>
+            Total <%= @coin_2 ? @coin_2.total_quantity : 0%>
           </div>
           <div class="">
-            reserve_quantity = <%= @coin_2 ? @coin_2.reserve_quantity : 0%>
+            Reserve <%= @coin_2 ? @coin_2.reserve_quantity : 0%>
+          </div>
+          <div class='inline_block_s balance_pair_values_div'>
+            <span>Available</span>
+            <span id="balance_pair_values_0"class="balance_pair_values">
+              <%= @coin_2 ? @coin_2.available_quantity : 0%></span>
           </div>
         <div id="ao_0" class="ao">
           <span id="after_order_sign_0" class="after_order_sign">-</span>

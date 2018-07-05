@@ -15,3 +15,18 @@
 .notification {
   background-color: black
 }
+
+.loan_fees {
+  color: white
+}
+
+.fist{
+  height: 3em;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.is-what-title {
+  display: inline-block;
+}

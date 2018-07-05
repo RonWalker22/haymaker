@@ -1,7 +1,8 @@
 <header>
   <nav class="navbar is-transparent">
     <div class="navbar-brand">
-      <%= image_tag "hm_logo.png",alt:'HayMakerX', class: "navbar-item"%>
+      <%= image_tag "hm_logo_44.svg", alt:'HayMaker',
+                    class: "navbar-item logo"%>
       <div class="navbar-burger burger" data-target="navbarExampleTransparentExample">
         <span></span>
         <span></span>
@@ -12,7 +13,7 @@
     <div id="navbarExampleTransparentExample" class="navbar-menu">
       <div class="navbar-start">
         <%= link_to 'Leagues', leagues_path, :class => "navbar-item"%>
-        <%= link_to 'Leaderboards', leaderboards_path, :class => "navbar-item"%>
+        <%= link_to 'Players',  users_path, :class => "navbar-item"%>
         <%= link_to 'About', about_path, :class => "navbar-item"%>
       </div>
       <div class="navbar-end">
@@ -26,6 +27,7 @@
                 <%= link_to 'Balances',
                   balances_path(params[:id], params[:xid]),
                     :class =>"navbar-item" %>
+                <%= link_to 'Margin', margin_path(params[:id]), :class =>"navbar-item" %>
               </div>
             </div>
           <% end %>

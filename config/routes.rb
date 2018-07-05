@@ -16,11 +16,14 @@ Rails.application.routes.draw do
     root to: 'users#current_user_home'
   end
 
-  resources :leagues
   resources :exchanges
   resources :wallets
 
-  get  '/leaderboards'                             => 'users#index'
+  get 'leagues/current'  => 'leagues#current', :as => 'current_leagues'
+  get 'leagues/past'     => 'leagues#past',    :as => 'past_leagues'
+
+  resources :leagues
+
   get  '/about'                                    => 'static_pages#about'
   post '/leagues/:id/join'                         => 'leagues#join',
                                                     :as => 'join'
@@ -60,5 +63,9 @@ Rails.application.routes.draw do
   delete 'orders/:id'               => 'orders#destroy', :as => 'cancel_order'
 
   get 'admin'                       => 'users#admin', :as => 'admin'
+
+  get 'leagues/:id/margin'                  => 'leagues#margin', :as => 'margin'
+
+  post 'leagues/:id/swing'             => 'leagues#swing',  :as => 'swing'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

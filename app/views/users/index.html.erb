@@ -1,33 +1,29 @@
-<h1 class="index_title">Top Haymakers</h1>
-
-<table id="users_table" class="table">
-  <thead>
-    <tr>
-      <th><abbr title="Position">Pos</abbr></th>
-      <th>Name</th>
-      <th>Cash</th>
-      <th>BTC</th>
-      <th>Email</th>
-    </tr>
-  </thead>
-  <tfoot>
-    <tr>
-      <th><abbr title="Position">Pos</abbr></th>
-      <th>Name</th>
-      <th>Cash</th>
-      <th>BTC</th>
-      <th>Email</th>
-    </tr>
-  </tfoot>
-  <tbody>
-    <% @users.each_with_index do |p,i| %>
-      <tr>
-        <th><%= i + 1 %></th>
-        <th><%= link_to p.name, user_path(p.id) %></th>
-        <td><%= p.coin_total('USD') + p.coin_total('USDT') %></td>
-        <td><%= p.coin_total('BTC') %></td>
-        <td><%= p.email %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="columns is-centered">
+  <div class="column is-8">
+    <div class="box">
+      <h1 class="title">Players</h1>
+      <table id="users_table" class="table is-striped">
+        <thead>
+          <tr>
+            <th><abbr title="Position">Pos</abbr></th>
+            <th>Name</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <th><abbr title="Position">Pos</abbr></th>
+            <th>Name</th>
+          </tr>
+        </tfoot>
+        <tbody>
+          <% @users.each_with_index do |p,i| %>
+            <tr>
+              <th><%= i + 1 %></th>
+              <th><%= link_to p.name, user_path(p.id) %></th>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

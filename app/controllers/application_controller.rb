@@ -3,6 +3,8 @@ class ApplicationController < ActionController::Base
   helper_method :switch_exchanges
   helper_method :current_rank
   helper_method :leader_boards
+  helper_method :current_btce
+  helper_method :portfolio_value
 
   private
 
@@ -30,7 +32,24 @@ class ApplicationController < ActionController::Base
     leader_boards(league).index {|hash| hash[user.name]} + 1
   end
 
+  def current_btce(user, league)
+    btc_price = Ticker.find_by(pair:"BTC-USDT", exchange_id: 1).price.to_f
+    leader_boards(league).each do |hash|
+       return hash[user] if hash[user]
+    end
+  end
+
+  def portfolio_value(league_user)
+    user = User.find league_user.user.id
+    league = League.find league_user.league_id
+    btc_price = Ticker.find_by(pair:"BTC-USDT", exchange_id: 1).price.to_f
+    leader_boards(league).each do |hash|
+       return hash[:cash] if hash[user.name]
+    end
+  end
+
   def leader_boards(league)
+    btc_price = Ticker.find_by(pair:"BTC-USDT", exchange_id: 1).price.to_f
     @league = league
     arr = []
     @league.users.all.each do |user|
@@ -42,9 +61,14 @@ class ApplicationController < ActionController::Base
     arr.sort_by! { |hash| hash.values}
     arr.reverse!
     arr.each do |hash|
-      hash.each {|k,v| hash[k] = '%.8f' % v }
+      hash.each do |k,v|
+        @btce =  '%.8f' % v
+        hash[k] = @btce
+      end
+      hash[:cash] = (@btce.to_f * btc_price).round 2
     end
     arr
+    # binding.pry
   end
 
   def total_btc

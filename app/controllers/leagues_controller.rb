@@ -1,6 +1,7 @@
 class LeaguesController < ApplicationController
   before_action :check_signed_in
-  before_action :set_league_variables, except: [:create, :new, :index, :join]
+  before_action :set_league_variables, except: [:create, :new, :index, :join,
+                                                :past, :current]
   before_action :set_league, only: [:join]
 
   # GET /leagues
@@ -159,6 +160,24 @@ class LeaguesController < ApplicationController
     redirect_to leagues_path
   end
 
+  def margin
+    @exchanges = Exchange.all
+  end
+
+  def swing
+    setup_swing_params
+    start_fist_fight
+    redirect_back fallback_location: root_path
+  end
+
+  def current
+    @leagues = League.all
+  end
+
+  def past
+    @leagues = League.all
+  end
+
   private
     def set_league_variables
       set_league
@@ -185,6 +204,15 @@ class LeaguesController < ApplicationController
 
     def setup_params
       params.permit(:exchange_starter, :league)
+    end
+
+    def setup_swing_params
+      @target = User.find punch_params[:target]
+      @leverage =  Leverage.find punch_params[:punch]
+    end
+
+    def punch_params
+      params.permit(:punch, :target)
     end
 
     def create_set_up_balance
@@ -214,6 +242,37 @@ class LeaguesController < ApplicationController
       if league_invite
         league_invite.status = "accepted"
         league_invite.save
+      end
+    end
+
+    def make_bet
+      baseline = portfolio_value @league_user
+      bet = Bet.new(
+                    leverage_id: @leverage.id,
+                    league_user_id: @league_user.id,
+                    baseline: baseline,
+                    liquidation: baseline - (@leverage.liquidation * baseline),
+                    round: @league.round,
+                    post_value: -1)
+      if bet.save
+        flash[:notice] = "You have swung on #{@target.name} with a #{@leverage.kind}."
+      else
+        flash[:notice] = "You have swung on #{@target.name} with a #{@leverage.kind}."
+      end
+    end
+
+    def start_fist_fight
+      fistfight = Fistfight.new(
+                                attacker_id: current_user.id,
+                                defender_id: @target.id,
+                                round: @league.round,
+                                league_id: @league.id
+      )
+
+      if fistfight.save
+        make_bet
+      else
+        flash[:alert] = "Fistfight was unable to start."
       end
     end
 end

@@ -23,6 +23,9 @@ gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
+
+gem 'sprockets', '~> 3.7.2'
+
 gem 'sprockets-rails', :require => 'sprockets/railtie'
 
 gem 'jquery-rails'

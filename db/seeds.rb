@@ -1,6 +1,6 @@
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-7.times do |n|
+40.times do |n|
   name = Faker::Name.name
   email = "example-#{n+1}@gmail.com"
   password = "123456"
@@ -21,6 +21,10 @@
                     balance_revivable: true,
                     start_date: Time.now,
                     end_date: 1000.years.from_now,
+                    round_end: 1000.years.from_now,
+                    round_steps: 1000,
+                    rounds: 100,
+                    round: 2
                   )
 
     Exchange.create!( name: 'Binance' )
@@ -29,8 +33,15 @@
 
   LeagueUser.create!(user_id: n + 1, league_id: 1, set_up: true, ready: true)
 
+  Wallet.create!( coin_type: 'ETH',
+                  total_quantity: [10, 20, 30, 25, 35, 40].sample,
+                  exchange_id: 1,
+                  league_user_id: n + 1,
+                  public_key: SecureRandom.hex(20)
+                )
+
   Wallet.create!( coin_type: 'BTC',
-                  total_quantity: 1.00,
+                  total_quantity: [1, 1.1, 1.2, 1.3, 1.6, 1.7, 1.8, 2].sample,
                   exchange_id: 1,
                   league_user_id: n + 1,
                   public_key: SecureRandom.hex(20)
@@ -43,19 +54,14 @@ League.create!( name: 'Second',
                 balance_revivable: true,
                 start_date: Time.now,
                 end_date: 100.years.from_now,
+                round_end: 1000.years.from_now,
+                round_steps: 1000,
               )
 ExchangeLeague.create!( exchange_id: 1, league_id: 2)
 2.times do |n|
   LeagueInvite.create!(receiver_id: n + 2, sender_id: n + 1, league_id: 2)
 end
 
-
-Wallet.create!( coin_type: 'ETH',
-                total_quantity: 3.554,
-                exchange_id: 1,
-                league_user_id: 1,
-                public_key: SecureRandom.hex(20)
-              )
 Wallet.create!( coin_type: 'LTC',
                 total_quantity: 4.8394828,
                 exchange_id: 1,
@@ -92,12 +98,11 @@ Wallet.create!( coin_type: 'LTC',
                 league_user_id: 2,
                 public_key: SecureRandom.hex(20)
               )
-
-Leverage.create!(  kind: 'Jab',                size: 1.5, liquidation: 0.4288)
-Leverage.create!(  kind: 'Cross',              size: 2,   liquidation: 0.331)
-Leverage.create!(  kind: 'Hook',               size: 3,   liquidation: 0.2472)
-Leverage.create!(  kind: 'Hammer Fist',        size: 5,   liquidation: 0.1632)
-Leverage.create!(  kind: 'Spinning Back Fist', size: 10,  liquidation: 0.0867)
-Leverage.create!(  kind: 'Upper Cut',          size: 25,  liquidation: 0.0338)
-Leverage.create!(  kind: 'Superman Punch',     size: 50,  liquidation: 0.0147)
-Leverage.create!(  kind: 'Haymaker',           size: 100, liquidation: 0.0049)
+          
+Leverage.create!(size: 2,   liquidation: 0.331)
+Leverage.create!(size: 3,   liquidation: 0.2472)
+Leverage.create!(size: 5,   liquidation: 0.1632)
+Leverage.create!(size: 10,  liquidation: 0.0867)
+Leverage.create!(size: 25,  liquidation: 0.0338)
+Leverage.create!(size: 50,  liquidation: 0.0147)
+Leverage.create!(size: 100, liquidation: 0.0049)

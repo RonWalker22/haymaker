@@ -18,12 +18,8 @@ class User < ApplicationRecord
   has_many :sent_league_invites,
             foreign_key: "sender_id",
             class_name: "LeagueInvite"
-  has_many   :attacks,
-              class_name: "Fistfight",
-              foreign_key: "attacker_id"
-  has_many   :defenses,
-              class_name: "Fistfight",
-              foreign_key: "defender_id"
+
+  paginates_per 10
 
   def coin_total(coin)
     league_user = LeagueUser.find_by user_id: self.id
@@ -32,5 +28,9 @@ class User < ApplicationRecord
       |wallet| arr << wallet.total_quantity.to_f
     end
     arr.sum
+  end
+
+  def self.search(search)
+    where("name ILIKE ?", "%#{search}%")
   end
 end

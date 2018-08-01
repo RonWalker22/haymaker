@@ -1,10 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   helper_method :switch_exchanges
-  helper_method :current_rank
-  helper_method :leader_boards
-  helper_method :current_btce
-  helper_method :portfolio_value
 
   private
 
@@ -26,85 +22,5 @@ class ApplicationController < ActionController::Base
       flash[:notice] = "You must be signed in to access that area."
       return redirect_to(new_user_session_path)
     end
-  end
-
-  def current_rank(user, league)
-    leader_boards(league).index {|hash| hash[user.name]} + 1
-  end
-
-  def current_btce(user, league)
-    btc_price = Ticker.find_by(pair:"BTC-USDT", exchange_id: 1).price.to_f
-    leader_boards(league).each do |hash|
-       return hash[user] if hash[user]
-    end
-  end
-
-  def portfolio_value(league_user)
-    user = User.find league_user.user.id
-    league = League.find league_user.league_id
-    btc_price = Ticker.find_by(pair:"BTC-USDT", exchange_id: 1).price.to_f
-    leader_boards(league).each do |hash|
-       return hash[:cash] if hash[user.name]
-    end
-  end
-
-  def leader_boards(league)
-    btc_price = Ticker.find_by(pair:"BTC-USDT", exchange_id: 1).price.to_f
-    @league = league
-    arr = []
-    @league.users.all.each do |user|
-      @user = user
-      @league_user = LeagueUser.find_by league_id: @league.id, user_id: @user.id
-      total_btc_estimate = alt_coins_estimate + total_btc
-      arr << { user.name =>  total_btc_estimate }
-    end
-    arr.sort_by! { |hash| hash.values}
-    arr.reverse!
-    arr.each do |hash|
-      hash.each do |k,v|
-        @btce =  '%.8f' % v
-        hash[k] = @btce
-      end
-      hash[:cash] = (@btce.to_f * btc_price).round 2
-    end
-    arr
-    # binding.pry
-  end
-
-  def total_btc
-    arr = []
-
-    @user.wallets.where(coin_type: 'BTC', league_user_id: @league_user.id).each do |w|
-      arr << w.total_quantity
-    end
-    arr.empty? ? 0 : arr.reduce(:+).round(8)
-  end
-
-  def alt_coins_estimate
-    hash = {}
-    arr = []
-    @user.wallets.where(league_user_id: @league_user.id).each do |w|
-      base_currency = w.coin_type
-      quote_currency = 'BTC'
-      ticker = Ticker.find_by base_currency: base_currency,
-                              quote_currency: 'BTC',
-                              exchange_id: w.exchange_id
-      next if ticker.nil?
-
-      if hash["#{w.coin_type}#{w.exchange_id}"]
-        hash["#{w.coin_type}#{w.exchange_id}"][0] += w.total_quantity
-      else
-        hash["#{w.coin_type}#{w.exchange_id}"] =
-                                [w.total_quantity, ticker.price]
-      end
-    end
-    hash.each do |k, v|
-      hash[k][2] = v[0] * v[1]
-      arr << v[2]
-      hash[k][0] = '%.8f' % v[0]
-      hash[k][1] = '%.8f' % v[1]
-      hash[k][2] = '%.8f' % v[2]
-    end
-    arr.empty? ? 0 : arr.reduce(:+).round(8)
   end
 end

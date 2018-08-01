@@ -4,3 +4,29 @@ production:
   :concurrency: 20
 :queues:
   - default
+
+:schedule:
+  end_game:
+    cron: '0 0 0 * * * America/Los_Angeles'
+    class: EndGameJob
+
+  get_tickers:
+    in: 1m
+    class: GetTickersJob
+
+  get_ticker_prices:
+    in: 900y
+    class: GetTickerPricesJob
+
+  new_round:
+    cron: '0 0 0 * * * America/Los_Angeles'
+    # cron: '* * * * * * America/Los_Angeles'
+    class: NewRoundJob
+
+  fight:
+    in: 900y
+    class: FightJob
+
+  destroy_fights:
+    in: 900y
+    class: DestroyFightsJob

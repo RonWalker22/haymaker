@@ -15,8 +15,11 @@ class CreateLeagues < ActiveRecord::Migration[5.1]
                     null: false
       t.datetime :start_date,                                   null: false
       t.datetime :end_date,                                     null: false
-      t.integer :rounds,            default: 1,                 null: false
-      t.integer :round,             default: 1,                 null: false
+      t.integer  :rounds,           default: 1,                 null: false
+      t.integer  :round,            default: 1,                 null: false
+      t.datetime :round_end,                                    null: false
+      t.integer  :round_steps,                                  null: false
+      t.boolean  :active,           default: true,              null: false
       t.timestamps
     end
   end

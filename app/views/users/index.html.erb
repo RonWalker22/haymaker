@@ -2,28 +2,43 @@
   <div class="column is-8">
     <div class="box">
       <h1 class="title">Players</h1>
+    <%= form_tag(users_path, :method => "get", id: "search-form") do %>
+    <div class="field has-addons">
+      <div class="control">
+        <%= text_field_tag :search, params[:search], placeholder: "Search Users", class: 'input' %>
+      </div>
+      <div class="control">
+        <%= submit_tag "Search", :name => nil, class: 'button is-info' %>
+      </div>
+    </div>
+    <% end %>
       <table id="users_table" class="table is-striped">
         <thead>
           <tr>
-            <th><abbr title="Position">Pos</abbr></th>
+            <th>ID</th>
             <th>Name</th>
           </tr>
         </thead>
         <tfoot>
           <tr>
-            <th><abbr title="Position">Pos</abbr></th>
+            <th>ID</th>
             <th>Name</th>
           </tr>
         </tfoot>
         <tbody>
-          <% @users.each_with_index do |p,i| %>
+          <% users = @users.order(id: :desc).page params[:page] %>
+          <% users.each_with_index do |user,i| %>
             <tr>
-              <th><%= i + 1 %></th>
-              <th><%= link_to p.name, user_path(p.id) %></th>
+              <th><%= user.id%></th>
+              <th><%= link_to user.name, user_path(user.id) %></th>
             </tr>
           <% end %>
         </tbody>
       </table>
+      <%= paginate users %>
+      <% if @users.blank? %>
+        <h4>There are no users with the name <%= params[:search] %>.</h4>
+      <% end %>
     </div>
   </div>
 </div>

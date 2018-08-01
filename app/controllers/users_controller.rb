@@ -3,7 +3,12 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show]
 
   def index
-    @users = User.all
+      @users = User.all.order("created_at")
+    if params[:search]
+      @users = User.search(params[:search]).order("created_at")
+    else
+      @users = User.all.order("created_at")
+    end
   end
 
   def show
@@ -11,18 +16,6 @@ class UsersController < ApplicationController
 
   def current_user_home
     redirect_to current_user
-  end
-
-  def admin
-    if current_user.admin?
-      Thread.new do
-        GetTickersJob.perform_later
-        sleep(10)
-        GetTickerPricesJob.perform_now
-        flash[:notice] = 'Tickers live!'
-      end
-    end
-    redirect_back fallback_location: root_path
   end
 
   private

@@ -3,7 +3,7 @@ module LeagueInvitesHelper
     league_invites = LeagueInvite.all
     user_leagues = user.leagues
     available_leagues = []
-    League.all.each do |league|
+    League.all.where(active: true).each do |league|
       user_in_league = user_leagues.any? do |user_league|
         user_league.id == league.id
       end

@@ -1,3 +1,27 @@
+<div class="columns is-centered">
+  <div class="column  is-half is-narrow">
+    <div class="box">
+      <h2 class="title is-5 center"><%= @league.name %> League Leverage</h2>
+      <%= form_tag(request_bet_path(@league), method: :get) do %>
+        <div class="select">
+          <select name="leverage_size" value="leverage_size">
+            <% Leverage.all.each do |leverage| %>
+              <option value="<%= leverage.size%>">
+                <%= "#{leverage.size}x" %>
+              </option>
+            <% end %>
+          </select>
+        </div>
+        <%= submit_tag("Active Leverage", class: 'button is-black' )%>
+      <% end %>
+      <% if flash[:bet] %>
+        <%= flash[:bet] %>
+        <%= link_to 'Yes', bet_path(@league, params[:size]), class: 'button is-info', method: :post%>
+        <%= link_to 'No', leverage_path(@league), class: 'button is-text'%>
+      <% end %>
+    </div>
+  </div>
+</div>
 
 <div class="columns is-centered">
   <div class="column  is-half is-narrow">
@@ -5,8 +29,7 @@
       <h2 class="title is-5">Leverage Information</h2>
       <h3 class="title is-6">What is the leverage? </h3>
       <p class="content">
-        When you swing on an opponent you have the option to add extra power to
-        your punch. This power is referred to as leverage. By leveraging, you
+        By leveraging, you
         make a bet on your entire portfolio. At the end of the bet, you will
         either receive a leverage bonus for a correct prediction or a leverage
         penalty for an incorrect prediction.
@@ -15,8 +38,11 @@
       <p class="content">
         <h3 class="title is-6">What is the bet? </h3>
         <ol>
-          <li class="content">Your portfolio will increase in value before the league ends.</li>
-          <li class="content">Your portfolio will not fall to or below the liquidation point.
+          <li class="content">Your portfolio will increase in value before the
+            league ends.
+          </li>
+          <li class="content">Your portfolio will not fall to or below the
+            liquidation point.
           </li>
         </ol>
       </p>
@@ -40,7 +66,7 @@
             it stays at or below the liquidation point beyond the grace period.
           </li>
           <li>
-            The league ends
+            The current round ends
           </li>
         </ol>
       </p>
@@ -82,7 +108,6 @@
       <h2 class="title is-5">Liquidation Rates</h2>
       <table class='table is-striped is-fullwidth'>
         <thead>
-          <th>Type</th>
           <th>Leverage</th>
           <th>Liquidation Trigger</th>
         </thead>
@@ -90,8 +115,6 @@
         <tbody>
           <% Leverage.all.each do |leverage|  %>
           <tr>
-
-            <td><%= leverage.kind %></td>
             <td><%= leverage.size %>x</td>
             <td>-<%= leverage.liquidation * 100 %>%</td>
           </tr>
@@ -119,7 +142,7 @@
             <% Leverage.all.each do |leverage| %>
               <option data-leverage="<%= leverage.size%>"
                 data-trigger="<%= leverage.liquidation %>">
-                <%= leverage.kind + " (#{leverage.size}x)" %>
+                <%= " (#{leverage.size}x)" %>
               </option>
             <% end %>
           </select>
@@ -133,7 +156,7 @@
         <label class="label">Current Portfolio Value</label>
         <div class="control">
           <input class="input is-static portfolio_value" type="text"
-          value="<%= current_btce(current_user.name, @league) %>" readonly>
+          value="<%=portfolio_value(@league_user) %>" readonly>
         </div>
       </div>
       <div class="field">
@@ -159,43 +182,38 @@
 <div class="columns">
   <div class="column">
     <div class="box">
-      <h2 class="title is-5">Bonus/Penalty Rates</h2>
+      <h2 class="title is-5">Bonus/Penalty Examples</h2>
       <table class="table is-striped">
         <thead>
-          <th>Type</th>
           <th>Leverage</th>
-          <th>Baseline(BTC)</th>
-          <th>Post Value(BTC)</th>
-          <th>Bonus/Penalty(BTC)</th>
-          <th>Final Value(BTC)</th>
+          <th>Baseline</th>
+          <th>Post Value</th>
+          <th>Bonus/Penalty</th>
+          <th>Total Points</th>
         </thead>
         <tbody>
           <% Leverage.all.each do |leverage|  %>
-            <% next unless leverage.kind == 'Jab' || leverage.kind ==
-            'Haymaker'%>
+            <% next unless leverage.size == 2 || leverage.size == 100%>
             <tr>
-              <td><%= leverage.kind %></td>
               <td><%= leverage.size %>x</td>
-              <td>1000</td>
-              <td>1001</td>
+              <td><%= number_to_currency 100  %></td>
+              <td><%= number_to_currency 101 %></td>
               <td><%=(leverage.size * 1) - 1%> Bonus</td>
-              <td><%= 1000 + (leverage.size * 1)%></td>
+              <td><%= number_with_delimiter (100 + (leverage.size * 1))%></td>
             </tr>
             <tr>
-              <td><%= leverage.kind %></td>
               <td><%= leverage.size.to_f %>x</td>
-              <td>1000</td>
-              <td>1500</td>
-              <td><%=(leverage.size * 500) - 500%> Bonus</td>
-              <td><%= 1000 + (leverage.size * 500)%></td>
+              <td><%= number_to_currency 100 %></td>
+              <td><%= number_to_currency 150 %></td>
+              <td><%=(leverage.size * 50) - 50%> Bonus</td>
+              <td><%= number_with_delimiter (100 + (leverage.size * 50))%></td>
             </tr>
             <tr>
-              <td><%= leverage.kind %></td>
               <td><%= leverage.size.to_f %>x</td>
-              <td>1000</td>
-              <td>999</td>
+              <td><%= number_to_currency 100  %></td>
+              <td><%= number_to_currency 99 %></td>
               <td><%= penalty = (leverage.size * 1) - 1%> Penalty</td>
-              <td><%=1000 -(leverage.size * 1)%></td>
+              <td><%=number_with_delimiter (100 - (leverage.size * 1))%></td>
             </tr>
           <% end %>
         </tbody>

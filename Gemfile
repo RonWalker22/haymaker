@@ -83,3 +83,7 @@ gem 'devise'
 gem 'sidekiq'
 
 gem 'bootstrap'
+
+gem 'sidekiq-scheduler'
+
+gem 'kaminari'

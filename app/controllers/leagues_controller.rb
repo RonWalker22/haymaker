@@ -3,6 +3,7 @@ class LeaguesController < ApplicationController
   before_action :set_league_variables, except: [:create, :new, :index, :join,
                                                 :past, :current]
   before_action :set_league, only: [:join]
+  include LeaguesHelper
 
   # GET /leagues
   # GET /leagues.json
@@ -160,14 +161,32 @@ class LeaguesController < ApplicationController
     redirect_to leagues_path
   end
 
-  def margin
+  def leverage
     @exchanges = Exchange.all
+  end
+
+  def deleverage
+    bet = @league_user.bets.last
+    leverage = Leverage.find (@league_user.bets.last.leverage_id)
+    current_cash_value = portfolio_value @league_user
+    if bet && bet.active
+      bet.active = false
+      @size = leverage.size.to_i - 1
+      @league_user.alive = false if current_cash_value <= bet.liquidation
+      @league_user.leverage_points += ((current_cash_value - bet.baseline) * @size).round(2)
+      @league_user.save
+      bet.post_value = current_cash_value
+      if bet.save
+        flash[:notice] = "Leverage has been successfully deactivated."
+      end
+    end
+    redirect_to league_path @league
   end
 
   def swing
     setup_swing_params
     start_fist_fight
-    redirect_back fallback_location: root_path
+    redirect_to league_path @league
   end
 
   def current
@@ -178,14 +197,52 @@ class LeaguesController < ApplicationController
     @leagues = League.all
   end
 
+  def bet
+    @leverage =  Leverage.find_by size: params[:size]
+    @league_user = LeagueUser.find_by(league_id: @league.id,
+                                      user_id: current_user.id)
+
+    baseline = portfolio_value @league_user
+    new_bet = Bet.new(
+                  leverage_id: @leverage.id,
+                  league_user_id: @league_user.id,
+                  baseline: baseline,
+                  liquidation: baseline - (@leverage.liquidation * baseline),
+                  round: @league.round,
+                  post_value: -1)
+    if new_bet.save
+      flash[:notice] = "#{@leverage.size}x leverage is now active."
+    else
+      flash[:notice] = "#{@leverage.size}x leverage was unsuccessful."
+    end
+    redirect_to league_path @league
+  end
+
+  def request_bet
+    @leverage_size = leverage_params[:leverage_size]
+    flash[:bet] = "Are you sure you want to active #{@leverage_size}x leverage?"
+    redirect_to leverage_path @league, size: @leverage_size
+  end
+
+  def balances
+
+  end
+
   private
     def set_league_variables
       set_league
       set_league_user
+      set_btc_price
+      set_tickers
+      set_league_wallets
     end
 
     def set_league
       @league = League.find(params[:id])
+    end
+
+    def set_btc_price
+      @btc_price = Ticker.find_by(pair:"BTC-USDT", exchange_id: 1).price.to_f
     end
 
     def set_league_user
@@ -193,6 +250,14 @@ class LeaguesController < ApplicationController
         @league_user = LeagueUser.find_by(league_id: @league.id,
                                           user_id: current_user.id)
       end
+    end
+
+    def set_tickers
+      @tickers = Ticker.all
+    end
+
+    def set_league_wallets
+      @league_wallets = @league.wallets
     end
 
     def league_params
@@ -207,12 +272,15 @@ class LeaguesController < ApplicationController
     end
 
     def setup_swing_params
-      @target = User.find punch_params[:target]
-      @leverage =  Leverage.find punch_params[:punch]
+      @target = LeagueUser.find_by user_id:punch_params[:target], league_id: @league.id
     end
 
     def punch_params
       params.permit(:punch, :target)
+    end
+
+    def leverage_params
+      params.permit(:leverage_size)
     end
 
     def create_set_up_balance
@@ -245,32 +313,16 @@ class LeaguesController < ApplicationController
       end
     end
 
-    def make_bet
-      baseline = portfolio_value @league_user
-      bet = Bet.new(
-                    leverage_id: @leverage.id,
-                    league_user_id: @league_user.id,
-                    baseline: baseline,
-                    liquidation: baseline - (@leverage.liquidation * baseline),
-                    round: @league.round,
-                    post_value: -1)
-      if bet.save
-        flash[:notice] = "You have swung on #{@target.name} with a #{@leverage.kind}."
-      else
-        flash[:notice] = "You have swung on #{@target.name} with a #{@leverage.kind}."
-      end
-    end
-
     def start_fist_fight
       fistfight = Fistfight.new(
-                                attacker_id: current_user.id,
+                                attacker_id: @league_user.id,
                                 defender_id: @target.id,
                                 round: @league.round,
                                 league_id: @league.id
       )
 
       if fistfight.save
-        make_bet
+        flash[:notice] = "Fistfight has begun."
       else
         flash[:alert] = "Fistfight was unable to start."
       end

@@ -2,7 +2,10 @@ module ApplicationHelper
   def appropriate_environment?(target)
     case target
       when 'funds'
-        params[:controller] == 'exchanges'
+        ['index', 'current', 'past'].each do |action|
+          return false if action == action_name
+        end
+        params[:controller] == 'leagues' || params[:controller] == 'exchanges'
     end
   end
 end

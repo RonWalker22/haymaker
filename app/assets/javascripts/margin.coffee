@@ -11,13 +11,10 @@ tryMargin = ->
   modal_background       = document.querySelector    ".modal-background"
   modal_close_btn        = document.querySelector    ".modal-close"
   modal                  = document.querySelector    ".modal"
-  fists                  = document.querySelectorAll ".fist"
   body                   = document.querySelector    "body"
   leverage_options       = document.querySelector    ".leverage_options"
-  target_options         = document.querySelector    ".target_options"
   portfolio_value        = document.querySelector    ".portfolio_value"
   liquidation            = document.querySelector    ".liquidation"
-  opponent_input         = document.querySelector    ".opponent-input"
 
   leverage_size =
     +leverage_options.options[leverage_options.selectedIndex].dataset.leverage
@@ -26,10 +23,6 @@ tryMargin = ->
 
   liquidation.value   = Math.roundTo (portfolio_value.value -
     (liquidation_trigger * portfolio_value.value)), 8
-  for fist in fists
-    fist.addEventListener 'click', ->
-      modal.classList.add "is-active"
-      target_options.value = this.dataset.userid
 
   if body.className == "leagues_margin"
     liquidation_calculator.addEventListener 'click', ->

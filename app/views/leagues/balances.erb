@@ -1,0 +1,25 @@
+<div class="columns is-centered">
+  <div class="column is-8">
+    <div class="box">
+      <h1 class="title">Balances</h1>
+      <div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Quantity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% current_user.wallets.where(league_user: @league_user).each do |w| %>
+                <tr>
+                  <td> <%= w.coin_type  %> </td>
+                  <td> <%= w.total_quantity %> </td>
+                </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

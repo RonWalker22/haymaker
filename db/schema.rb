@@ -22,11 +22,11 @@ ActiveRecord::Schema.define(version: 20180702021858) do
     t.decimal "liquidation", null: false
     t.decimal "post_value", null: false
     t.integer "round", null: false
+    t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["league_user_id"], name: "index_bets_on_league_user_id"
     t.index ["leverage_id"], name: "index_bets_on_leverage_id"
-    t.index ["round", "league_user_id"], name: "index_bets_on_round_and_league_user_id", unique: true
   end
 
   create_table "exchange_leagues", force: :cascade do |t|
@@ -54,12 +54,14 @@ ActiveRecord::Schema.define(version: 20180702021858) do
     t.bigint "league_id", null: false
     t.bigint "attacker_id", null: false
     t.bigint "defender_id", null: false
+    t.decimal "attacker_performance", default: "0.0", null: false
+    t.decimal "defender_performance", default: "0.0", null: false
     t.integer "round", null: false
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["attacker_id"], name: "index_fistfights_on_attacker_id"
-    t.index ["defender_id", "attacker_id"], name: "index_fistfights_on_defender_id_and_attacker_id", unique: true
+    t.index ["defender_id", "attacker_id", "round"], name: "index_fistfights_on_defender_id_and_attacker_id_and_round", unique: true
     t.index ["defender_id"], name: "index_fistfights_on_defender_id"
     t.index ["league_id"], name: "index_fistfights_on_league_id"
     t.index ["round", "attacker_id"], name: "index_fistfights_on_round_and_attacker_id", unique: true
@@ -84,9 +86,12 @@ ActiveRecord::Schema.define(version: 20180702021858) do
     t.bigint "user_id", null: false
     t.boolean "ready", default: false, null: false
     t.boolean "set_up", default: false, null: false
-    t.string "status", default: "alive", null: false
+    t.boolean "alive", default: true, null: false
     t.integer "rank", default: 0, null: false
-    t.decimal "btce", default: "0.0", null: false
+    t.decimal "btce", default: "1.0", null: false
+    t.decimal "points", default: "0.0", null: false
+    t.decimal "leverage_points", default: "0.0", null: false
+    t.boolean "champ", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["league_id", "user_id"], name: "index_league_users_on_league_id_and_user_id", unique: true
@@ -108,13 +113,15 @@ ActiveRecord::Schema.define(version: 20180702021858) do
     t.datetime "end_date", null: false
     t.integer "rounds", default: 1, null: false
     t.integer "round", default: 1, null: false
+    t.datetime "round_end", null: false
+    t.integer "round_steps", null: false
+    t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["commissioner_id"], name: "index_leagues_on_commissioner_id"
   end
 
   create_table "leverages", force: :cascade do |t|
-    t.string "kind", null: false
     t.decimal "size", null: false
     t.decimal "liquidation", null: false
     t.datetime "created_at", null: false
@@ -200,8 +207,8 @@ ActiveRecord::Schema.define(version: 20180702021858) do
     t.index ["public_key"], name: "index_wallets_on_public_key", unique: true
   end
 
-  add_foreign_key "fistfights", "users", column: "attacker_id"
-  add_foreign_key "fistfights", "users", column: "defender_id"
+  add_foreign_key "fistfights", "league_users", column: "attacker_id"
+  add_foreign_key "fistfights", "league_users", column: "defender_id"
   add_foreign_key "league_invites", "users", column: "receiver_id"
   add_foreign_key "league_invites", "users", column: "sender_id"
   add_foreign_key "leagues", "users", column: "commissioner_id"

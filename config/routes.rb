@@ -10,10 +10,10 @@ Rails.application.routes.draw do
   end
 
   unauthenticated do
-   root :to => 'users#index'
+   root to: 'static_pages#about'
   end
   authenticated do
-    root to: 'users#current_user_home'
+    root to: 'static_pages#about'
   end
 
   resources :exchanges
@@ -34,16 +34,8 @@ Rails.application.routes.draw do
                                                             :as => 'trade'
   post 'leagues/:id/exchanges/:xid/order'          => 'exchanges#order',
                                                             :as => 'order'
-  get  'leagues/:id/exchanges/:xid/balances'        => 'exchanges#balances',
-                                                            :as => 'balances'
-  get  'leagues/:id/exchanges/:xid/withdrawal/:cid' => 'exchanges#withdrawal',
-                                                            :as => 'withdrawal'
-  post 'leagues/:id/exchanges/:xid/withdrawal/:cid' =>
-                                                'exchanges#process_withdrawal',
-                                                    :as => 'process_withdrawal'
-  get 'leagues/:id/exchanges/:xid/transactions/:cid' =>
-                                                'exchanges#transaction_history',
-                                                    :as => 'transaction_history'
+  get  'leagues/:id/balances'                      => 'leagues#balances',
+                                                    :as => 'balances'
   get 'users'                                    => 'users#index',
                                                     :as => 'users'
 
@@ -62,10 +54,13 @@ Rails.application.routes.draw do
                                                   :as => 'decline_league_invite'
   delete 'orders/:id'               => 'orders#destroy', :as => 'cancel_order'
 
-  get 'admin'                       => 'users#admin', :as => 'admin'
+  get 'leagues/:id/leverage'                => 'leagues#leverage', :as => 'leverage'
 
-  get 'leagues/:id/margin'                  => 'leagues#margin', :as => 'margin'
+  post 'leagues/:id/swing/:target'          => 'leagues#swing',  :as => 'swing'
 
-  post 'leagues/:id/swing'             => 'leagues#swing',  :as => 'swing'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  post 'leagues/:id/bet/:size'                    => 'leagues#bet',    :as => 'bet'
+
+  get 'leagues/:id/request_bet'             =>  'leagues#request_bet', :as => 'request_bet'
+
+  get 'leagues/:id/deleverage'   => 'leagues#deleverage', :as => 'deleverage'
 end

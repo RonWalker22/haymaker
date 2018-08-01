@@ -25,11 +25,12 @@
               <% @user.leagues.each do |l| %>
                 <% league_user = LeagueUser.find_by(user_id: @user.id,
                                                   league_id: l.id ) %>
-                <% if league_user.status == 'alive' %>
+                <% if league_user.alive%>
                   <tr>
                     <td><%= l.name %></td>
                     <td><%= User.find(l.commissioner_id).name %></td>
-                    <td><%= current_rank(@user, l) %></td>
+                    <td><%= LeagueUser.find_by(league_id: l.id,
+                                                user_id: @user.id).rank %></td>
                   </tr>
                 <% end  %>
               <% end %>
@@ -43,7 +44,7 @@
             </a>
           <% end %>
           <% if current_user.id != @user.id %>
-            <table class="table is-narrow collapse is-fullwidth" id="collapseInvite">
+            <table class="table is-narrow collapse show is-fullwidth" id="collapseInvite">
               <thead>
                 <tr>
                   <th>Name</th>

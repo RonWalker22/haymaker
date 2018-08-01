@@ -38,16 +38,6 @@ class ExchangesController < ApplicationController
     redirect_to "/leagues/#{@league_id}/exchanges/#{@exchange.id}?p=#{@pair}"
   end
 
-  def process_withdrawal
-    if qualifying_transaction?
-      transfer_funds
-      flash[:notice] = 'Your transaction was successfully processed.'
-    else
-      flash[:alert] = 'Your transaction was unsuccessful.'
-    end
-    redirect_to request.original_fullpath
-  end
-
   def delete_custom_order
     @order = current_user.orders.find order_params[:oid]
     if @order

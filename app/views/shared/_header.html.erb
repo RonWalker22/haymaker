@@ -18,6 +18,14 @@
       </div>
       <div class="navbar-end">
         <% if user_signed_in? %>
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a href="#" class=navbar-link>My Leagues</a>
+            <div class="navbar-dropdown is-boxed">
+              <% current_user.leagues.each do |l| %>
+                <%= link_to l.name, league_path(l.id), :class =>"navbar-item" %>
+              <% end %>
+            </div>
+          </div>
           <% if appropriate_environment?('funds') %>
             <div class="navbar-item has-dropdown is-hoverable">
               <a href="#" class=navbar-link>
@@ -31,14 +39,6 @@
               </div>
             </div>
           <% end %>
-          <div class="navbar-item has-dropdown is-hoverable">
-            <a href="#" class=navbar-link>My Leagues</a>
-            <div class="navbar-dropdown is-boxed">
-              <% current_user.leagues.each do |l| %>
-                <%= link_to l.name, league_path(l.id), :class =>"navbar-item" %>
-              <% end %>
-            </div>
-          </div>
           <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link" href="#">
               <%= current_user.name%>

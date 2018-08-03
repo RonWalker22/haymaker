@@ -114,15 +114,16 @@
           <dt><strong>Round Ends:</strong></dt>
           <dd><%= @league.round_end.strftime("%m/%d/%y %I:%M%p").downcase  %> UTC</dd>
         </dl>
-        <button class="button is-rounded" type="button"
+        <button class="button is-rounded is-black" type="button"
                 data-toggle="collapse" data-target="#collapseSettting"
                 aria-expanded="false" aria-controls="collapseSettting">
                 League Settings
         </button>
         <div class="collapse" id="collapseSettting">
         <% if @league.id == 1 %>
-          <%= link_to "Reset Funds", reset_path(league:@league.id),
-                                  class:"button is-danger is-small"%>
+          <button type="button" class="button reset is-danger is-small">
+            Reset Funds
+          </button>
         <% else %>
           <% if @league.start_date.future?  %>
             <%=  link_to "Leave League",
@@ -171,26 +172,26 @@
             <tr>
               <td>
                 <% if @league_attacker.alive%>
-                  <%= link_to "#{@attacker.name} (#{@ffa_results}%)",
+                  <%= link_to @attacker.name,
                               user_path(@attacker.id) %>
                 <% else %>
-                  <%= link_to "#{@attacker.name} (#{@ffa_results}%)",
+                  <%= link_to @attacker.name,
                               user_path(@attacker.id),
                               class: 'ko'%>
                 <% end %>
-                <%= "(#{ff.attacker_performance}%)" unless ff.active%>
+        <%= ff.active ? "(#{@ffa_results}%)" : "(#{ff.attacker_performance}%)"%>
               </td>
               <td>vs.</td>
               <td>
                 <% if @league_defender.alive%>
-                  <%= link_to "#{@defender.name} (#{@ffd_results}%)",
+                  <%= link_to @defender.name,
                               user_path(@defender.id) %>
                 <% else %>
-                  <%= link_to "#{@defender.name} (#{@ffd_results}%)",
+                  <%= link_to @defender.name,
                               user_path(@defender.id),
                               class: 'ko' %>
                 <% end %>
-                <%= "(#{ff.defender_performance}%)" unless ff.active%>
+        <%= ff.active ? "(#{@ffd_results}%)" : "(#{ff.defender_performance}%)"%>
               </td>
               <td><%=ff.round%></td>
             </tr>
@@ -231,12 +232,24 @@
             <% end %>
           </dd>
         </dl>
-        <button class="button is-rounded">
-                <%= link_to 'Deleverage', deleverage_path(@league)%>
+        <button class="button is-rounded is-black deleverage-btn">Deleverage
         </button>
       <% else %>
-        <p class="content"><%= link_to 'Leverage', leverage_path(@league)%> is
+        <p class="content"><%= link_to 'Leverage', leverage_path(@league), target:'blank'%> is
           currently not active.</p>
+            <div class="select">
+              <select name="leverage_size" value="leverage_size" data-currentuser=""
+              class="leverage-size">
+                <% Leverage.all.each do |leverage| %>
+                  <option value="<%= leverage.size%>">
+                    <%= "#{leverage.size}x" %>
+                  </option>
+                <% end %>
+              </select>
+            </div>
+            <button type="button" class="button is-black is-rounded activate">
+              Activate
+            </button>
       <% end %>
     </div>
   </div>
@@ -294,9 +307,7 @@
               <% user = User.find league_user.user_id %>
               <tr>
                 <td>
-                  <% if i == 0%>
-                    1
-                  <% elsif league_user.rank > 0%>
+                  <% if league_user.rank > 0%>
                     <%= league_user.rank %>
                   <% elsif league_user.rank < 0%>
                     <%= "KO'd" %>
@@ -316,11 +327,9 @@
                 <td><%= number_with_delimiter (league_user.points + league_user.leverage_points) %></td>
                 <% unless current_user.id == user.id %>
                   <td>
-                    <% fist_image = image_tag("hm_fist_2.svg", alt:'Fist', class:'fist',
-                      :'data-userid' => user.id) %>
-                    <%= link_to(fist_image, swing_path(@league, user),
-                        confirm: "Are you sure you to engage in a fistfight with #{user.name}?",
-                        method: :post) %>
+                    <%= fist_image = image_tag("hm_fist_2.svg", alt:'Fist', class:'fist',
+                      :'data-userid' => user.id, :'data-username' => user.name,
+                      id:"fist#{i}") %>
                   </td>
                 <% else %>
                   <td></td>
@@ -333,4 +342,26 @@
     <% end %>
     </div>
   </div>
+</div>
+
+
+<div class="modal confirmation-modal">
+  <div class="modal-background"></div>
+  <div class="modal-content">
+    <div class="box">
+      <div class="columns">
+        <div class="column is-narrow">
+          <div class="box">
+            <p class="title is-5">Confirmation</p>
+            <p class="content confirmation-message notice">
+            </p>
+            <%= link_to('Yes', league_path(@league),
+                                        class:'button confirmation-action') %>
+            <button type="button" class="button is-text cancel-fight">No</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="modal-close is-large" aria-label="close"></button>
 </div>

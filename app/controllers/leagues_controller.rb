@@ -95,26 +95,6 @@ class LeaguesController < ApplicationController
     redirect_to league_path(@league)
   end
 
-  def request_reset
-  league = League.find(params[:league])
-    if league.id == 1
-      # flash[:notice] = 'League was successfully updated.'
-      flash[:reset_funds] =
-                  'Are you sure you want to reset your practice league funds?'
-      respond_to do |format|
-        format.html { redirect_to league_path(league.id)}
-        format.json { render :show, status: :ok, location: league }
-      end
-    else
-      respond_to do |format|
-        flash[:notice] = "Funds can only be reset in the practice league."
-        format.html { redirect_to league_path(league.id) }
-        format.json { render json: @league.errors,
-                      status: :unprocessable_entity }
-      end
-    end
-  end
-
   def reset_funds
     league = League.find(1)
     league_user = LeagueUser.find_by league_id: 1, user_id: current_user.id
@@ -216,12 +196,6 @@ class LeaguesController < ApplicationController
       flash[:notice] = "#{@leverage.size}x leverage was unsuccessful."
     end
     redirect_to league_path @league
-  end
-
-  def request_bet
-    @leverage_size = leverage_params[:leverage_size]
-    flash[:bet] = "Are you sure you want to active #{@leverage_size}x leverage?"
-    redirect_to leverage_path @league, size: @leverage_size
   end
 
   def balances

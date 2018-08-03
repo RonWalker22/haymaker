@@ -27,9 +27,7 @@ Rails.application.routes.draw do
   get  '/about'                                    => 'static_pages#about'
   post '/leagues/:id/join'                         => 'leagues#join',
                                                     :as => 'join'
-  get  '/leagues/:id/reset'                        => 'leagues#request_reset',
-                                                    :as => 'reset'
-  post '/leagues/:id/reset'                        => 'leagues#reset_funds'
+  post '/leagues/:id/reset'                          => 'leagues#reset_funds'
   get  'leagues/:id/exchanges/:xid'                => 'exchanges#show',
                                                             :as => 'trade'
   post 'leagues/:id/exchanges/:xid/order'          => 'exchanges#order',
@@ -60,7 +58,5 @@ Rails.application.routes.draw do
 
   post 'leagues/:id/bet/:size'                    => 'leagues#bet',    :as => 'bet'
 
-  get 'leagues/:id/request_bet'             =>  'leagues#request_bet', :as => 'request_bet'
-
-  get 'leagues/:id/deleverage'   => 'leagues#deleverage', :as => 'deleverage'
+  post 'leagues/:id/deleverage'   => 'leagues#deleverage', :as => 'deleverage'
 end

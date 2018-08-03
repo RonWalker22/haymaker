@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180702021858) do
+ActiveRecord::Schema.define(version: 20180802180222) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -146,6 +146,14 @@ ActiveRecord::Schema.define(version: 20180702021858) do
     t.index ["quote_currency_id"], name: "index_orders_on_quote_currency_id"
   end
 
+  create_table "rewards", force: :cascade do |t|
+    t.text "name", null: false
+    t.integer "size", null: false
+    t.boolean "long_term", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "tickers", force: :cascade do |t|
     t.bigint "exchange_id", null: false
     t.decimal "price", default: "0.0", null: false
@@ -172,6 +180,25 @@ ActiveRecord::Schema.define(version: 20180702021858) do
     t.index ["wallet_id"], name: "index_transaction_histories_on_wallet_id"
   end
 
+  create_table "upgrade_types", force: :cascade do |t|
+    t.text "name", null: false
+    t.integer "cost", null: false
+    t.integer "level", null: false
+    t.boolean "burn", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "upgrades", force: :cascade do |t|
+    t.bigint "league_user_id", null: false
+    t.bigint "upgrade_type_id", null: false
+    t.integer "round", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["league_user_id"], name: "index_upgrades_on_league_user_id"
+    t.index ["upgrade_type_id"], name: "index_upgrades_on_upgrade_type_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -184,6 +211,7 @@ ActiveRecord::Schema.define(version: 20180702021858) do
     t.inet "current_sign_in_ip"
     t.inet "last_sign_in_ip"
     t.boolean "admin", default: false
+    t.integer "xp", default: 0
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

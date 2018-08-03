@@ -98,7 +98,7 @@ Wallet.create!( coin_type: 'LTC',
                 league_user_id: 2,
                 public_key: SecureRandom.hex(20)
               )
-          
+
 Leverage.create!(size: 2,   liquidation: 0.331)
 Leverage.create!(size: 3,   liquidation: 0.2472)
 Leverage.create!(size: 5,   liquidation: 0.1632)
@@ -106,3 +106,20 @@ Leverage.create!(size: 10,  liquidation: 0.0867)
 Leverage.create!(size: 25,  liquidation: 0.0338)
 Leverage.create!(size: 50,  liquidation: 0.0147)
 Leverage.create!(size: 100, liquidation: 0.0049)
+
+UpgradeType.create!(name:'Oracle', cost:100, level:2)
+UpgradeType.create!(name:'Block', cost:10, level:1)
+UpgradeType.create!(name:'Bull', cost:10, level:1)
+UpgradeType.create!(name:'Double spend', cost:10, level:1)
+UpgradeType.create!(name:'Encryption', cost:10, level:1)
+UpgradeType.create!(name:'Decryption', cost:10, level:1)
+UpgradeType.create!(name:'Satoshi', cost:1000, level:3, burn:true)
+
+Reward.create!(name:"Champ of the Day", size:10)
+Reward.create!(name:"Champ of the Week", size:70)
+Reward.create!(name:"Champ of the Month", size:300)
+Reward.create!(name:"Champ of the Quarter", size:900)
+Reward.create!(name:"Champ of the Year", size:3600)
+Reward.create!(name:"Round Survivor", size:1, long_term:false)
+Reward.create!(name:"Firefight Champ", size:3, long_term:false)
+Reward.create!(name:"King to the Hill", size:5, long_term:false)

@@ -2,23 +2,6 @@
   <div class="column  is-half is-narrow">
     <div class="box">
       <h2 class="title is-5 center"><%= @league.name %> League Leverage</h2>
-      <%= form_tag(request_bet_path(@league), method: :get) do %>
-        <div class="select">
-          <select name="leverage_size" value="leverage_size">
-            <% Leverage.all.each do |leverage| %>
-              <option value="<%= leverage.size%>">
-                <%= "#{leverage.size}x" %>
-              </option>
-            <% end %>
-          </select>
-        </div>
-        <%= submit_tag("Active Leverage", class: 'button is-black' )%>
-      <% end %>
-      <% if flash[:bet] %>
-        <%= flash[:bet] %>
-        <%= link_to 'Yes', bet_path(@league, params[:size]), class: 'button is-info', method: :post%>
-        <%= link_to 'No', leverage_path(@league), class: 'button is-text'%>
-      <% end %>
     </div>
   </div>
 </div>
@@ -142,7 +125,7 @@
             <% Leverage.all.each do |leverage| %>
               <option data-leverage="<%= leverage.size%>"
                 data-trigger="<%= leverage.liquidation %>">
-                <%= " (#{leverage.size}x)" %>
+                <%= "#{leverage.size}x" %>
               </option>
             <% end %>
           </select>

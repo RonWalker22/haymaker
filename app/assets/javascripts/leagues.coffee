@@ -31,11 +31,12 @@ tryLeverage = ->
   modal_background.addEventListener 'click', ->
     modal.classList.remove "is-active"
 
-  reset.addEventListener 'click', ->
-    confirmation_action.dataset.method = "post"
-    confirmation_meessage.innerText = "Are you sure you want to reset your practice league funds?"
-    confirmation_action.href = "/leagues/1/reset_funds"
-    confirmation_modal.classList.add "is-active"
+  if reset
+    reset.addEventListener 'click', ->
+      confirmation_action.dataset.method = "post"
+      confirmation_meessage.innerText = "Are you sure you want to reset your practice league funds?"
+      confirmation_action.href = "/leagues/1/reset_funds"
+      confirmation_modal.classList.add "is-active"
 
   if activate
     activate.addEventListener 'click', ->

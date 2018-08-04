@@ -51,12 +51,14 @@ end
 
 League.create!( name: 'Second',
                 commissioner_id: 1,
-                balance_revivable: true,
                 start_date: Time.now,
                 end_date: 100.years.from_now,
                 round_end: 1000.years.from_now,
                 round_steps: 1000,
+                rounds: 100,
+                round: 1
               )
+l_user_2 = LeagueUser.create!(user_id: 1, league_id: 2, set_up: true, ready: true)
 ExchangeLeague.create!( exchange_id: 1, league_id: 2)
 2.times do |n|
   LeagueInvite.create!(receiver_id: n + 2, sender_id: n + 1, league_id: 2)
@@ -66,6 +68,13 @@ Wallet.create!( coin_type: 'LTC',
                 total_quantity: 4.8394828,
                 exchange_id: 1,
                 league_user_id: 1,
+                public_key: SecureRandom.hex(20)
+              )
+
+Wallet.create!( coin_type: 'BTC',
+                total_quantity: 4.8394828,
+                exchange_id: 2,
+                league_user_id: l_user_2.id,
                 public_key: SecureRandom.hex(20)
               )
 Wallet.create!( coin_type: 'ADA',
@@ -107,19 +116,19 @@ Leverage.create!(size: 25,  liquidation: 0.0338)
 Leverage.create!(size: 50,  liquidation: 0.0147)
 Leverage.create!(size: 100, liquidation: 0.0049)
 
-UpgradeType.create!(name:'Oracle', cost:100, level:2)
-UpgradeType.create!(name:'Block', cost:10, level:1)
-UpgradeType.create!(name:'Bull', cost:10, level:1)
-UpgradeType.create!(name:'Double spend', cost:10, level:1)
-UpgradeType.create!(name:'Encryption', cost:10, level:1)
-UpgradeType.create!(name:'Decryption', cost:10, level:1)
-UpgradeType.create!(name:'Satoshi', cost:1000, level:3, burn:true)
-
-Reward.create!(name:"Champ of the Day", size:10)
-Reward.create!(name:"Champ of the Week", size:70)
-Reward.create!(name:"Champ of the Month", size:300)
-Reward.create!(name:"Champ of the Quarter", size:900)
-Reward.create!(name:"Champ of the Year", size:3600)
-Reward.create!(name:"Round Survivor", size:1, long_term:false)
-Reward.create!(name:"Firefight Champ", size:3, long_term:false)
-Reward.create!(name:"King to the Hill", size:5, long_term:false)
+# UpgradeType.create!(name:'Oracle', cost:100, level:2)
+# UpgradeType.create!(name:'Block', cost:10, level:1)
+# UpgradeType.create!(name:'Bull', cost:10, level:1)
+# UpgradeType.create!(name:'Double spend', cost:10, level:1)
+# UpgradeType.create!(name:'Encryption', cost:10, level:1)
+# UpgradeType.create!(name:'Decryption', cost:10, level:1)
+# UpgradeType.create!(name:'Satoshi', cost:1000, level:3, burn:true)
+#
+# Reward.create!(name:"Champ of the Day", size:10)
+# Reward.create!(name:"Champ of the Week", size:70)
+# Reward.create!(name:"Champ of the Month", size:300)
+# Reward.create!(name:"Champ of the Quarter", size:900)
+# Reward.create!(name:"Champ of the Year", size:3600)
+# Reward.create!(name:"Round Survivor", size:1, long_term:false)
+# Reward.create!(name:"Firefight Champ", size:3, long_term:false)
+# Reward.create!(name:"King to the Hill", size:5, long_term:false)

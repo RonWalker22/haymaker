@@ -52,7 +52,24 @@ tryLeverage = ->
       confirmation_action.href = "/leagues/1/deleverage"
       confirmation_modal.classList.add "is-active"
 
+tryPassword = ->
+  community_select = document.querySelector('#community_select')
+  password_input = document.querySelector('#league_password')
+
+  community_select.addEventListener 'change', ->
+    if community_select.value == 'Public'
+      console.log 'hi'
+      password_input.setAttribute 'disabled', true
+      password_input.removeAttribute "required"
+    if community_select.value == 'Private'
+      console.log 'hi'
+      password_input.removeAttribute "disabled"
+      password_input.setAttribute 'required', true
+
 document.addEventListener 'turbolinks:load', ->
   body = document.querySelector("body")
   if body.className == "leagues_show"
     tryLeverage()
+
+  else if body.className == "leagues_new"
+    tryPassword()

@@ -14,7 +14,7 @@ class CreateWallets < ActiveRecord::Migration[5.1]
                   null: false
       t.string :public_key, null: false
       t.references :league_user
-      t.references :exchange
+      t.references :exchange, default: 1
       t.timestamps
     end
     add_index :wallets,

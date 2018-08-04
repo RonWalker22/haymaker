@@ -28,9 +28,18 @@ class LeaguesController < ApplicationController
   # POST /leagues
   # POST /leagues.json
   def create
+    league_params
     puts ">>>>>-------->>>>#{params}"
-    @league = League.new(league_params.slice(:name, :commissioner_id,
-                                              :start_date, :end_date))
+    @league = League.new( name: league_params[:name],
+                          commissioner_id: league_params[:commissioner_id].to_i,
+                          start_date: league_params[:start_date].to_date,
+                          end_date: league_params[:start_date].to_date + params[:duration].to_i.days,
+                          round_end: league_params[:start_date].to_date + 1.day,
+                          round_steps: 3,
+                          rounds: 12,
+                          private: params[:community].downcase == 'private',
+                          mode:  params[:game_mode]
+                         )
     respond_to do |format|
       if @league.save
         ExchangeLeague.create! league_id: @league.id, exchange_id: 1
@@ -39,7 +48,6 @@ class LeaguesController < ApplicationController
                                   user_id:current_user.id})
         create_btc_wallets
         create_set_up_balance
-        EndGameJob.set(wait_until: @league.end_date).perform_later(@league)
         format.html { redirect_to @league }
         format.json { render :show, status: :created, location: @league }
       else
@@ -102,9 +110,9 @@ class LeaguesController < ApplicationController
 
     wallets.each do |wallet|
       if wallet.coin_type == 'BTC'
-        wallet.update_attributes coin_quantity: league.starting_balance
+        wallet.update_attributes total_quantity: league.starting_balance
       else
-        wallet.update_attributes coin_quantity: 0
+        wallet.update_attributes total_quantity: 0
       end
       flash[:notice] = 'Funds in Practice League have been reset.'
     end
@@ -237,8 +245,7 @@ class LeaguesController < ApplicationController
     def league_params
       params.require(:league).permit(:name, :entry_fee, :commissioner,
         :start_date, :user_id, :commissioner_id, :end_date, :rounds,
-        :exchange_fees, :public_keys, :"Binance Exchange", :"Poloniex Exchange",
-        :"Bitfinex Exchange", :"GDAX Exchange", :exchange_starter)
+        :public_keys, :password, :game_mode, :community, :duration)
     end
 
     def setup_params
@@ -261,7 +268,7 @@ class LeaguesController < ApplicationController
       league_user = @league_user || @new_league_user
       wallet = Wallet.find_by(league_user_id: league_user.id,
                               coin_type: 'BTC')
-      wallet.coin_quantity = @league.starting_balance
+      wallet.total_quantity = @league.starting_balance
 
       if wallet.save
         league_user.update_attributes set_up: true, ready: true
@@ -273,7 +280,7 @@ class LeaguesController < ApplicationController
       Wallet.create!(league_user_id: league_user.id,
                       exchange_id: 1,
                       coin_type: 'BTC',
-                      coin_quantity: 0.00,
+                      total_quantity: 0.00,
                       public_key: SecureRandom.hex(20)
                       )
     end

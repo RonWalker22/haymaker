@@ -16,6 +16,17 @@
   </div>
 
   <div class="field">
+    <%= form.label :game_mode, class: "label" %>
+    <div class="control">
+      <div class="select is-small">
+        <select name="game_mode" >
+          <%= options_for_select(['Swing', 'Bare Knuckle'])%>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="field">
     <%= form.label :name, class: "label" %>
     <div class="control">
       <%= form.text_field :name, id: :league_name, class: "input is-small", required: true %>
@@ -23,24 +34,43 @@
   </div>
 
   <div class="field">
-    <%= form.label :community, class: "label" %>
+    <%= form.label :entry_fee, class: "label" %>
     <div class="control">
       <div class="select is-small">
-        <select disabled=true>
-          <%= options_for_select(['Public', 1], ['Private', 2])%>
+        <select class="" name="entry_fee" disabled=true>
+          <%= options_for_select(['Free', 1], ['Paid', 2])%>
         </select>
       </div>
     </div>
   </div>
 
   <div class="field">
-    <%= form.label :entry_fee, class: "label" %>
+    <%= form.label :prize, class: "label" %>
     <div class="control">
       <div class="select is-small">
-        <select class="" name="" disabled=true>
-          <%= options_for_select(['Free', 1], ['Paid', 2])%>
+        <select class="" name="prize" disabled=true>
+          <%= options_for_select(['Bragging Rights', 1], ['XP', 2])%>
         </select>
       </div>
+    </div>
+  </div>
+
+  <div class="field">
+    <%= form.label :community, class: "label" %>
+    <div class="control">
+      <div class="select is-small">
+        <select name="community", id="community_select">
+          <%= options_for_select(['Public', 'Private'])%>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="field">
+    <%= form.label :password, class: "label" %>
+    <div class="control">
+      <%= form.text_field :password, id: :league_password,
+                          class: "input is-small", disabled:true%>
     </div>
   </div>
 
@@ -54,24 +84,36 @@
   <div class="field">
     <div class="control">
       <%= form.label :start_date, class: "label"%>
-      <%= form.date_field :start_date, id: :league_start_date,
+      <%= form.date_field :start_date, id: :league_start_date, min: Date.today,
       class:"input"%>
     </div>
   </div>
 
   <div class="field">
     <div class="control">
-      <%= form.label :end_date, class: "label" %>
-      <%= form.date_field :end_date, id: :league_end_date,
-      class:"input"%>
+      <%= form.label :duration, class: "label" %>
+      <div class="select is-small">
+        <select class="" name="duration">
+          <option value="1">1 Day</option>
+          <option value="7">7 Days</option>
+          <option value="14">14 Days</option>
+          <option value="30">30 Days</option>
+          <option value="90">90 Days</option>
+          <option value="365">365 Days</option>
+        </select>
+      </div>
     </div>
   </div>
 
   <div class="field">
     <div class="control">
-      <%= form.label :rounds, class: "label" %>
-      <%= form.number_field :rounds, id: :league_rounds, class:"input is-small",
-      disabled: true%>
+      <%= form.label :Late_Joiners, class: "label" %>
+      <div class="select is-small">
+        <select class="" name="">
+          <option value="1">Disallow</option>
+          <option value="7">Allow</option>
+        </select>
+      </div>
     </div>
   </div>
 

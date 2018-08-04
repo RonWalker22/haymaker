@@ -73,7 +73,7 @@ Wallet.create!( coin_type: 'LTC',
 
 Wallet.create!( coin_type: 'BTC',
                 total_quantity: 4.8394828,
-                exchange_id: 2,
+                exchange_id: 1,
                 league_user_id: l_user_2.id,
                 public_key: SecureRandom.hex(20)
               )

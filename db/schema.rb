@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 20180702021858) do
   end
 
   create_table "exchange_leagues", force: :cascade do |t|
-    t.bigint "exchange_id", null: false
+    t.bigint "exchange_id", default: 1, null: false
     t.bigint "league_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -104,10 +104,10 @@ ActiveRecord::Schema.define(version: 20180702021858) do
     t.string "entry_fee", default: "FREE", null: false
     t.string "prize", default: "Bragging Rights", null: false
     t.decimal "starting_balance", default: "1.0", null: false
-    t.string "starting_exchange", default: "any", null: false
     t.boolean "balance_revivable", default: false, null: false
-    t.boolean "exchange_fees", default: true, null: false
-    t.boolean "exchange_risk", default: true, null: false
+    t.boolean "private", default: false, null: false
+    t.string "password", default: "pass", null: false
+    t.string "mode", default: "Swing", null: false
     t.bigint "commissioner_id", null: false
     t.datetime "start_date", null: false
     t.datetime "end_date", null: false
@@ -198,7 +198,7 @@ ActiveRecord::Schema.define(version: 20180702021858) do
     t.decimal "reserve_quantity", precision: 1000, scale: 8, default: "0.0", null: false
     t.string "public_key", null: false
     t.bigint "league_user_id"
-    t.bigint "exchange_id"
+    t.bigint "exchange_id", default: 1
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["coin_type", "exchange_id", "league_user_id"], name: "unique_wallet", unique: true

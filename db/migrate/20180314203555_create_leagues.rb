@@ -5,10 +5,10 @@ class CreateLeagues < ActiveRecord::Migration[5.1]
       t.string :entry_fee,          default: 'FREE',            null: false
       t.string :prize,              default: 'Bragging Rights', null: false
       t.decimal :starting_balance,  default: 1.0,               null: false
-      t.string :starting_exchange,  default: 'any',             null: false
       t.boolean :balance_revivable, default: false,             null: false
-      t.boolean :exchange_fees,     default: true,              null: false
-      t.boolean :exchange_risk,     default: true,              null: false
+      t.boolean :private,           default: false,             null: false
+      t.string  :password,          default: 'pass',            null: false
+      t.string  :mode,              default: 'Swing',           null: false
       t.references :commissioner,
                     index: true,
                     foreign_key: {to_table: :users},

@@ -126,24 +126,13 @@ class LeaguesController < ApplicationController
     redirect_to league_path(@league)
   end
 
-  def request_leave
-    flash[:request_leave] =
-                "Are you sure you want to leave the #{@league.name} league?"
-    respond_to do |format|
-      format.html { redirect_to league_path(@league.id)}
-      format.json { render :show, status: :ok, location: league }
-    end
-  end
-
   def leave
     if @league.start_date.past?
-      flash[:notice] = "You are unable leave a league which has already started.
-                        Ask for mercy instead."
+      flash[:notice] = "You are unable to leave a league which has already started."
       return redirect_to league_url(@league)
     end
-    league_user = LeagueUser.find_by(league_id: params[:id],
-                                      user_id: params[:pid])
-    if league_user.destroy
+
+    if @league_user.destroy
       flash[:notice] = "You have left the #{@league.name} league."
     end
     redirect_to leagues_path

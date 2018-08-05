@@ -44,8 +44,6 @@ Rails.application.routes.draw do
 
   delete 'leagues/:id/players/:pid'                => 'leagues#leave',
                                                     :as => 'leave'
-  get 'leagues/:id/request_leave'                 => 'leagues#request_leave',
-                                                    :as => 'request_leave'
   post 'league_invites/:id/:sid/:rid/create'      => 'league_invites#create',
                                                    :as => 'send_league_invite'
   post 'league_invites/:lid/decline'              => 'league_invites#decline',

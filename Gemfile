@@ -90,3 +90,5 @@ gem 'bootstrap'
 gem 'sidekiq-scheduler'
 
 gem 'kaminari'
+
+gem 'local_time'

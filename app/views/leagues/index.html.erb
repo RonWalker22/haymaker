@@ -15,7 +15,7 @@
             <tr>
               <th>Name</th>
               <th>Commissioner</th>
-              <th>Entry fee</th>
+              <th>Game Mode</th>
               <th>Start date</th>
               <th>Rounds</th>
             </tr>
@@ -24,7 +24,7 @@
             <tr>
               <th>Name</th>
               <th>Commissioner</th>
-              <th>Entry fee</th>
+              <th>Game Mode</th>
               <th>Start date</th>
               <th>Rounds</th>
             </tr>
@@ -41,7 +41,7 @@
                     <%= link_to User.find(league.commissioner_id).name,
                                 user_path(User.find(league.commissioner_id).id)%>
                 </td>
-                <td><%= league.entry_fee %></td>
+                <td><%= league.mode %></td>
                 <td>
                   <%= league.start_date.strftime("%m/%d/%y %I:%M%p").downcase %>
                 </td>

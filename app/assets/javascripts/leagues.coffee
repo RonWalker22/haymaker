@@ -11,6 +11,7 @@ tryLeverage = ->
   activate               = document.querySelector    ".activate"
   reset                  = document.querySelector    ".reset"
   deleverage_btn         = document.querySelector    ".deleverage-btn"
+  leave_btn              = document.querySelector    "#leave-btn"
 
   for punch in punches
     punch.addEventListener 'click', ->
@@ -36,6 +37,13 @@ tryLeverage = ->
       confirmation_action.dataset.method = "post"
       confirmation_meessage.innerText = "Are you sure you want to reset your practice league funds?"
       confirmation_action.href = "/leagues/1/reset_funds"
+      confirmation_modal.classList.add "is-active"
+
+  if leave_btn
+    leave_btn.addEventListener 'click', ->
+      confirmation_action.dataset.method = "delete"
+      confirmation_meessage.innerText = "Are you sure you want to leave this league?"
+      confirmation_action.href = "/leagues/1/players/1"
       confirmation_modal.classList.add "is-active"
 
   if activate

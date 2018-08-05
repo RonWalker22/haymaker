@@ -1,98 +1,124 @@
-<% unless @league_user.alive %>
-<section class="hero is-small is-warning">
-  <div class="hero-body">
-    <div class="container">
-      <h1 class="title">
-        Game Over
-      </h1>
-      <h2 class="subtitle">
-        You have been knocked out of this league.
-      </h2>
-    </div>
-  </div>
-</section>
-<% end %>
-
 <% if @league_user.champ %>
-<section class="hero is-small is-info">
-  <div class="hero-body">
-    <div class="container">
-      <h1 class="title">
-        Game Over
-      </h1>
-      <h2 class="subtitle">
-        Congratulations! You are the <%= @league.name %> League Champion.
+  <section class="hero is-small is-info">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
+          Game Over
+        </h1>
+        <h2 class="subtitle">
+          Congratulations! You are the <%= @league.name %> League Champion.
+      </div>
+    </div>
+  </section>
+<% elsif !@league_user.alive%>
+  <section class="hero is-small is-warning">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
+          Game Over
+        </h1>
+        <h2 class="subtitle">
+          You have been knocked out of <%= @league.name %> league.
+        </h2>
+      </div>
+    </div>
+  </section>
+<% elsif !@league.active %>
+  <section class="hero is-small is-black">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
+          Game Over
+        </h1>
+        <h2 class="subtitle">
+          <p>League play has concluded.
+          </p>
+        </h2>
+      </div>
+    </div>
+  </section>
+<% elsif @league.start_date.future?%>
+  <section class="hero is-small is-black">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
+          League Locked
+        </h1>
+        <h2 class="subtitle">
+          <p><%= @league.name %> league is currently accpeting new players and will begin on
+            <%= local_time @league.start_date, format: '%b %e, %Y %l:%M%P'%>
+          </p>
+        </h2>
+      </div>
+    </div>
+  </section>
+<% end %>
+
+<% if @league.start_date.past?%>
+  <div class="columns is-centered is-desktop">
+    <div class="column">
+      <div class="box">
+        <h2 class="title is-3 center"><%= @league.name %> League</h2>
+        <nav class="level is-mobile">
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">Rank</p>
+              <p class="title">
+                <% if @league_user.rank > 0%>
+                  <%= @league_user.rank %>
+                <% elsif @league_user.rank < 0%>
+                  <%= "KO'd" %>
+                <% else%>
+                  <%= "Unranked" %>
+                <% end %>
+              </p>
+            </div>
+          </div>
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">Score</p>
+              <p class="title">
+              <%= number_with_delimiter portfolio_value(@league_user) + @league_user.leverage_points%>
+            </p>
+            </div>
+          </div>
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">Portfolio</p>
+              <p class="title">
+                <%= number_to_currency (portfolio_value @league_user)%>
+              </p>
+            </div>
+          </div>
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">Net Bonus</p>
+              <p class="title">
+                <%= number_with_delimiter @league_user.leverage_points %>
+              </p>
+            </div>
+          </div>
+        </nav>
+        <% if @league.start_date.past? && @league.end_date.future? %>
+            <% @league.exchanges.each do |x|%>
+              <%= link_to "Trade @ #{x.name}X", trade_path(@league.id, x.id, p:
+              'ETH-BTC'), class:"button is-medium trade-btn is-fullwidth",
+              data: { turbolinks: false }%>
+            <% end %>
+        <% end %>
+      </div>
     </div>
   </div>
-</section>
 <% end %>
 
 <div class="columns is-centered is-desktop">
-  <div class="column">
-    <div class="box">
-      <h2 class="title is-3 center"><%= @league.name %> League</h2>
-      <nav class="level is-mobile">
-        <div class="level-item has-text-centered">
-          <div>
-            <p class="heading">Rank</p>
-            <p class="title">
-              <% if @league_user.rank > 0%>
-                <%= @league_user.rank %>
-              <% elsif @league_user.rank < 0%>
-                <%= "KO'd" %>
-              <% else%>
-                <%= "Unranked" %>
-              <% end %>
-            </p>
-          </div>
-        </div>
-        <div class="level-item has-text-centered">
-          <div>
-            <p class="heading">Score</p>
-            <p class="title">
-            <%= number_with_delimiter portfolio_value(@league_user) + @league_user.leverage_points%>
-          </p>
-          </div>
-        </div>
-        <div class="level-item has-text-centered">
-          <div>
-            <p class="heading">Portfolio</p>
-            <p class="title">
-              <%= number_to_currency (portfolio_value @league_user)%>
-            </p>
-          </div>
-        </div>
-        <div class="level-item has-text-centered">
-          <div>
-            <p class="heading">Net Bonus</p>
-            <p class="title">
-              <%= number_with_delimiter @league_user.leverage_points %>
-            </p>
-          </div>
-        </div>
-      </nav>
-
-      <% if @league.start_date.future? %>
-        <p>Trading options will open here on
-          <%= @league.start_date.strftime("%m/%d/%y %I:%M%p").downcase %> UTC
-        </p>
-      <% elsif @league.end_date.past?%>
-      <p>The trading window has closed.</p>
-      <% end %>
-
-      <% if @league_user.set_up? && @league.start_date.past? && @league.end_date.future? %>
-          <% @league.exchanges.each do |x|%>
-            <%= link_to "Trade @ #{x.name}X", trade_path(@league.id, x.id, p:
-            'ETH-BTC'), class:"button is-medium trade-btn is-fullwidth",
-            data: { turbolinks: false }%>
-          <% end %>
-      <% end %>
-    </div>
-  </div>
-</div>
-
-<div class="columns is-centered is-desktop">
+  <% if !@league.active %>
+  <div class="column is-4">
+  <% elsif @league.start_date.past? %>
   <div class="column is-narrow">
+  <% else %>
+  <div class="column is-8">
+  <% end %>
     <div class="box">
       <h2 class="title is-5 center">League Info</h2>
       <p class="content">
@@ -106,13 +132,19 @@
           <dt><strong>Player Count:</strong></dt>
           <dd><%= @league.users.count %>
           <dt><strong>Start date:</strong></dt>
-          <dd><%= @league.start_date.strftime("%m/%d/%y %I:%M%p").downcase  %> UTC</dd>
+          <dd>
+            <%= local_time @league.start_date, format: '%b %e, %Y %l:%M%P'  %>
+          </dd>
           <dt><strong>End date:</strong></dt>
-          <dd><%= @league.end_date.strftime("%m/%d/%y %I:%M%p").downcase  %> UTC</dd>
+          <dd>
+            <%= local_time @league.end_date, format: '%b %e, %Y %l:%M%P'  %>
+          </dd>
           <dt><strong>Round:</strong></dt>
           <dd><%= @league.round %> of <%= @league.rounds %></dd>
           <dt><strong>Round Ends:</strong></dt>
-          <dd><%= @league.round_end.strftime("%m/%d/%y %I:%M%p").downcase  %> UTC</dd>
+          <dd>
+              <%= local_time @league.round_end, format: '%b %e, %Y %l:%M%P'  %>
+          </dd>
         </dl>
         <button class="button is-rounded is-black" type="button"
                 data-toggle="collapse" data-target="#collapseSettting"
@@ -126,133 +158,143 @@
           </button>
         <% else %>
           <% if @league.start_date.future?  %>
-            <%=  link_to "Leave League",
-                          request_leave_path(@league),
-                          class:"button is-danger is-small"%>
+            <button type="button" name="button" id="leave-btn"
+            class="button is-danger is-small">
+              Leave League
+            </button>
           <% end %>
         <% end %>
         </div>
       </p>
     </div>
   </div>
-  <div class="column is-narrow-desktop">
-    <div class="box">
-      <h2 class="title is-5 -title center">Fistfights</h2>
-      <table class="table is-striped">
-        <thead>
-          <tr>
-            <th>Attacker</th>
-            <th></th>
-            <th>Defender</th>
-            <th>Round</th>
-          </tr>
-        </thead>
-        <tbody>
-          <%  fistfights = @league.fistfights.order(id: :desc).page params[:page] %>
-          <%  fistfights.each do |ff| %>
-            <% @ffa_results = nil %>
-            <% @attacker = nil %>
-            <% @league_attacker = nil %>
-            <% @ffd_results = nil %>
-            <% @defender = nil %>
-            <% @league_defender = nil %>
-            <% users_performance.each do |hash| %>
-                <% if ff.attacker.user_id == hash[:id] %>
-                  <% @ffa_results = hash[:fistfight] %>
-                  <% @attacker = hash[:user] %>
-                  <% @league_attacker = hash[:league_user]  %>
-                <% end %>
-                <% if ff.defender.user_id == hash[:id] %>
-                  <% @ffd_results = hash[:fistfight] %>
-                  <% @defender = hash[:user] %>
-                  <% @league_defender = hash[:league_user] %>
-                <% end %>
-                <% break if @ffa_results && @ffd_results %>
-            <% end %>
+
+  <% if @league.start_date.past?%>
+    <% if !@league.active%>
+      <div class="column is-4">
+    <% else %>
+      <div class="column is-narrow-desktop">
+    <% end %>
+      <div class="box">
+        <h2 class="title is-5 -title center">Fistfights</h2>
+        <table class="table is-striped">
+          <thead>
             <tr>
-              <td>
-                <% if @league_attacker.alive%>
-                  <%= link_to @attacker.name,
-                              user_path(@attacker.id) %>
-                <% else %>
-                  <%= link_to @attacker.name,
-                              user_path(@attacker.id),
-                              class: 'ko'%>
-                <% end %>
-        <%= ff.active ? "(#{@ffa_results}%)" : "(#{ff.attacker_performance}%)"%>
-              </td>
-              <td>vs.</td>
-              <td>
-                <% if @league_defender.alive%>
-                  <%= link_to @defender.name,
-                              user_path(@defender.id) %>
-                <% else %>
-                  <%= link_to @defender.name,
-                              user_path(@defender.id),
-                              class: 'ko' %>
-                <% end %>
-        <%= ff.active ? "(#{@ffd_results}%)" : "(#{ff.defender_performance}%)"%>
-              </td>
-              <td><%=ff.round%></td>
+              <th>Attacker</th>
+              <th></th>
+              <th>Defender</th>
+              <th>Round</th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
-      <%= paginate fistfights %>
-
-      <%if @league.fistfights.count == 0  %>
-        <p class="content">
-            There are no past or active Fistfights.
-        </p>
-      <% end %>
-    </div>
-  </div>
-  <div class="column is-narrow">
-    <div class="box">
-      <h2 class="title is-5 -title center">Leverage</h2>
-
-      <% bets = @league_user.bets.where active: true %>
-      <% if bets.count >= 1 %>
-        <% leverage = Leverage.find @league_user.bets.last.leverage_id %>
-        <dl>
-          <dt><strong>Size:</strong></dt>
-          <dd><%= leverage.size %>x</dd>
-          <dt><strong>Baseline:</strong></dt>
-          <dd><%= number_to_currency @league_user.bets.last.baseline%></dd>
-          <dt><strong>Liquidation trigger: </strong></dt>
-          <dd></strong><%= number_to_currency @league_user.bets.last.liquidation %></dd>
-          <dt><strong>Current Results:</strong></dt>
-          <dd>
-            <% net_bonus = (portfolio_value(@league_user, @league,@btc_price) - @league_user.bets.last.baseline) * (leverage.size - 1 ) %>
-            <%=number_with_delimiter net_bonus.abs%>
-            <% if net_bonus >= 0%>
-              Bonus
-            <% else %>
-              Penalty
+          </thead>
+          <tbody>
+            <%  fistfights = @league.fistfights.order(id: :desc).page params[:page] %>
+            <%  fistfights.each do |ff| %>
+              <% @ffa_results = nil %>
+              <% @attacker = nil %>
+              <% @league_attacker = nil %>
+              <% @ffd_results = nil %>
+              <% @defender = nil %>
+              <% @league_defender = nil %>
+              <% users_performance.each do |hash| %>
+                  <% if ff.attacker.user_id == hash[:id] %>
+                    <% @ffa_results = hash[:fistfight] %>
+                    <% @attacker = hash[:user] %>
+                    <% @league_attacker = hash[:league_user]  %>
+                  <% end %>
+                  <% if ff.defender.user_id == hash[:id] %>
+                    <% @ffd_results = hash[:fistfight] %>
+                    <% @defender = hash[:user] %>
+                    <% @league_defender = hash[:league_user] %>
+                  <% end %>
+                  <% break if @ffa_results && @ffd_results %>
+              <% end %>
+              <tr>
+                <td>
+                  <% if @league_attacker.alive%>
+                    <%= link_to @attacker.name,
+                                user_path(@attacker.id) %>
+                  <% else %>
+                    <%= link_to @attacker.name,
+                                user_path(@attacker.id),
+                                class: 'ko'%>
+                  <% end %>
+          <%= ff.active ? "(#{@ffa_results}%)" : "(#{ff.attacker_performance}%)"%>
+                </td>
+                <td>vs.</td>
+                <td>
+                  <% if @league_defender.alive%>
+                    <%= link_to @defender.name,
+                                user_path(@defender.id) %>
+                  <% else %>
+                    <%= link_to @defender.name,
+                                user_path(@defender.id),
+                                class: 'ko' %>
+                  <% end %>
+          <%= ff.active ? "(#{@ffd_results}%)" : "(#{ff.defender_performance}%)"%>
+                </td>
+                <td><%=ff.round%></td>
+              </tr>
             <% end %>
-          </dd>
-        </dl>
-        <button class="button is-rounded is-black deleverage-btn">Deleverage
-        </button>
-      <% else %>
-        <p class="content"><%= link_to 'Leverage', leverage_path(@league), target:'blank'%> is
-          currently not active.</p>
-            <div class="select">
-              <select name="leverage_size" value="leverage_size" data-currentuser=""
-              class="leverage-size">
-                <% Leverage.all.each do |leverage| %>
-                  <option value="<%= leverage.size%>">
-                    <%= "#{leverage.size}x" %>
-                  </option>
-                <% end %>
-              </select>
-            </div>
-            <button type="button" class="button is-black is-rounded activate">
-              Activate
-            </button>
-      <% end %>
+          </tbody>
+        </table>
+        <%= paginate fistfights %>
+
+        <%if @league.fistfights.count == 0  %>
+          <p class="content">
+              There are no past or active Fistfights.
+          </p>
+        <% end %>
+      </div>
     </div>
-  </div>
+  <% end %>
+  <% if @league.start_date.past? && @league.active %>
+    <div class="column is-narrow">
+      <div class="box">
+        <h2 class="title is-5 -title center">Leverage</h2>
+
+        <% bets = @league_user.bets.where active: true %>
+        <% if bets.count >= 1 %>
+          <% leverage = Leverage.find @league_user.bets.last.leverage_id %>
+          <dl>
+            <dt><strong>Size:</strong></dt>
+            <dd><%= leverage.size %>x</dd>
+            <dt><strong>Baseline:</strong></dt>
+            <dd><%= number_to_currency @league_user.bets.last.baseline%></dd>
+            <dt><strong>Liquidation trigger: </strong></dt>
+            <dd></strong><%= number_to_currency @league_user.bets.last.liquidation %></dd>
+            <dt><strong>Current Results:</strong></dt>
+            <dd>
+              <% net_bonus = (portfolio_value(@league_user, @league,@btc_price) - @league_user.bets.last.baseline) * (leverage.size - 1 ) %>
+              <%=number_with_delimiter net_bonus.abs%>
+              <% if net_bonus >= 0%>
+                Bonus
+              <% else %>
+                Penalty
+              <% end %>
+            </dd>
+          </dl>
+          <button class="button is-rounded is-black deleverage-btn">Deleverage
+          </button>
+        <% else %>
+          <p class="content"><%= link_to 'Leverage', leverage_path(@league), target:'blank'%> is
+            currently not active.</p>
+              <div class="select">
+                <select name="leverage_size" value="leverage_size" data-currentuser=""
+                class="leverage-size">
+                  <% Leverage.all.each do |leverage| %>
+                    <option value="<%= leverage.size%>">
+                      <%= "#{leverage.size}x" %>
+                    </option>
+                  <% end %>
+                </select>
+              </div>
+              <button type="button" class="button is-black is-rounded activate">
+                Activate
+              </button>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 </div>
 
 
@@ -283,66 +325,66 @@
   </div>
   <% end %>
 
-<div class="columns is-centered is-tablet">
-  <div class="column is-8">
-    <div class="box">
-      <h2 class="title is-5 center center">Leaderboards</h2>
-      <% if @league.start_date.past?%>
-        <table class="table is-striped is-fullwidth">
-          <thead>
-            <th>Rank</th>
-            <th>Player</th>
-            <th>Score</th>
-            <th>Swing</th>
-          </thead>
-          <tfoot>
-            <th>Rank</th>
-            <th>Player</th>
-            <th>Score</th>
-            <th>Swing</th>
-          </tfoot>
-          <tbody>
-            <% league_users = LeagueUser.where(alive:true, league_id: @league.id).order(:rank).page params[:leaderboards] %>
-            <% league_users.each_with_index do |league_user, i| %>
-              <% user = User.find league_user.user_id %>
-              <tr>
-                <td>
-                  <% if league_user.rank > 0%>
-                    <%= league_user.rank %>
-                  <% elsif league_user.rank < 0%>
-                    <%= "KO'd" %>
-                  <% else%>
-                    <%= "Unranked" %>
-                  <% end %>
-                </td>
-                <td>
-                  <% if league_user.alive %>
-                    <%= link_to(user.name, user_path(user.id)) %>
-                  <% else %>
-                    <%= link_to(user.name, user_path(user.id),
-                                                class: 'ko') %>
-                  <% end %>
-
-                </td>
-                <td><%= number_with_delimiter (league_user.points + league_user.leverage_points) %></td>
-                <% unless current_user.id == user.id %>
+<% if @league.start_date.past?%>
+  <div class="columns is-centered is-tablet">
+    <div class="column is-8">
+      <div class="box">
+        <h2 class="title is-5 center center">Leaderboards</h2>
+          <table class="table is-striped is-fullwidth">
+            <thead>
+              <th>Rank</th>
+              <th>Player</th>
+              <th>Score</th>
+              <th>Swing</th>
+            </thead>
+            <tfoot>
+              <th>Rank</th>
+              <th>Player</th>
+              <th>Score</th>
+              <th>Swing</th>
+            </tfoot>
+            <tbody>
+              <% league_users = LeagueUser.where(alive:true, league_id: @league.id).order(:rank).page params[:leaderboards] %>
+              <% league_users.each_with_index do |league_user, i| %>
+                <% user = User.find league_user.user_id %>
+                <tr>
                   <td>
-                    <%= fist_image = image_tag("hm_fist_2.svg", alt:'Fist', class:'fist',
-                      :'data-userid' => user.id, :'data-username' => user.name,
-                      id:"fist#{i}") %>
+                    <% if league_user.rank > 0%>
+                      <%= league_user.rank %>
+                    <% elsif league_user.rank < 0%>
+                      <%= "KO'd" %>
+                    <% else%>
+                      <%= "Unranked" %>
+                    <% end %>
                   </td>
-                <% else %>
-                  <td></td>
-                <% end %>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-        <%= paginate league_users, :param_name => "leaderboards" %>
-    <% end %>
+                  <td>
+                    <% if league_user.alive %>
+                      <%= link_to(user.name, user_path(user.id)) %>
+                    <% else %>
+                      <%= link_to(user.name, user_path(user.id),
+                                                  class: 'ko') %>
+                    <% end %>
+
+                  </td>
+                  <td><%= number_with_delimiter (league_user.points + league_user.leverage_points) %></td>
+                  <% unless current_user.id == user.id %>
+                    <td>
+                      <%= fist_image = image_tag("hm_fist_2.svg", alt:'Fist', class:'fist',
+                        :'data-userid' => user.id, :'data-username' => user.name,
+                        id:"fist#{i}") %>
+                    </td>
+                  <% else %>
+                    <td></td>
+                  <% end %>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <%= paginate league_users, :param_name => "leaderboards" %>
+      </div>
     </div>
   </div>
-</div>
+<% end %>
 
 
 <div class="modal confirmation-modal">

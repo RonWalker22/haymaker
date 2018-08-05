@@ -26,10 +26,15 @@
     </div>
   </div>
 
-  <div class="field">
-    <%= form.label :name, class: "label" %>
+  <%= form.label :name, class: "label" %>
+  <div class="field has-addons">
     <div class="control">
       <%= form.text_field :name, id: :league_name, class: "input is-small", required: true %>
+    </div>
+    <div class="control">
+      <a class="button is-static is-small">
+        League
+      </a>
     </div>
   </div>
 
@@ -85,7 +90,7 @@
     <div class="control">
       <%= form.label :start_date, class: "label"%>
       <%= form.date_field :start_date, id: :league_start_date, min: Date.today,
-      class:"input"%>
+      prompt: {hour: true}, class:"input"%>
     </div>
   </div>
 

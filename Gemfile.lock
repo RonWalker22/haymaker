@@ -125,6 +125,7 @@ GEM
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
       ruby_dep (~> 1.2)
+    local_time (2.0.1)
     loofah (2.2.2)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -276,6 +277,7 @@ DEPENDENCIES
   jquery-rails
   kaminari
   listen (>= 3.0.5, < 3.2)
+  local_time
   minitest (~> 5.10.3)
   minitest-reporters
   pg (~> 0.18)

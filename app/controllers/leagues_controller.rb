@@ -38,7 +38,8 @@ class LeaguesController < ApplicationController
                           round_steps: 3,
                           rounds: 12,
                           private: params[:community].downcase == 'private',
-                          mode:  params[:game_mode]
+                          mode:  params[:game_mode],
+                          password: league_params[:password]
                          )
     respond_to do |format|
       if @league.save
@@ -89,14 +90,20 @@ class LeaguesController < ApplicationController
     if @league.start_date.past?
       flash[:notice] = "This league is no longer accepting new players."
       return redirect_to leagues_url
+    elsif @league.private?
+      unless password_param[:password].downcase == @league.password.downcase
+        flash[:alert] = "That password is incorrect."
+        return redirect_to leagues_url
+      end
     end
+
     @new_league_user = LeagueUser.new({user_id:current_user.id,
                       league_id: @league.id})
     if @new_league_user.save
       accpet_league_invite
       create_btc_wallets
       create_set_up_balance
-      flash[:notice] = 'You have successfully joined this league.'
+      flash[:notice] = "You have successfully joined the #{@league.name} league."
     else
       flash[:notice] = 'You have aleady joined this league.'
     end
@@ -239,6 +246,10 @@ class LeaguesController < ApplicationController
 
     def setup_params
       params.permit(:exchange_starter, :league)
+    end
+
+    def password_param
+      params.permit(:password)
     end
 
     def setup_swing_params

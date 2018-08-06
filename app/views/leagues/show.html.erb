@@ -23,7 +23,7 @@
       </div>
     </div>
   </section>
-<% elsif !@league.active %>
+<% elsif !@league.active? %>
   <section class="hero is-small is-black">
     <div class="hero-body">
       <div class="container">
@@ -58,7 +58,9 @@
   <div class="columns is-centered is-desktop">
     <div class="column">
       <div class="box">
-        <h2 class="title is-3 center"><%= @league.name %> League</h2>
+        <h2 class="title is-3 center">
+          <%= @league.name %> League
+        </h2>
         <nav class="level is-mobile">
           <div class="level-item has-text-centered">
             <div>
@@ -112,7 +114,7 @@
 <% end %>
 
 <div class="columns is-centered is-desktop">
-  <% if !@league.active %>
+  <% if !@league.active? %>
   <div class="column is-4">
   <% elsif @league.start_date.past? %>
   <div class="column is-narrow">
@@ -120,7 +122,9 @@
   <div class="column is-8">
   <% end %>
     <div class="box">
-      <h2 class="title is-5 center">League Info</h2>
+      <h2 class="title is-5 center" id="league-info" data-leagueid = "<%=@league.id%>" data-userid = "<%=current_user.id%>">
+        League Info
+      </h2>
       <p class="content">
         <dl>
           <dt><strong>Commissioner:</strong></dt>
@@ -170,7 +174,7 @@
   </div>
 
   <% if @league.start_date.past?%>
-    <% if !@league.active%>
+    <% if !@league.active?%>
       <div class="column is-4">
     <% else %>
       <div class="column is-narrow-desktop">
@@ -218,7 +222,7 @@
                                 user_path(@attacker.id),
                                 class: 'ko'%>
                   <% end %>
-          <%= ff.active ? "(#{@ffa_results}%)" : "(#{ff.attacker_performance}%)"%>
+          <%= ff.active? ? "(#{@ffa_results}%)" : "(#{ff.attacker_performance}%)"%>
                 </td>
                 <td>vs.</td>
                 <td>
@@ -230,7 +234,7 @@
                                 user_path(@defender.id),
                                 class: 'ko' %>
                   <% end %>
-          <%= ff.active ? "(#{@ffd_results}%)" : "(#{ff.defender_performance}%)"%>
+          <%= ff.active? ? "(#{@ffd_results}%)" : "(#{ff.defender_performance}%)"%>
                 </td>
                 <td><%=ff.round%></td>
               </tr>
@@ -247,7 +251,7 @@
       </div>
     </div>
   <% end %>
-  <% if @league.start_date.past? && @league.active %>
+  <% if @league.start_date.past? && @league.active? %>
     <div class="column is-narrow">
       <div class="box">
         <h2 class="title is-5 -title center">Leverage</h2>
@@ -399,7 +403,7 @@
             </p>
             <%= link_to('Yes', league_path(@league),
                                         class:'button confirmation-action') %>
-            <button type="button" class="button is-text cancel-fight">No</button>
+            <button type="button" class="button is-text cancel-modal">No</button>
           </div>
         </div>
       </div>

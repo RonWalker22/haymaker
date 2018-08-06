@@ -3,7 +3,6 @@ class LeagueUser < ApplicationRecord
   belongs_to :user
   has_many   :wallets, dependent: :delete_all
   has_many   :bets,    dependent: :delete_all
-  has_many   :fistfights, dependent: :delete_all
   has_many   :attacks,
               class_name: "Fistfight",
               foreign_key: "attacker_id"

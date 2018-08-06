@@ -8,7 +8,6 @@ class User < ApplicationRecord
   has_many :wallets,            :through => :league_users
   has_many :orders,             :through => :wallets
   has_many :bets,               :through => :league_users
-  has_many :fistfights,         :through => :league_users
   has_many :received_league_invites,
             foreign_key: "receiver_id",
             class_name: "LeagueInvite"

@@ -1,64 +1,102 @@
-tryLeverage = ->
-  punches                = document.querySelectorAll ".fist"
-  leverage_size          = document.querySelector    ".leverage-size"
+tryModal = ->
   confirmation_modal     = document.querySelector    ".confirmation-modal"
   confirmation_meessage  = document.querySelector    ".confirmation-message"
   confirmation_action    = document.querySelector    ".confirmation-action"
   modal_background       = document.querySelector    ".modal-background"
   modal_close_btn        = document.querySelector    ".modal-close"
-  cancel_fight_btn       = document.querySelector    ".cancel-fight"
-  modal                  = document.querySelector    ".modal"
-  activate               = document.querySelector    ".activate"
-  reset                  = document.querySelector    ".reset"
-  deleverage_btn         = document.querySelector    ".deleverage-btn"
-  leave_btn              = document.querySelector    "#leave-btn"
-
-  for punch in punches
-    punch.addEventListener 'click', ->
-      confirmation_action.dataset.method = "post"
-      confirmation_action.href = "/leagues/1/swing/#{this.dataset.userid}"
-      confirmation_meessage.innerText = "Are you sure you to engage in a fistfight with #{this.dataset.username}?"
-      confirmation_modal.classList.add "is-active"
+  cancel_modal_btn       = document.querySelector    ".cancel-modal"
+  body                   = document.querySelector    "body"
 
   modal_background.addEventListener 'click', ->
-    modal.classList.remove "is-active"
+    confirmation_modal.classList.remove "is-active"
 
   modal_close_btn.addEventListener 'click', ->
-    modal.classList.remove "is-active"
+    confirmation_modal.classList.remove "is-active"
 
-  cancel_fight_btn.addEventListener 'click', ->
-    modal.classList.remove "is-active"
+  cancel_modal_btn.addEventListener 'click', ->
+    confirmation_modal.classList.remove "is-active"
 
-  modal_background.addEventListener 'click', ->
-    modal.classList.remove "is-active"
+  tryLeverage = ->
+    punches                = document.querySelectorAll ".fist"
+    leverage_size          = document.querySelector    ".leverage-size"
+    activate               = document.querySelector    ".activate"
+    reset                  = document.querySelector    ".reset"
+    deleverage_btn         = document.querySelector    ".deleverage-btn"
+    leave_btn              = document.querySelector    "#leave-btn"
+    league_info            = document.querySelector    "#league-info"
+    league_id              = league_info.dataset.leagueid
+    user_id                = league_info.dataset.userid
 
-  if reset
-    reset.addEventListener 'click', ->
-      confirmation_action.dataset.method = "post"
-      confirmation_meessage.innerText = "Are you sure you want to reset your practice league funds?"
-      confirmation_action.href = "/leagues/1/reset_funds"
-      confirmation_modal.classList.add "is-active"
+    for punch in punches
+      punch.addEventListener 'click', ->
+        confirmation_action.dataset.method = "post"
+        confirmation_action.href = "/leagues/#{league_id}/swing/#{user_id}"
+        confirmation_meessage.innerText = "Are you sure you to engage in a fistfight with #{this.dataset.username}?"
+        confirmation_modal.classList.add "is-active"
 
-  if leave_btn
-    leave_btn.addEventListener 'click', ->
-      confirmation_action.dataset.method = "delete"
-      confirmation_meessage.innerText = "Are you sure you want to leave this league?"
-      confirmation_action.href = "/leagues/1/players/1"
-      confirmation_modal.classList.add "is-active"
+    if reset
+      reset.addEventListener 'click', ->
+        confirmation_action.dataset.method = "post"
+        confirmation_meessage.innerText = "Are you sure you want to reset your practice league funds?"
+        confirmation_action.href = "/leagues/1/reset_funds"
+        confirmation_modal.classList.add "is-active"
 
-  if activate
-    activate.addEventListener 'click', ->
-      size = +leverage_size.options[leverage_size.selectedIndex].value
-      confirmation_action.dataset.method = "post"
-      confirmation_meessage.innerText = "Are you sure you want to active #{size}x leverage?"
-      confirmation_action.href = "/leagues/1/bet/#{size}"
-      confirmation_modal.classList.add "is-active"
-  else
-    deleverage_btn.addEventListener 'click', ->
-      confirmation_action.dataset.method = "post"
-      confirmation_meessage.innerText = "Are you sure you want to deleverage your account?"
-      confirmation_action.href = "/leagues/1/deleverage"
-      confirmation_modal.classList.add "is-active"
+    if leave_btn
+      leave_btn.addEventListener 'click', ->
+        confirmation_action.dataset.method = "delete"
+        confirmation_meessage.innerText = "Are you sure you want to leave this league?"
+        confirmation_action.href = "/leagues/#{league_id}/players/#{user_id}"
+        confirmation_modal.classList.add "is-active"
+
+    if activate
+      activate.addEventListener 'click', ->
+        size = +leverage_size.options[leverage_size.selectedIndex].value
+        confirmation_action.dataset.method = "post"
+        confirmation_meessage.innerText = "Are you sure you want to active #{size}x leverage?"
+        confirmation_action.href = "/leagues/#{league_id}/bet/#{size}"
+        confirmation_modal.classList.add "is-active"
+    else if deleverage_btn
+      deleverage_btn.addEventListener 'click', ->
+        confirmation_action.dataset.method = "post"
+        confirmation_meessage.innerText = "Are you sure you want to deleverage your account?"
+        confirmation_action.href = "/leagues/#{league_id}/deleverage"
+        confirmation_modal.classList.add "is-active"
+
+  tryJoin = ->
+    join_btns              = document.querySelectorAll ".join-btns"
+    join_private_btns      = document.querySelectorAll ".join-private-btns"
+    private_form           = document.querySelector    ".private_form"
+    public_league          = document.querySelector    ".public_league"
+    private_league_message = document.querySelector    ".private_league_message"
+    private_cancel         = document.querySelector    ".private_cancel"
+    join_form              = document.querySelector    ".join-form"
+
+    if private_cancel
+      private_cancel.addEventListener 'click', ->
+        confirmation_modal.classList.remove "is-active"
+
+    if join_btns
+      for join_btn in join_btns
+        join_btn.addEventListener 'click', ->
+          public_league.style = 'display: block'
+          private_form.style = 'display: none'
+          confirmation_action.dataset.method = "post"
+          confirmation_meessage.innerText = "Are you sure you want to join #{this.dataset.name} league?"
+          confirmation_action.href = "/leagues/#{this.dataset.id}/join"
+          confirmation_modal.classList.add "is-active"
+    if join_private_btns
+      for join_private_btn in join_private_btns
+        join_private_btn.addEventListener 'click', ->
+          confirmation_modal.classList.add "is-active"
+          private_league_message.innerText = "The #{this.dataset.name} league is private and requires a case-insensitive password to join."
+          join_form.action = "/leagues/#{this.dataset.id}/join"
+          private_form.style = 'display: block'
+          public_league.style = 'display: none'
+
+  if body.className == "leagues_show"
+    tryLeverage()
+  else if body.className == "leagues_index"
+    tryJoin()
 
 tryPassword = ->
   community_select = document.querySelector('#community_select')
@@ -77,7 +115,8 @@ tryPassword = ->
 document.addEventListener 'turbolinks:load', ->
   body = document.querySelector("body")
   if body.className == "leagues_show"
-    tryLeverage()
-
+    tryModal()
   else if body.className == "leagues_new"
     tryPassword()
+  else if body.className == "leagues_index"
+    tryModal()

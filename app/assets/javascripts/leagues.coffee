@@ -99,7 +99,7 @@ tryModal = ->
     tryJoin()
 
 tryPassword = ->
-  community_select = document.querySelector('#community_select')
+  community_select = document.querySelector('#league_community')
   password_input = document.querySelector('#league_password')
 
   community_select.addEventListener 'change', ->

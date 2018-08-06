@@ -30,17 +30,24 @@ class LeaguesController < ApplicationController
   def create
     league_params
     puts ">>>>>-------->>>>#{params}"
+    round_steps = {'1' => 1, '6' => 2, '12' => 4,
+                  '28' => 7, '84' => 14, '360' => 30 }
+    rounds = {'1' => 1, '6' => 3, '12' => 3,
+                  '28' => 4, '84' => 6, '360' => 12}
+
+   round_end = league_params[:start_date].to_date + round_steps[params[:duration]].days
+
     @league = League.new( name: league_params[:name],
                           commissioner_id: league_params[:commissioner_id].to_i,
                           start_date: league_params[:start_date].to_date,
                           end_date: league_params[:start_date].to_date + params[:duration].to_i.days,
-                          round_end: league_params[:start_date].to_date + 1.day,
-                          round_steps: 3,
-                          rounds: 12,
+                          round_end: round_end,
+                          rounds: rounds[params[:duration]],
                           private: params[:community].downcase == 'private',
                           mode:  params[:game_mode],
                           password: league_params[:password],
-                          late_join: params[:late_join] == "true"
+                          late_join: params[:late_join] == "true",
+                          round_steps: round_steps[params[:duration]]
                          )
     respond_to do |format|
       if @league.save

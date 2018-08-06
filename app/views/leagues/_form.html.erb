@@ -19,7 +19,7 @@
     <%= form.label :game_mode, class: "label" %>
     <div class="control">
       <div class="select is-small">
-        <select name="game_mode" >
+        <select name="game_mode" id="league_game_mode" >
           <%= options_for_select(['Swing', 'Bare Knuckle'])%>
         </select>
       </div>
@@ -42,7 +42,7 @@
     <%= form.label :entry_fee, class: "label" %>
     <div class="control">
       <div class="select is-small">
-        <select class="" name="entry_fee" disabled=true>
+        <select class="" name="entry_fee" disabled=true id="league_entry_fee">
           <%= options_for_select(['Free', 1], ['Paid', 2])%>
         </select>
       </div>
@@ -53,7 +53,7 @@
     <%= form.label :prize, class: "label" %>
     <div class="control">
       <div class="select is-small">
-        <select class="" name="prize" disabled=true>
+        <select class="" name="prize" disabled=true id="league_prize">
           <%= options_for_select(['Bragging Rights', 1], ['XP', 2])%>
         </select>
       </div>
@@ -64,7 +64,7 @@
     <%= form.label :community, class: "label" %>
     <div class="control">
       <div class="select is-small">
-        <select name="community", id="community_select">
+        <select name="community" id="league_community">
           <%= options_for_select(['Public', 'Private'])%>
         </select>
       </div>
@@ -73,6 +73,7 @@
 
   <div class="field">
     <%= form.label :password, class: "label" %>
+    <p class="help">(Case-insensitive)</p>
     <div class="control">
       <%= form.text_field :password, id: :league_password,
                           class: "input is-small", disabled:true, value:""%>
@@ -98,13 +99,13 @@
     <div class="control">
       <%= form.label :duration, class: "label" %>
       <div class="select is-small">
-        <select class="" name="duration">
-          <option value="1">1 Day</option>
-          <option value="7">7 Days</option>
-          <option value="14">14 Days</option>
-          <option value="30">30 Days</option>
-          <option value="90">90 Days</option>
-          <option value="365">365 Days</option>
+        <select class="" name="duration" id="league_duration">
+          <option value="1">1 Day (1round)</option>
+          <option value="6">6 Days (3rounds-- 1r/2 days)</option>
+          <option value="12">12 Days (3rounds-- 1r/4 days)</option>
+          <option value="28">28 Days (4rounds-- 1r/7 days)</option>
+          <option value="84">84 Days (6rounds-- 1r/14 days)</option>
+          <option value="360">360 Days(12rounds-- 1r/30 days)</option>
         </select>
       </div>
     </div>
@@ -112,9 +113,10 @@
 
   <div class="field">
     <div class="control">
-      <%= form.label :Late_Joiners, class: "label" %>
+      <%= form.label :late_joiners, class: "label" %>
+      <p class="help">(1 round grace period)</p>
       <div class="select is-small">
-        <select class="" name="late_join">
+        <select class="" name="late_join" id="league_late_joiners">
           <option value="true">Allow</option>
           <option value="false">Disallow</option>
         </select>

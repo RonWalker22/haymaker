@@ -95,7 +95,7 @@ tryModal = ->
 
   if body.className == "leagues_show"
     tryLeverage()
-  else if body.className == "leagues_index"
+  else if body.className == "leagues_index" || body.className == "leagues_current"
     tryJoin()
 
 tryPassword = ->
@@ -114,9 +114,8 @@ tryPassword = ->
 
 document.addEventListener 'turbolinks:load', ->
   body = document.querySelector("body")
-  if body.className == "leagues_show"
+  console.log body.className
+  if body.className == "leagues_show" || body.className == "leagues_index" || body.className == "leagues_current"
     tryModal()
   else if body.className == "leagues_new"
     tryPassword()
-  else if body.className == "leagues_index"
-    tryModal()

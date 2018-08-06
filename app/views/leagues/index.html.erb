@@ -32,7 +32,7 @@
 
           <tbody>
             <% @leagues.each do |league| %>
-              <% next unless league.start_date.future?%>
+              <% next if league.start_date.past? || !league.active? %>
               <tr>
                 <td>
                   <%=link_to league.name, league_path(league.id) %>
@@ -48,8 +48,7 @@
                 <td><%= league.rounds %></td>
 
                 <td>
-                    <% if !current_user.leagues.any? { |l| l.id == league.id }  &&
-                            league.start_date.future?
+                    <% if !current_user.leagues.any? { |l| l.id == league.id }
                     %>
                       <% if league.private? %>
                         <button type="button" name="button" data-id="<%= league.id %>"

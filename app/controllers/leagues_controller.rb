@@ -39,7 +39,8 @@ class LeaguesController < ApplicationController
                           rounds: 12,
                           private: params[:community].downcase == 'private',
                           mode:  params[:game_mode],
-                          password: league_params[:password]
+                          password: league_params[:password],
+                          late_join: params[:late_join] == "true"
                          )
     respond_to do |format|
       if @league.save
@@ -87,8 +88,11 @@ class LeaguesController < ApplicationController
   end
 
   def join
-    if @league.start_date.past?
+    if @league.start_date.past? && @league.round > 1
       flash[:notice] = "This league is no longer accepting new players."
+      return redirect_to leagues_url
+    elsif @league.start_date.past? && !@league.late_join?
+      flash[:notice] = "This league does not accept late joiners."
       return redirect_to leagues_url
     elsif @league.private?
       unless password_param[:password].downcase == @league.password.downcase
@@ -241,7 +245,7 @@ class LeaguesController < ApplicationController
     def league_params
       params.require(:league).permit(:name, :entry_fee, :commissioner,
         :start_date, :user_id, :commissioner_id, :end_date, :rounds,
-        :public_keys, :password, :game_mode, :community, :duration)
+        :public_keys, :password, :game_mode, :community, :duration, :late_join)
     end
 
     def setup_params

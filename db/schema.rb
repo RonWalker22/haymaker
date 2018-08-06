@@ -108,6 +108,7 @@ ActiveRecord::Schema.define(version: 20180702021858) do
     t.boolean "private", default: false, null: false
     t.string "password", default: "pass", null: false
     t.string "mode", default: "Swing", null: false
+    t.boolean "late_join", default: true, null: false
     t.bigint "commissioner_id", null: false
     t.datetime "start_date", null: false
     t.datetime "end_date", null: false

@@ -31,7 +31,7 @@
 
           <tbody>
             <% @leagues.each do |league| %>
-              <% next unless league.end_date.past?%>
+              <% next if league.active?%>
               <tr>
                 <td>
                   <%=link_to league.name, league_path(league.id) %>
@@ -45,16 +45,6 @@
                   <%= league.start_date.strftime("%m/%d/%y %I:%M%p").downcase %>
                 </td>
                 <td><%= league.rounds %></td>
-
-                <td>
-                    <% if !current_user.leagues.any? { |l| l.id == league.id }  &&
-                            league.start_date.future?
-                    %>
-                      <%= link_to "Join", join_path(id:league.id), method: :post,
-                                                    class: "button is-rounded is-small"
-                      %>
-                    <% end %>
-                </td>
               </tr>
             <% end %>
           </tbody>

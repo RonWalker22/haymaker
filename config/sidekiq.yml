@@ -1,5 +1,6 @@
 development:
   :concurrency: 5
+  max_retries: 0
 production:
   :concurrency: 20
 :queues:

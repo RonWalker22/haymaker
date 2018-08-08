@@ -12,22 +12,25 @@ production:
     class: EndGameJob
 
   get_tickers:
-    in: 1m
+    in: 999y
     class: GetTickersJob
+    enabled: false
 
   get_ticker_prices:
     in: 900y
     class: GetTickerPricesJob
+    enabled: false
 
   new_round:
     cron: '0 0 0 * * * America/Los_Angeles'
-    # cron: '* * * * * * America/Los_Angeles'
     class: NewRoundJob
 
   fight:
     in: 900y
     class: FightJob
+    enabled: false
 
   destroy_fights:
     in: 900y
     class: DestroyFightsJob
+    enabled: false

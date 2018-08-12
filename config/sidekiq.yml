@@ -8,7 +8,7 @@ production:
 
 :schedule:
   end_game:
-    cron: '0 0 0 * * * America/Los_Angeles'
+    cron: '0 0 0 * * *'
     class: EndGameJob
 
   get_tickers:
@@ -22,7 +22,7 @@ production:
     enabled: false
 
   new_round:
-    cron: '0 0 0 * * * America/Los_Angeles'
+    cron: '0 0 0 * * *'
     class: NewRoundJob
 
   fight:

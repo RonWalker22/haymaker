@@ -35,12 +35,16 @@ class LeaguesController < ApplicationController
     rounds = {'1' => 1, '6' => 3, '12' => 3,
                   '28' => 4, '84' => 6, '360' => 12}
 
-   round_end = league_params[:start_date].to_date + round_steps[params[:duration]].days
+   start_date = league_params[:start_date].to_datetime.midday
+   round_end  = league_params[:start_date].to_datetime + round_steps[params[:duration]].days
+   round_end  = round_end.end_of_day
+   end_date   = league_params[:start_date].to_datetime + params[:duration].to_i.days
+   end_date   = end_date.end_of_day
 
     @league = League.new( name: league_params[:name],
                           commissioner_id: league_params[:commissioner_id].to_i,
-                          start_date: league_params[:start_date].to_date,
-                          end_date: league_params[:start_date].to_date + params[:duration].to_i.days,
+                          start_date: start_date,
+                          end_date: end_date,
                           round_end: round_end,
                           rounds: rounds[params[:duration]],
                           private: params[:community].downcase == 'private',

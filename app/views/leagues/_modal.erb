@@ -1,0 +1,52 @@
+<div class="modal confirmation-modal">
+  <div class="modal-background"></div>
+  <div class="modal-content">
+    <div class="box">
+      <div class="columns">
+        <div class="column is-narrow">
+          <div class="box">
+            <div class="public_league">
+              <p class="title is-5">Confirmation</p>
+              <p class="content confirmation-message">
+              </p>
+              <%= link_to('Yes', leagues_path,
+                                  class:'button confirmation-action') %>
+              <button type="button" class="button cancel-modal">No</button>
+            </div>
+
+            <div class="private_form">
+              <p class="title is-5">Password Protected</p>
+
+              <p class="content private_league_message">
+                This league is private and requires a password to join.
+              </p>
+              <%= form_tag(join_path(8), method: "post",
+                                      :class => "join-form") do %>
+              <div class="field">
+                <%= label_tag :password, 'Password:'%>
+                <div class="control">
+                  <%= text_field_tag "password", nil, class:'input', required: true %>
+                </div>
+              </div>
+
+              <div class="field is-grouped">
+                <div class="control">
+                  <%= submit_tag "Join", class: 'button' %>
+                </div>
+                <div class="control">
+                  <button type="button" name="button"
+                  class="button private_cancel">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+              <% end %>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="modal-close is-large" aria-label="close"></button>
+</div>

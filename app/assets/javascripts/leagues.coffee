@@ -63,8 +63,8 @@ tryModal = ->
         confirmation_modal.classList.add "is-active"
 
   tryJoin = ->
-    join_btns              = document.querySelectorAll ".join-btns"
-    join_private_btns      = document.querySelectorAll ".join-private-btns"
+    join_private_btn       = document.querySelector    ".join-private-btn"
+    join_btn               = document.querySelector    ".join-btn"
     private_form           = document.querySelector    ".private_form"
     public_league          = document.querySelector    ".public_league"
     private_league_message = document.querySelector    ".private_league_message"
@@ -74,28 +74,19 @@ tryModal = ->
     if private_cancel
       private_cancel.addEventListener 'click', ->
         confirmation_modal.classList.remove "is-active"
-
-    if join_btns
-      for join_btn in join_btns
+    if join_btn
         join_btn.addEventListener 'click', ->
           public_league.style = 'display: block'
           private_form.style = 'display: none'
-          confirmation_action.dataset.method = "post"
-          confirmation_meessage.innerText = "Are you sure you want to join #{this.dataset.name} league?"
-          confirmation_action.href = "/leagues/#{this.dataset.id}/join"
           confirmation_modal.classList.add "is-active"
-    if join_private_btns
-      for join_private_btn in join_private_btns
+    if join_private_btn
         join_private_btn.addEventListener 'click', ->
-          confirmation_modal.classList.add "is-active"
-          private_league_message.innerText = "The #{this.dataset.name} league is private and requires a case-insensitive password to join."
-          join_form.action = "/leagues/#{this.dataset.id}/join"
           private_form.style = 'display: block'
           public_league.style = 'display: none'
+          confirmation_modal.classList.add "is-active"
 
   if body.className == "leagues_show"
     tryLeverage()
-  else if body.className == "leagues_index" || body.className == "leagues_current"
     tryJoin()
 
 tryPassword = ->

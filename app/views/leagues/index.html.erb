@@ -18,6 +18,7 @@
               <th>Game Mode</th>
               <th>Start date</th>
               <th>Rounds</th>
+              <th>status</th>
             </tr>
           </thead>
           <tfoot>
@@ -27,6 +28,7 @@
               <th>Game Mode</th>
               <th>Start date</th>
               <th>Rounds</th>
+              <th>status</th>
             </tr>
           </tfoot>
 
@@ -50,19 +52,7 @@
                 <td>
                     <% if !current_user.leagues.any? { |l| l.id == league.id }
                     %>
-                      <% if league.private? %>
-                        <button type="button" name="button" data-id="<%= league.id %>"
-                        data-name="<%= league.name %>"
-                        class="button is-rounded is-small join-private-btns">
-                          Join (Private)
-                        </button>
-                      <% else %>
-                        <button type="button" name="button" data-id="<%= league.id %>"
-                        data-name="<%= league.name %>"
-                        class="button is-rounded is-small join-btns">
-                          Join
-                        </button>
-                      <% end %>
+                      Open
                     <% end %>
                 </td>
               </tr>

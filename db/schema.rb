@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180702021858) do
+ActiveRecord::Schema.define(version: 20180812194346) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -107,7 +107,7 @@ ActiveRecord::Schema.define(version: 20180702021858) do
     t.boolean "balance_revivable", default: false, null: false
     t.boolean "private", default: false, null: false
     t.string "password", default: "pass", null: false
-    t.string "mode", default: "Swing", null: false
+    t.string "mode", default: "Slugfest", null: false
     t.boolean "late_join", default: true, null: false
     t.bigint "commissioner_id", null: false
     t.datetime "start_date", null: false
@@ -125,6 +125,13 @@ ActiveRecord::Schema.define(version: 20180702021858) do
   create_table "leverages", force: :cascade do |t|
     t.decimal "size", null: false
     t.decimal "liquidation", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "markets", force: :cascade do |t|
+    t.string "name", null: false
+    t.decimal "cap", default: "1.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -8,7 +8,7 @@ class CreateLeagues < ActiveRecord::Migration[5.1]
       t.boolean :balance_revivable, default: false,             null: false
       t.boolean :private,           default: false,             null: false
       t.string  :password,          default: 'pass',            null: false
-      t.string  :mode,              default: 'Swing',           null: false
+      t.string  :mode,              default: 'Slugfest',        null: false
       t.boolean :late_join,         default: true,              null: false
       t.references :commissioner,
                     index: true,

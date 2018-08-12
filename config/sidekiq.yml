@@ -25,6 +25,10 @@ production:
     cron: '0 0 0 * * *'
     class: NewRoundJob
 
+  total_market_cap:
+    cron: '0 * * * * *'
+    class: TotalMarketCapJob
+
   fight:
     in: 900y
     class: FightJob

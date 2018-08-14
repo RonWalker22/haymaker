@@ -181,7 +181,9 @@
       <div class="column is-6 is-desktop">
     <% end %>
       <div class="box">
-        <h2 class="title is-5 -title center">Fistfights</h2>
+        <% fistfights = @league.fistfights.order(id: :desc).page params[:page] %>
+        <h2 class="title is-5 -title center" id="fistfights-title">Fistfights</h2>
+        <%= paginate fistfights, params: {anchor: 'fistfights-title'}  %>
         <table class="table is-striped">
           <thead>
             <tr>
@@ -192,7 +194,6 @@
             </tr>
           </thead>
           <tbody>
-            <%  fistfights = @league.fistfights.order(id: :desc).page params[:page] %>
             <%  fistfights.each do |ff| %>
               <% @ffa_results = nil %>
               <% @attacker = nil %>
@@ -242,7 +243,6 @@
             <% end %>
           </tbody>
         </table>
-        <%= paginate fistfights %>
 
         <%if @league.fistfights.count == 0  %>
           <p class="content">
@@ -376,8 +376,10 @@
   <div class="columns is-centered">
     <div class="column is-10 is-half">
       <div class="box">
-        <h2 class="title is-5 center center">Leaderboards</h2>
-          <table class="table is-striped is-fullwidth">
+        <% league_users = LeagueUser.where(alive:true, league_id: @league.id).order(:rank).page params[:leaderboards] %>
+        <h2 class="title is-5 center center" id="leaderboards-title">Leaderboards</h2>
+        <%= paginate league_users, :param_name => "leaderboards", params: {anchor: 'leaderboards-title'} %>
+          <table class="table is-striped is-narrow">
             <thead>
               <th>Rank</th>
               <th>Player</th>
@@ -391,7 +393,6 @@
               <th>Swing</th>
             </tfoot>
             <tbody>
-              <% league_users = LeagueUser.where(alive:true, league_id: @league.id).order(:rank).page params[:leaderboards] %>
               <% league_users.each_with_index do |league_user, i| %>
                 <% user = User.find league_user.user_id %>
                 <tr>
@@ -435,7 +436,7 @@
               <% end %>
             </tbody>
           </table>
-          <%= paginate league_users, :param_name => "leaderboards" %>
+          <%= paginate league_users, :param_name => "leaderboards", params: {anchor: 'leaderboards-title'} %>
       </div>
     </div>
   </div>

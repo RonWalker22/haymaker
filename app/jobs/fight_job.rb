@@ -12,7 +12,7 @@ class FightJob < ApplicationJob
     @league = League.find(1)
     @league.league_users.each_with_index do |league_user, i|
       @baseline = [7_000, 12_000, 8_000, 9_000, 11_000].sample
-      next unless i.even?
+      next unless i.even? || i == 40
       @league_user     = LeagueUser.find(i + 1)
       @league_defender = LeagueUser.find(i + 2)
 
@@ -26,7 +26,7 @@ class FightJob < ApplicationJob
       if fistfight.save
         @league_user.shield = true
         @league_user.save
-        @leeague_defender.shield = true
+        @league_defender.shield = true
         @league_defender.save
       end
     end

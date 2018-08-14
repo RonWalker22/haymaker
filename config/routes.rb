@@ -50,8 +50,6 @@ Rails.application.routes.draw do
                                                   :as => 'decline_league_invite'
   delete 'orders/:id'               => 'orders#destroy', :as => 'cancel_order'
 
-  get 'leagues/:id/leverage'                => 'leagues#leverage', :as => 'leverage'
-
   post 'leagues/:id/swing/:target'          => 'leagues#swing',  :as => 'swing'
 
   post 'leagues/:id/bet/:size'                    => 'leagues#bet',    :as => 'bet'

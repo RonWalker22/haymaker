@@ -115,5 +115,3 @@ Leverage.create!(size: 10,  liquidation: 0.0867)
 Leverage.create!(size: 25,  liquidation: 0.0338)
 Leverage.create!(size: 50,  liquidation: 0.0147)
 Leverage.create!(size: 100, liquidation: 0.0049)
-
-Market.create! name: 'coinlib'

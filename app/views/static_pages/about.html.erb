@@ -1,15 +1,211 @@
 <div class="columns is-centered">
+  <div class="column">
+    <div class="box">
+      <h1 class="title center">About</h1>
+    </div>
+  </div>
+</div>
+
+<div class="columns is-centered">
   <div class="column is-8">
     <div class="box">
-      <h1 class="title">About</h1>
+      <h2 class="title is-5 center">General</h2>
       <p class="content">
-      HayMaker hosts cryptocurrency paper trading
-      competitions. Each competition is encapsulated within a league. In
-      addition to paper trading, there is an additional competition to survive
-      each round through our fistfight feature.
+        HayMaker hosts cryptocurrency paper trading competitions. Each competition
+        is encapsulated within a league. Play for the oldest and most staple
+        digital currency, bragging rights.
       </p>
-      <p class="content">Join an existing league or create your own.</p>
-      <p class="content" >Go Big or Down Swinging!</p>
+      <p class="content">Join an existing league or create your own, and
+        go big or down swinging!
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="columns is-centered">
+  <div class="column is-8">
+    <div class="box">
+      <h2 class="title is-5 center" id="modes-about">Game Modes</h2>
+
+      <h3 class="title is-6">Slugfest</h3>
+
+        <p class="content">Round base trading competition with fistfights and
+        leverage.</p> <p class="content">Each round players must survive head to
+        head battles known as fistfights. Players decide if and when to initiate
+        a fistfight. This decision must happen before the middle of the
+        round.</p>
+
+        <p class="content">Winners of each fistgiht move on to the next round,
+        losers are knocked out of the league. In addition to survival, winners
+        will receive one block which they can use in a future round of their
+        choice. When a player actives a block, he or she is shielded from
+        participating in a fistfight. This shield expires at the end of the
+        round.</p>
+
+        <p class="content">A player’s round performance is determined by
+        percentage change of their portfolio from the beginning of the round
+        compared to the end of the round. Leverage points are not considered in
+        round performance. For example, let's suppose player A1 and player B1
+        are in a fistfight. If A1 increases his portfolio by 10% and B1
+        increases his portfolio by 9%, A1 moves on to the next round and B1 is
+        knocked out of the league.  Each round is independent from the rest.</p>
+      <h3 class="title is-6">Bare Knuckle</h3>
+
+      <p class="content"> Trading competition without rounds, fistfights, or
+        leverage.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="columns is-centered">
+  <div class="column  is-8">
+    <div class="box">
+      <h2 class="title is-5 center" id="leverage-about">Leverage Information</h2>
+      <h3 class="title is-6">What is the leverage? </h3>
+      <p class="content">
+        By leveraging, you
+        make a bet on your entire portfolio. At the end of the bet, you will
+        either receive a leverage bonus for a correct prediction or a leverage
+        penalty for an incorrect prediction.
+      </p>
+
+      <p class="content">
+        <h3 class="title is-6">What is the bet? </h3>
+        <ol>
+          <li class="content">Your portfolio will increase in value before the
+            league ends.
+          </li>
+          <li class="content">Your portfolio will not fall to or below the
+            liquidation point.
+          </li>
+        </ol>
+      </p>
+      <p class="content">The system liquidates accounts every 30 minutes . So
+      if this does occur, you may receive a tiny grace period to improve
+      your portfolio. If by the end of the grace period the value of
+      your portfolio is at or below the liquidation point, you will be
+      knocked out of the league.</p>
+      <p class="content">
+        <h3 class="title is-6">When does the bet end? </h3>
+
+        <p class="content">The bet ends if any of the following scenarios
+        occur:</p>
+        <ol>
+          <li>
+            You click the deleverage button located within the league’s
+            homepage
+          </li>
+          <li>
+            Your portfolio falls to or below the liquidation point AND
+            it stays at or below the liquidation point beyond the grace period.
+          </li>
+          <li>
+            The current round ends
+          </li>
+        </ol>
+      </p>
+      <p class="content">
+        <h3 class="title is-6">How is the penalty/bonus calculated?</h3>
+        At the start of the bet the current value of your portfolio will be
+        used to generate a baseline value. At the end of the bet, the current
+        value of your portfolio will be used to generate a post value. The
+        percentage difference will be used to calculate your bonus/penalty.
+        View the chart below for examples.
+      </p>
+      <p class="content">
+        <h3 class="title is-6">How is the liquidation point calculated? </h3>
+
+        At the start of the bet the current value of your portfolio will be used
+        to gather a baseline. This baseline and the leverage type will determine
+        the liquidation point. See the table below for the general liquidation
+        trigger points. The calculator will provide precise liquidation trigger
+        points based on the current value of your portfolio.
+      </p>
+      <p class="content">
+      </p>
+      <p class="content">
+      </p>
+      <p class="content">
+      </p>
+      <p class="content">
+      </p>
+      <p class="content">
+      </p>
+      <p class="content">
+      </p>
+      <p class="content">
+      </p>
+
+      <h2 class="title is-5 center">Liquidation Rates</h2>
+      <table class='table is-striped'>
+        <thead>
+          <th>Leverage</th>
+          <th>Liquidation Trigger</th>
+        </thead>
+
+        <tbody>
+          <% Leverage.all.each do |leverage|  %>
+          <tr>
+            <td><%= leverage.size %>x</td>
+            <td>-<%= leverage.liquidation * 100 %>%</td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <h2 class="title is-3 center">Bonus/Penalty Examples</h2>
+      <table class="table is-striped is-fullwidth">
+        <thead>
+          <th>Leverage</th>
+          <th>Baseline</th>
+          <th>Post Value</th>
+          <th>Bonus/Penalty</th>
+          <th>Total Points</th>
+        </thead>
+        <tbody>
+          <% Leverage.all.each do |leverage|  %>
+            <% next unless leverage.size == 2 || leverage.size == 100%>
+            <tr>
+              <td><%= leverage.size %>x</td>
+              <td><%= number_to_currency 100  %></td>
+              <td><%= number_to_currency 101 %></td>
+              <td><%=(leverage.size * 1) - 1%> Bonus</td>
+              <td><%= number_with_delimiter (100 + (leverage.size * 1))%></td>
+            </tr>
+            <tr>
+              <td><%= leverage.size.to_f %>x</td>
+              <td><%= number_to_currency 100 %></td>
+              <td><%= number_to_currency 150 %></td>
+              <td><%=(leverage.size * 50) - 50%> Bonus</td>
+              <td><%= number_with_delimiter (100 + (leverage.size * 50))%></td>
+            </tr>
+            <tr>
+              <td><%= leverage.size.to_f %>x</td>
+              <td><%= number_to_currency 100  %></td>
+              <td><%= number_to_currency 99 %></td>
+              <td><%= penalty = (leverage.size * 1) - 1%> Penalty</td>
+              <td><%=number_with_delimiter (100 - (leverage.size * 1))%></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<div class="columns is-centered">
+  <div class="column is-8">
+    <div class="box">
+      <h2 class="title is-5 center">Educational Value</h2>
+      <p class="content">
+      HayMaker hosts cryptocurrency paper trading competitions. Each competition
+      is encapsulated within a league. Play for the oldest and most staple
+      digital currency, bragging rights.
+      </p>
+      <p class="content">Join an existing league or create your own, and
+        go big or down swinging!
+      </p>
     </div>
   </div>
 </div>

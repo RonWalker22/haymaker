@@ -160,10 +160,6 @@ class LeaguesController < ApplicationController
     redirect_to leagues_path
   end
 
-  def leverage
-    @exchanges = Exchange.all
-  end
-
   def deleverage
     bet = @league_user.bets.last
     leverage = Leverage.find (@league_user.bets.last.leverage_id)

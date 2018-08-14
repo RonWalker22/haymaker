@@ -281,7 +281,8 @@
           <button class="button is-rounded  deleverage-btn">Deleverage
           </button>
         <% else %>
-          <p class="content"><%= link_to 'Leverage', leverage_path(@league), target:'blank'%> is
+          <p class="content">
+          <%= link_to 'Leverage', about_path(anchor: 'leverage-about'), target:'blank'%> is
             currently not active.</p>
               <div class="select">
                 <select name="leverage_size" value="leverage_size" data-currentuser=""

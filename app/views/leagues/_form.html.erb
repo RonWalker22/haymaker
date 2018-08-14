@@ -1,3 +1,8 @@
+<div class="box">
+  <div class="columns">
+    <div class="column is-narrow">
+      <div class="box">
+
 <%= form_with(model: league, local: true) do |form| %>
   <% if league.errors.any? %>
     <div id="error_explanation">
@@ -20,7 +25,7 @@
     <div class="control">
       <div class="select is-small">
         <select name="game_mode" id="league_game_mode" >
-          <%= options_for_select(['Swing', 'Bare Knuckle'])%>
+          <%= options_for_select(['Slugfest', 'Bare Knuckle'])%>
         </select>
       </div>
     </div>
@@ -135,3 +140,28 @@
   </div>
 
 <% end %>
+      </div>
+    </div>
+
+<div class="column">
+<div class="box">
+  <div class="field">
+    <h2 class="title is-5">Game Modes Info</h2>
+    <dl class="list">
+      <dt>Slugfest</dt>
+      <dd class="help">
+        Round base trading competition with fistfights and leverage.
+        <%= link_to 'Learn More', about_path(anchor: 'modes-about')%>
+      </dd>
+      <dt>Bare Kunckle</dt>
+      <dd class="help">
+        Trading competition without any rounds, fistfights, or leverages.
+      </dd>
+    </dl>
+  </div>
+  <div class="field">
+  </div>
+</div>
+</div>
+</div>
+</div>

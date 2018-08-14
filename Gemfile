@@ -32,7 +32,7 @@ gem 'jquery-rails'
 
 gem 'popper_js', '~> 1.12.9'
 
-gem 'font-awesome-sass', '~> 5.0.6'
+gem "font-awesome-rails"
 
 
 # Use CoffeeScript for .coffee assets and views

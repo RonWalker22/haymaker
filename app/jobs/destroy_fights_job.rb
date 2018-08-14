@@ -15,7 +15,7 @@ class DestroyFightsJob < ApplicationJob
 
   def reset_league_users
     LeagueUser.all.each do |lu|
-      lu.update_attributes alive:true, leverage_points:0, rank: 0
+      lu.update_attributes alive:true, leverage_points:0, rank: 0, shield: false, blocks:0
     end
   end
 

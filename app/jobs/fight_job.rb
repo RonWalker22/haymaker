@@ -23,7 +23,12 @@ class FightJob < ApplicationJob
                                 league_id: @league.id
       )
 
-      fistfight.save
+      if fistfight.save
+        @league_user.shield = true
+        @league_user.save
+        @leeague_defender.shield = true
+        @league_defender.save
+      end
     end
 
     LeagueUser.all.each do |user|

@@ -11,6 +11,8 @@ class CreateLeagueUsers < ActiveRecord::Migration[5.1]
       t.numeric :points,            default: 0,     null: false
       t.numeric :leverage_points,   default: 0,     null: false
       t.boolean :champ,             default: false, null: false
+      t.integer :blocks,            default: 0,     null: false
+      t.boolean :shield,            default: false, null: false
 
       t.timestamps
     end

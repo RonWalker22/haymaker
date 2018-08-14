@@ -55,4 +55,6 @@ Rails.application.routes.draw do
   post 'leagues/:id/bet/:size'                    => 'leagues#bet',    :as => 'bet'
 
   post 'leagues/:id/deleverage'   => 'leagues#deleverage', :as => 'deleverage'
+
+  post 'leagues/:id/shield'       => 'leagues#shield', :as => 'shield'
 end

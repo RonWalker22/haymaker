@@ -214,7 +214,20 @@ class LeaguesController < ApplicationController
   end
 
   def balances
+  end
 
+  def shield
+    unless @league_user.blocks > 0
+      return flash[:notice] = "Shield unsuccessful. You don't have any blocks available."
+    end
+
+    @league_user.shield = true
+    if @league_user.save
+      @league_user.decrement! 'blocks'
+      flash[:success] = "Shield is now active. You are shielded from participating in a fistfight in this round."
+    end
+
+    redirect_to league_path @league
   end
 
   private
@@ -314,6 +327,8 @@ class LeaguesController < ApplicationController
       )
 
       if fistfight.save
+        @league_user.udpate_attributes shield: true
+        @target.udpate_attributes shield: true
         flash[:notice] = "Fistfight has begun."
       else
         flash[:alert] = "Fistfight was unable to start."

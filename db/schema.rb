@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180812194346) do
+ActiveRecord::Schema.define(version: 20180702021858) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,6 +92,8 @@ ActiveRecord::Schema.define(version: 20180812194346) do
     t.decimal "points", default: "0.0", null: false
     t.decimal "leverage_points", default: "0.0", null: false
     t.boolean "champ", default: false, null: false
+    t.integer "blocks", default: 0, null: false
+    t.boolean "shield", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["league_id", "user_id"], name: "index_league_users_on_league_id_and_user_id", unique: true
@@ -125,13 +127,6 @@ ActiveRecord::Schema.define(version: 20180812194346) do
   create_table "leverages", force: :cascade do |t|
     t.decimal "size", null: false
     t.decimal "liquidation", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "markets", force: :cascade do |t|
-    t.string "name", null: false
-    t.decimal "cap", default: "1.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

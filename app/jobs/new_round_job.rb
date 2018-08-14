@@ -3,12 +3,13 @@ class NewRoundJob < ApplicationJob
   queue_as :default
 
   def perform
-    # leagues = League.all.where('round_end <= :now AND active = true AND
-    #                             round <= rounds', :now => Time.now)
-
-    leagues = League.all.where active: true
+    leagues = League.all.where('round_end <= :now AND active = true AND
+                                round <= rounds', :now => Time.now)
     leagues.each do |league|
       @league = league
+      @league.league_users.where(shield:true).each do |league_user|
+        league_user.update_attributes shield:false
+      end
       end_fistfights if @league.round > 1
       update_stats(league)
       if @league.round < @league.rounds
@@ -17,7 +18,6 @@ class NewRoundJob < ApplicationJob
         @league.save
       end
     end
-
   end
 
   private
@@ -56,6 +56,7 @@ class NewRoundJob < ApplicationJob
     @loser.rank = -1
     @loser.save
 
+    @winner.increment! 'blocks'
     @winner.points = portfolio_value(@loser)
     @winner.rank = current_rank @winner.user_id
     @winner.save

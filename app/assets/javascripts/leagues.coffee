@@ -19,7 +19,8 @@ tryModal = ->
   tryLeverage = ->
     punches                = document.querySelectorAll ".fist"
     leverage_size          = document.querySelector    ".leverage-size"
-    activate               = document.querySelector    ".activate"
+    activate_leverage      = document.querySelector    ".activate-leverage"
+    activate_shield        = document.querySelector    ".activate-shield"
     reset                  = document.querySelector    ".reset"
     deleverage_btn         = document.querySelector    ".deleverage-btn"
     leave_btn              = document.querySelector    "#leave-btn"
@@ -48,8 +49,8 @@ tryModal = ->
         confirmation_action.href = "/leagues/#{league_id}/players/#{user_id}"
         confirmation_modal.classList.add "is-active"
 
-    if activate
-      activate.addEventListener 'click', ->
+    if activate_leverage
+      activate_leverage.addEventListener 'click', ->
         size = +leverage_size.options[leverage_size.selectedIndex].value
         confirmation_action.dataset.method = "post"
         confirmation_meessage.innerText = "Are you sure you want to active #{size}x leverage?"
@@ -60,6 +61,13 @@ tryModal = ->
         confirmation_action.dataset.method = "post"
         confirmation_meessage.innerText = "Are you sure you want to deleverage your account?"
         confirmation_action.href = "/leagues/#{league_id}/deleverage"
+        confirmation_modal.classList.add "is-active"
+    if activate_shield
+      activate_shield.addEventListener 'click', ->
+        confirmation_action.dataset.method = "post"
+        confirmation_meessage.innerText =
+          "Are you sure you want to activate a shield for this round? This will cost 1 block."
+        confirmation_action.href = "/leagues/#{league_id}/shield/"
         confirmation_modal.classList.add "is-active"
 
   tryJoin = ->

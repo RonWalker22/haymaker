@@ -3,6 +3,7 @@ class DestroyFightsJob < ApplicationJob
 
   def perform
     destroy_fights
+    destroy_bets
     reset_league_users
     go_to_round_2
   end
@@ -11,6 +12,10 @@ class DestroyFightsJob < ApplicationJob
 
   def destroy_fights
     Fistfight.all.each { |fight| fight.destroy}
+  end
+
+  def destroy_bets
+    Bet.all.each { |bet| bet.destroy}
   end
 
   def reset_league_users

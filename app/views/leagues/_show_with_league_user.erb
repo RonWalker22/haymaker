@@ -256,12 +256,14 @@
     <div class="column is-2">
       <div class="box">
 
-        <% bets = @league_user.bets.where active: true %>
-        <% if bets.count >= 1 %>
+        <% user_bet = Bet.find_by league_user: @league_user.id%>
+        <% if user_bet %>
           <div class="title is-5 is-title center">
             <div class="tags has-addons">
               <span class="tag is-dark">Leverage</span>
-              <span class="tag is-info">active</span>
+              <span class="tag <%= user_bet.active? ? 'is-info':''%>">
+                <%= user_bet.active? ? 'Active':'Inactive' %>
+              </span>
             </div>
           </div>
           <% leverage = Leverage.find @league_user.bets.last.leverage_id %>
@@ -283,8 +285,10 @@
               <% end %>
             </dd>
           </dl>
-          <button class="button is-rounded  deleverage-btn">Deleverage
-          </button>
+          <% if user_bet.active? %>
+            <button class="button is-rounded  deleverage-btn">Deleverage
+            </button>
+          <% end %>
         <% else %>
               <div class="title is-5 is-title center">
                 <div class="tags has-addons">
@@ -292,19 +296,19 @@
                   <span class="tag">inactive</span>
                 </div>
               </div>
-              <div class="select">
-                <select name="leverage_size" value="leverage_size" data-currentuser=""
-                class="leverage-size">
-                  <% Leverage.all.each do |leverage| %>
-                    <option value="<%= leverage.size%>">
-                      <%= "#{leverage.size}x" %>
-                    </option>
-                  <% end %>
-                </select>
-              </div>
-              <button type="button" class="button  is-small is-rounded activate-leverage">
-                Activate Leverage
-              </button>
+                <div class="select">
+                  <select name="leverage_size" value="leverage_size" data-currentuser=""
+                  class="leverage-size">
+                    <% Leverage.all.each do |leverage| %>
+                      <option value="<%= leverage.size%>">
+                        <%= "#{leverage.size}x" %>
+                      </option>
+                    <% end %>
+                  </select>
+                </div>
+                <button type="button" class="button  is-small is-rounded activate-leverage">
+                  Activate Leverage
+                </button>
         <% end %>
       </div>
       <div class="box">

@@ -196,19 +196,23 @@ class LeaguesController < ApplicationController
     @leverage =  Leverage.find_by size: params[:size]
     @league_user = LeagueUser.find_by(league_id: @league.id,
                                       user_id: current_user.id)
-
-    baseline = portfolio_value @league_user
-    new_bet = Bet.new(
-                  leverage_id: @leverage.id,
-                  league_user_id: @league_user.id,
-                  baseline: baseline,
-                  liquidation: baseline - (@leverage.liquidation * baseline),
-                  round: @league.round,
-                  post_value: -1)
-    if new_bet.save
-      flash[:notice] = "#{@leverage.size}x leverage is now active."
+    if Bet.find_by league_user: @league_user.id
+      flash[:notice] = "#{@leverage.size}x leverage was unsuccessful.
+                        You can't use leverage more than once per league."
     else
-      flash[:notice] = "#{@leverage.size}x leverage was unsuccessful."
+      baseline = portfolio_value @league_user
+      new_bet = Bet.new(
+                    leverage_id: @leverage.id,
+                    league_user_id: @league_user.id,
+                    baseline: baseline,
+                    liquidation: baseline - (@leverage.liquidation * baseline),
+                    round: @league.round,
+                    post_value: -1)
+      if new_bet.save
+        flash[:notice] = "#{@leverage.size}x leverage is now active."
+      else
+        flash[:notice] = "#{@leverage.size}x leverage was unsuccessful."
+      end
     end
     redirect_to league_path @league
   end
@@ -218,7 +222,8 @@ class LeaguesController < ApplicationController
 
   def shield
     unless @league_user.blocks > 0
-      return flash[:notice] = "Shield unsuccessful. You don't have any blocks available."
+      return flash[:notice] = "Shield unsuccessful. You don't have any blocks
+                              available."
     end
 
     @league_user.shield = true

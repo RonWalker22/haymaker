@@ -13,17 +13,20 @@ module LeaguesHelper
 
   def update_stats(league)
     current_rankings = leaderboards
-
-    current_rankings.each_with_index do |user_stats, index|
-      league_user        = LeagueUser.find user_stats[:id]
-      if league_user.alive
-        league_user.points   = user_stats[:cash]
-        league_user.save
+    if current_rankings
+      current_rankings.each_with_index do |user_stats, index|
+        league_user = LeagueUser.find user_stats[:id]
+        if league_user.alive
+          league_user.points   = user_stats[:cash]
+          league_user.save
+        end
       end
     end
   end
 
   def leaderboards
+    @league_wallets ||= @league.wallets
+    @tickers ||= Ticker.all
     arr = []
     users = @league.users.order(:id)
     @league.league_users.order(:user_id).all.each_with_index do |league_user, index|
@@ -96,6 +99,7 @@ module LeaguesHelper
       user        = @temp_user        || @user
       league_user = @temp_league_user || @league_user
       @user_wallets.each do |user_wallet|
+
         if user_wallet.coin_type == 'BTC'
           @btc_wallet = user_wallet
           break
@@ -105,6 +109,7 @@ module LeaguesHelper
     end
 
     def alt_coins_estimate
+      @league_wallets ||= @league.wallets
       hash          = {}
       arr           = []
       user          = @temp_user        || @user
@@ -112,6 +117,7 @@ module LeaguesHelper
       @user_wallets = []
 
       @league_wallets.each do |league_wallet|
+
         if league_wallet.league_user_id == league_user.id
           @user_wallets << league_wallet
         end

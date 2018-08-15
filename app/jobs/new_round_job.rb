@@ -3,8 +3,10 @@ class NewRoundJob < ApplicationJob
   queue_as :default
 
   def perform
-    leagues = League.all.where('round_end <= :now AND active = true AND
-                                round <= rounds', :now => Time.now)
+    @btc_price = Ticker.find_by(pair:"BTC-USDT", exchange_id: 1).price.to_f
+    # leagues = League.all.where('round_end <= :now AND active = true AND
+    #                             round <= rounds', :now => Time.now)
+    leagues = League.all.where active: true
     leagues.each do |league|
       @league = league
       @league.league_users.where(shield:true).each do |league_user|
@@ -39,9 +41,8 @@ class NewRoundJob < ApplicationJob
   end
 
   def knockout_loser
-    btc_price = Ticker.find_by(pair:"BTC-USDT", exchange_id: 1).price.to_f
-    @attacker_performance = round_performance(@attacker, @league, btc_price )
-    @defender_performance = round_performance(@defender, @league, btc_price )
+    @attacker_performance = round_performance(@attacker, @league, @btc_price )
+    @defender_performance = round_performance(@defender, @league, @btc_price )
 
     if @attacker_performance > @defender_performance
       @winner = @attacker

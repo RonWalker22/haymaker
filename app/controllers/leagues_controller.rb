@@ -3,6 +3,7 @@ class LeaguesController < ApplicationController
   before_action :set_league_variables, except: [:create, :new, :index, :join,
                                                 :past, :current]
   before_action :set_league, only: [:join]
+  before_action :check_user_alive, only: [:deleverage, :swing, :bet, :shield]
   include LeaguesHelper
 
   # GET /leagues
@@ -242,6 +243,14 @@ class LeaguesController < ApplicationController
       set_btc_price
       set_tickers
       set_league_wallets
+    end
+
+    def check_user_alive
+      if !@league_user.alive?
+        flash[:notice] = "You have been knocked out of this league and are no
+                                  longer able to access any league featues."
+        return redirect_to @league
+      end
     end
 
     def set_league

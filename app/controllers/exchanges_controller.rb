@@ -59,7 +59,11 @@ class ExchangesController < ApplicationController
     set_coin_tickers
     league_user = LeagueUser.find_by(user_id: current_user.id,
                                     league_id: params[:id].to_i)
-
+    if !league_user.alive?
+      flash[:notice] = "You have been knocked out of this league and are no
+                                longer able to access any league featues."
+      return redirect_back(fallback_location: root_path)
+    end
     @wallets = league_user.wallets.where(exchange_id: @exchange.id)
 
     @wallet = @wallets.find_by(coin_type:@coin_1_ticker)

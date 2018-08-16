@@ -1,6 +1,6 @@
 
 <% if @league_user.champ %>
-  <section class="hero is-small is-info">
+  <section class="hero is-info">
     <div class="hero-body">
       <div class="container">
         <h1 class="title">
@@ -62,7 +62,7 @@
         <%= @league.name %> League
       </h1>
       <% if @league.start_date.past?%>
-        <nav class="level is-mobile">
+        <nav class="level">
           <div class="level-item has-text-centered">
             <div>
               <p class="heading">Rank</p>
@@ -166,101 +166,12 @@
         </div>
       </p>
     </div>
-    <div class="box">
-      <% user_bet = Bet.find_by league_user: @league_user.id%>
-      <% if user_bet %>
-        <div class="title is-5 is-title center">
-          <div class="tags has-addons">
-            <span class="tag is-dark">Leverage</span>
-            <span class="tag <%= user_bet.active? ? 'is-info':''%>">
-              <%= user_bet.active? ? 'Active':'Inactive' %>
-            </span>
-          </div>
-        </div>
-        <% leverage = Leverage.find @league_user.bets.last.leverage_id %>
-        <dl>
-          <dt><strong>Size:</strong></dt>
-          <dd><%= leverage.size %>x</dd>
-          <dt><strong>Baseline:</strong></dt>
-          <dd><%= number_to_currency @league_user.bets.last.baseline%></dd>
-          <dt><strong>Liquidation trigger: </strong></dt>
-          <dd></strong><%= number_to_currency @league_user.bets.last.liquidation %></dd>
-          <dt><strong>Current Results:</strong></dt>
-          <dd>
-            <% net_bonus = (portfolio_value(@league_user, @league,@btc_price) - @league_user.bets.last.baseline) * (leverage.size - 1 ) %>
-            <%=number_with_delimiter net_bonus.abs%>
-            <% if net_bonus >= 0%>
-              Bonus
-            <% else %>
-              Penalty
-            <% end %>
-          </dd>
-        </dl>
-        <% if user_bet.active? %>
-          <button class="button is-rounded  deleverage-btn">Deleverage
-          </button>
-        <% end %>
-      <% else %>
-            <div class="title is-5 is-title center">
-              <div class="tags has-addons">
-                <span class="tag is-dark">Leverage</span>
-                <span class="tag">inactive</span>
-              </div>
-            </div>
-              <div class="select">
-                <select name="leverage_size" value="leverage_size" data-currentuser=""
-                class="leverage-size">
-                  <% Leverage.all.each do |leverage| %>
-                    <option value="<%= leverage.size%>">
-                      <%= "#{leverage.size}x" %>
-                    </option>
-                  <% end %>
-                </select>
-              </div>
-              <button type="button" class="button  is-small is-rounded activate-leverage">
-                Activate Leverage
-              </button>
-      <% end %>
-    </div>
-    <div class="box">
-        <% if @league_user.shield?%>
-        <div class="title is-5 is-title center">
-          <div class="tags has-addons">
-            <span class="tag is-dark">Shield</span>
-            <span class="tag is-info">active</span>
-          </div>
-        </div>
-          <p class="content">
-            While this shield is active you will not participate in any
-            additional fistfights this round.
-          </p>
-          <p class="content">
-            You have <%= @league_user.blocks %> blocks remaining.
-          </p>
-        <% else %>
-        <div class="title is-5 is-title center">
-          <div class="tags has-addons">
-            <span class="tag is-dark">Shield</span>
-            <span class="tag">inactive</span>
-          </div>
-        </div>
-        <p class="content">
-          You have <%= @league_user.blocks %> blocks remaining.
-        </p>
-        <% end %>
-        <% if @league_user.blocks > 0 %>
-          <button type="button"
-          class="button is-samll is-rounded activate-shield is-small">
-            Activate Shield
-          </button>
-        <% end %>
-    </div>
   </div>
 
     <div class="column">
       <div class="box">
         <% league_users = LeagueUser.where(alive:true, league_id: @league.id).order(:rank).page params[:leaderboards] %>
-        <h2 class="title is-5 center center" id="leaderboards-title">Leaderboards</h2>
+        <h2 class="title is-5 center" id="leaderboards-title">Leaderboards</h2>
         <%= paginate league_users, :param_name => "leaderboards", params: {anchor: 'leaderboards-title'} %>
           <table class="table is-striped is-fullwidth is-narrow">
             <thead>
@@ -324,6 +235,90 @@
     </div>
 
     <div class="column is-4-desktop">
+      <div class="box">
+        <h2 class="title is-5 center" id="actions-title">Actions</h2>
+          <% if @league_user.shield?%>
+          <div class="tags has-addons">
+            <span class="tag is-dark margin-left">Shield</span>
+            <span class="tag is-info margin-right">active</span>
+          </div>
+            <p class="content">
+              While this shield is active you will not participate in any
+              additional fistfights this round.
+            </p>
+            <p class="content">
+              You have <%= @league_user.blocks %> blocks remaining.
+            </p>
+          <% else %>
+          <div class="tags has-addons">
+            <span class="tag is-dark margin-left">Shield</span>
+            <span class="tag margin-right">inactive</span>
+          </div>
+          <p class="content">
+            You have <%= @league_user.blocks %> blocks remaining.
+          </p>
+          <% end %>
+          <% if @league_user.blocks > 0 %>
+            <button type="button"
+            class="button is-samll is-rounded activate-shield is-small">
+              Activate Shield
+            </button>
+          <% end %>
+
+          <% user_bet = Bet.find_by league_user: @league_user.id%>
+          <% if user_bet %>
+            <div class="tags has-addons">
+              <span class="tag is-dark margin-left">Leverage</span>
+              <span class="tag margin-right <%= user_bet.active? ? 'is-info':''%>">
+                <%= user_bet.active? ? 'Active':'Inactive' %>
+              </span>
+            </div>
+            <% leverage = Leverage.find @league_user.bets.last.leverage_id %>
+            <dl>
+              <dt><strong>Size:</strong></dt>
+              <dd><%= leverage.size %>x</dd>
+              <dt><strong>Baseline:</strong></dt>
+              <dd><%= number_to_currency @league_user.bets.last.baseline%></dd>
+              <dt><strong>Liquidation trigger: </strong></dt>
+              <dd></strong><%= number_to_currency @league_user.bets.last.liquidation %></dd>
+              <dt><strong>Current Results:</strong></dt>
+              <dd>
+                <% net_bonus = (portfolio_value(@league_user, @league,@btc_price) - @league_user.bets.last.baseline) * (leverage.size - 1 ) %>
+                <%=number_with_delimiter net_bonus.abs%>
+                <% if net_bonus >= 0%>
+                  Bonus
+                <% else %>
+                  Penalty
+                <% end %>
+              </dd>
+            </dl>
+            <% if user_bet.active? %>
+              <button class="button is-rounded  deleverage-btn">Deleverage
+              </button>
+            <% end %>
+          <% else %>
+                <div class="title is-5 is-title center">
+                  <div class="tags has-addons">
+                    <span class="tag margin-left is-dark">Leverage</span>
+                    <span class="tag margin-right">inactive</span>
+                  </div>
+                </div>
+                  <div class="select">
+                    <select name="leverage_size" value="leverage_size" data-currentuser=""
+                    class="leverage-size">
+                      <% Leverage.all.each do |leverage| %>
+                        <option value="<%= leverage.size%>">
+                          <%= "#{leverage.size}x" %>
+                        </option>
+                      <% end %>
+                    </select>
+                  </div>
+                  <button type="button" class="button  is-small is-rounded activate-leverage">
+                    Activate Leverage
+                  </button>
+          <% end %>
+      </div>
+
       <div class="box">
         <% fistfights = @league.fistfights.order(id: :desc).page params[:page] %>
         <h2 class="title is-5 -title center" id="fistfights-title">Fistfights</h2>

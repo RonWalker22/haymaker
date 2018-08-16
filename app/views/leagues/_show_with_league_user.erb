@@ -55,7 +55,7 @@
   </section>
 <% end %>
 
-<div class="columns is-desktop">
+<div class="columns">
   <div class="column">
     <div class="box">
       <h1 class="title is-4 center">
@@ -103,7 +103,7 @@
           </div>
         </nav>
       <% end %>
-      <% if @league.start_date.past? && @league.end_date.future? %>
+      <% if @league.start_date.past?%>
           <% @league.exchanges.each do |x|%>
             <%= link_to "Trade @ #{x.name}X", trade_path(@league.id, x.id, p:
             'ETH-BTC'), class:"button is-medium is-fullwidth",
@@ -114,14 +114,8 @@
   </div>
 </div>
 
-<div class="columns">
-  <% if !@league.active? %>
-  <div class="column is-4">
-  <% elsif @league.start_date.past? %>
-  <div class="column is-2 is-offset-1 is-desktop">
-  <% else %>
-  <div class="column is-2 is-offset-1 is-desktop">
-  <% end %>
+<div class="columns is-multiline">
+  <div class="column is-3-tablet is-2-desktop">
     <div class="box">
       <h2 class="title is-4 center" id="league-info" data-leagueid = "<%=@league.id%>" data-userid = "<%=current_user.id%>">
         League Info
@@ -172,218 +166,103 @@
         </div>
       </p>
     </div>
-  </div>
-
-  <% if @league.start_date.past?%>
-    <% if !@league.active?%>
-      <div class="column is-4">
-    <% else %>
-      <div class="column is-6 is-desktop">
-    <% end %>
-      <div class="box">
-        <% fistfights = @league.fistfights.order(id: :desc).page params[:page] %>
-        <h2 class="title is-5 -title center" id="fistfights-title">Fistfights</h2>
-        <%= paginate fistfights, params: {anchor: 'fistfights-title'}  %>
-        <table class="table is-striped">
-          <thead>
-            <tr>
-              <th>Attacker</th>
-              <th></th>
-              <th>Defender</th>
-              <th>Round</th>
-            </tr>
-          </thead>
-          <tbody>
-            <%  fistfights.each do |ff| %>
-              <% @ffa_results = nil %>
-              <% @attacker = nil %>
-              <% @league_attacker = nil %>
-              <% @ffd_results = nil %>
-              <% @defender = nil %>
-              <% @league_defender = nil %>
-              <% users_performance.each do |hash| %>
-                  <% if ff.attacker.user_id == hash[:id] %>
-                    <% @ffa_results = hash[:fistfight] %>
-                    <% @attacker = hash[:user] %>
-                    <% @league_attacker = hash[:league_user]  %>
-                  <% end %>
-                  <% if ff.defender.user_id == hash[:id] %>
-                    <% @ffd_results = hash[:fistfight] %>
-                    <% @defender = hash[:user] %>
-                    <% @league_defender = hash[:league_user] %>
-                  <% end %>
-                  <% break if @ffa_results && @ffd_results %>
-              <% end %>
-              <tr>
-                <td>
-                  <% if @league_attacker.alive%>
-                    <%= link_to @attacker.name,
-                                user_path(@attacker.id) %>
-                  <% else %>
-                    <%= link_to @attacker.name,
-                                user_path(@attacker.id),
-                                class: 'ko'%>
-                  <% end %>
-          <%= ff.active? ? "(#{@ffa_results}%)" : "(#{ff.attacker_performance}%)"%>
-                </td>
-                <td>vs.</td>
-                <td>
-                  <% if @league_defender.alive%>
-                    <%= link_to @defender.name,
-                                user_path(@defender.id) %>
-                  <% else %>
-                    <%= link_to @defender.name,
-                                user_path(@defender.id),
-                                class: 'ko' %>
-                  <% end %>
-          <%= ff.active? ? "(#{@ffd_results}%)" : "(#{ff.defender_performance}%)"%>
-                </td>
-                <td><%=ff.round%></td>
-              </tr>
+    <div class="box">
+      <% user_bet = Bet.find_by league_user: @league_user.id%>
+      <% if user_bet %>
+        <div class="title is-5 is-title center">
+          <div class="tags has-addons">
+            <span class="tag is-dark">Leverage</span>
+            <span class="tag <%= user_bet.active? ? 'is-info':''%>">
+              <%= user_bet.active? ? 'Active':'Inactive' %>
+            </span>
+          </div>
+        </div>
+        <% leverage = Leverage.find @league_user.bets.last.leverage_id %>
+        <dl>
+          <dt><strong>Size:</strong></dt>
+          <dd><%= leverage.size %>x</dd>
+          <dt><strong>Baseline:</strong></dt>
+          <dd><%= number_to_currency @league_user.bets.last.baseline%></dd>
+          <dt><strong>Liquidation trigger: </strong></dt>
+          <dd></strong><%= number_to_currency @league_user.bets.last.liquidation %></dd>
+          <dt><strong>Current Results:</strong></dt>
+          <dd>
+            <% net_bonus = (portfolio_value(@league_user, @league,@btc_price) - @league_user.bets.last.baseline) * (leverage.size - 1 ) %>
+            <%=number_with_delimiter net_bonus.abs%>
+            <% if net_bonus >= 0%>
+              Bonus
+            <% else %>
+              Penalty
             <% end %>
-          </tbody>
-        </table>
-
-        <%if @league.fistfights.count == 0  %>
-          <p class="content">
-              There are no past or active Fistfights.
-          </p>
+          </dd>
+        </dl>
+        <% if user_bet.active? %>
+          <button class="button is-rounded  deleverage-btn">Deleverage
+          </button>
         <% end %>
-      </div>
-    </div>
-  <% end %>
-  <% if @league.start_date.past? && @league.active? %>
-    <div class="column is-2">
-      <div class="box">
-
-        <% user_bet = Bet.find_by league_user: @league_user.id%>
-        <% if user_bet %>
-          <div class="title is-5 is-title center">
-            <div class="tags has-addons">
-              <span class="tag is-dark">Leverage</span>
-              <span class="tag <%= user_bet.active? ? 'is-info':''%>">
-                <%= user_bet.active? ? 'Active':'Inactive' %>
-              </span>
-            </div>
-          </div>
-          <% leverage = Leverage.find @league_user.bets.last.leverage_id %>
-          <dl>
-            <dt><strong>Size:</strong></dt>
-            <dd><%= leverage.size %>x</dd>
-            <dt><strong>Baseline:</strong></dt>
-            <dd><%= number_to_currency @league_user.bets.last.baseline%></dd>
-            <dt><strong>Liquidation trigger: </strong></dt>
-            <dd></strong><%= number_to_currency @league_user.bets.last.liquidation %></dd>
-            <dt><strong>Current Results:</strong></dt>
-            <dd>
-              <% net_bonus = (portfolio_value(@league_user, @league,@btc_price) - @league_user.bets.last.baseline) * (leverage.size - 1 ) %>
-              <%=number_with_delimiter net_bonus.abs%>
-              <% if net_bonus >= 0%>
-                Bonus
-              <% else %>
-                Penalty
-              <% end %>
-            </dd>
-          </dl>
-          <% if user_bet.active? %>
-            <button class="button is-rounded  deleverage-btn">Deleverage
-            </button>
-          <% end %>
-        <% else %>
-              <div class="title is-5 is-title center">
-                <div class="tags has-addons">
-                  <span class="tag is-dark">Leverage</span>
-                  <span class="tag">inactive</span>
-                </div>
+      <% else %>
+            <div class="title is-5 is-title center">
+              <div class="tags has-addons">
+                <span class="tag is-dark">Leverage</span>
+                <span class="tag">inactive</span>
               </div>
-                <div class="select">
-                  <select name="leverage_size" value="leverage_size" data-currentuser=""
-                  class="leverage-size">
-                    <% Leverage.all.each do |leverage| %>
-                      <option value="<%= leverage.size%>">
-                        <%= "#{leverage.size}x" %>
-                      </option>
-                    <% end %>
-                  </select>
-                </div>
-                <button type="button" class="button  is-small is-rounded activate-leverage">
-                  Activate Leverage
-                </button>
-        <% end %>
-      </div>
-      <div class="box">
-          <% if @league_user.shield?%>
-          <div class="title is-5 is-title center">
-            <div class="tags has-addons">
-              <span class="tag is-dark">Shield</span>
-              <span class="tag is-info">active</span>
             </div>
+              <div class="select">
+                <select name="leverage_size" value="leverage_size" data-currentuser=""
+                class="leverage-size">
+                  <% Leverage.all.each do |leverage| %>
+                    <option value="<%= leverage.size%>">
+                      <%= "#{leverage.size}x" %>
+                    </option>
+                  <% end %>
+                </select>
+              </div>
+              <button type="button" class="button  is-small is-rounded activate-leverage">
+                Activate Leverage
+              </button>
+      <% end %>
+    </div>
+    <div class="box">
+        <% if @league_user.shield?%>
+        <div class="title is-5 is-title center">
+          <div class="tags has-addons">
+            <span class="tag is-dark">Shield</span>
+            <span class="tag is-info">active</span>
           </div>
-            <p class="content">
-              While this shield is active you will not participate in any
-              additional fistfights this round.
-            </p>
-            <p class="content">
-              You have <%= @league_user.blocks %> blocks remaining.
-            </p>
-          <% else %>
-          <div class="title is-5 is-title center">
-            <div class="tags has-addons">
-              <span class="tag is-dark">Shield</span>
-              <span class="tag">inactive</span>
-            </div>
-          </div>
+        </div>
+          <p class="content">
+            While this shield is active you will not participate in any
+            additional fistfights this round.
+          </p>
           <p class="content">
             You have <%= @league_user.blocks %> blocks remaining.
           </p>
-          <% end %>
-          <% if @league_user.blocks > 0 %>
-            <button type="button"
-            class="button is-samll is-rounded activate-shield is-small">
-              Activate Shield
-            </button>
-          <% end %>
-      </div>
+        <% else %>
+        <div class="title is-5 is-title center">
+          <div class="tags has-addons">
+            <span class="tag is-dark">Shield</span>
+            <span class="tag">inactive</span>
+          </div>
+        </div>
+        <p class="content">
+          You have <%= @league_user.blocks %> blocks remaining.
+        </p>
+        <% end %>
+        <% if @league_user.blocks > 0 %>
+          <button type="button"
+          class="button is-samll is-rounded activate-shield is-small">
+            Activate Shield
+          </button>
+        <% end %>
     </div>
-  <% end %>
-</div>
-
-
-<% if flash[:reset_funds]%>
-<div class="notification">
-  <p class="notice center">
-    <%= flash[:reset_funds] %>
-   <%= link_to "Yes", reset_path(@league), method: :post,
-                class:"button is-rounded is-danger is-small"%>
-   <%= link_to "No", league_path(@league),
-                class:"button is-rounded  is-inverted is-small"%>
-  </p>
-</div>
-<% end %>
-
-<p class="notice center">
-  <% if flash[:request_leave]%>
-  <div class="notification">
-    <p class="notice center">
-    <%= flash[:request_leave] %>
-    <%=  link_to "Yes",
-                  leave_path(id:@league.id, pid: current_user.id ),
-                  class:"button  is-rounded is-danger is-small",
-                    method: :delete%>
-   <%= link_to "No", league_path(league:@league.id),
-                class:"button is-rounded  is-inverted is-small"%>
-    </p>
   </div>
-  <% end %>
 
-<% if @league.start_date.past?%>
-  <div class="columns is-centered">
-    <div class="column is-10 is-half">
+    <div class="column">
       <div class="box">
         <% league_users = LeagueUser.where(alive:true, league_id: @league.id).order(:rank).page params[:leaderboards] %>
         <h2 class="title is-5 center center" id="leaderboards-title">Leaderboards</h2>
         <%= paginate league_users, :param_name => "leaderboards", params: {anchor: 'leaderboards-title'} %>
-          <table class="table is-striped is-narrow">
+          <table class="table is-striped is-fullwidth is-narrow">
             <thead>
               <th>Rank</th>
               <th>Player</th>
@@ -443,9 +322,108 @@
           <%= paginate league_users, :param_name => "leaderboards", params: {anchor: 'leaderboards-title'} %>
       </div>
     </div>
-  </div>
+
+    <div class="column is-4-desktop">
+      <div class="box">
+        <% fistfights = @league.fistfights.order(id: :desc).page params[:page] %>
+        <h2 class="title is-5 -title center" id="fistfights-title">Fistfights</h2>
+        <%= paginate fistfights, params: {anchor: 'fistfights-title'}  %>
+        <table class="table is-striped is-fullwidth is-narrow">
+          <thead>
+            <tr>
+              <th>Attacker</th>
+              <th></th>
+              <th>Defender</th>
+              <th>Round</th>
+            </tr>
+          </thead>
+          <tbody>
+            <%  fistfights.each do |ff| %>
+              <% @ffa_results = nil %>
+              <% @attacker = nil %>
+              <% @league_attacker = nil %>
+              <% @ffd_results = nil %>
+              <% @defender = nil %>
+              <% @league_defender = nil %>
+              <% users_performance.each do |hash| %>
+                  <% if ff.attacker.user_id == hash[:id] %>
+                    <% @ffa_results = hash[:fistfight] %>
+                    <% @attacker = hash[:user] %>
+                    <% @league_attacker = hash[:league_user]  %>
+                  <% end %>
+                  <% if ff.defender.user_id == hash[:id] %>
+                    <% @ffd_results = hash[:fistfight] %>
+                    <% @defender = hash[:user] %>
+                    <% @league_defender = hash[:league_user] %>
+                  <% end %>
+                  <% break if @ffa_results && @ffd_results %>
+              <% end %>
+              <tr>
+                <td>
+                  <% if @league_attacker.alive%>
+                    <%= link_to @attacker.name,
+                                user_path(@attacker.id) %>
+                  <% else %>
+                    <%= link_to @attacker.name,
+                                user_path(@attacker.id),
+                                class: 'ko'%>
+                  <% end %>
+          <%= ff.active? ? "(#{@ffa_results}%)" : "(#{ff.attacker_performance}%)"%>
+                </td>
+                <td>vs.</td>
+                <td>
+                  <% if @league_defender.alive%>
+                    <%= link_to @defender.name,
+                                user_path(@defender.id) %>
+                  <% else %>
+                    <%= link_to @defender.name,
+                                user_path(@defender.id),
+                                class: 'ko' %>
+                  <% end %>
+          <%= ff.active? ? "(#{@ffd_results}%)" : "(#{ff.defender_performance}%)"%>
+                </td>
+                <td><%=ff.round%></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= paginate fistfights, params: {anchor: 'fistfights-title'}  %>
+        <%if @league.fistfights.count == 0  %>
+          <p class="content">
+              There are no past or active Fistfights.
+          </p>
+        <% end %>
+      </div>
+    </div>
+</div>
+
+
+<% if flash[:reset_funds]%>
+<div class="notification">
+  <p class="notice center">
+    <%= flash[:reset_funds] %>
+   <%= link_to "Yes", reset_path(@league), method: :post,
+                class:"button is-rounded is-danger is-small"%>
+   <%= link_to "No", league_path(@league),
+                class:"button is-rounded  is-inverted is-small"%>
+  </p>
+</div>
 <% end %>
 
+<p class="notice center">
+  <% if flash[:request_leave]%>
+  <div class="notification">
+    <p class="notice center">
+    <%= flash[:request_leave] %>
+    <%=  link_to "Yes",
+                  leave_path(id:@league.id, pid: current_user.id ),
+                  class:"button  is-rounded is-danger is-small",
+                    method: :delete%>
+   <%= link_to "No", league_path(league:@league.id),
+                class:"button is-rounded  is-inverted is-small"%>
+    </p>
+  </div>
+  <% end %>
 
 <div class="modal confirmation-modal">
   <div class="modal-background"></div>

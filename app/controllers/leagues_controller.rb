@@ -248,7 +248,7 @@ class LeaguesController < ApplicationController
     def check_user_alive
       if !@league_user.alive?
         flash[:notice] = "You have been knocked out of this league and are no
-                                  longer able to access any league featues."
+                                  longer able to access any league features."
         return redirect_to @league
       end
     end
@@ -341,8 +341,8 @@ class LeaguesController < ApplicationController
       )
 
       if fistfight.save
-        @league_user.udpate_attributes shield: true
-        @target.udpate_attributes shield: true
+        @league_user.update_attributes shield: true
+        @target.update_attributes shield: true
         flash[:notice] = "Fistfight has begun."
       else
         flash[:alert] = "Fistfight was unable to start."

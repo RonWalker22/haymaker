@@ -31,7 +31,7 @@ tryModal = ->
     for punch in punches
       punch.addEventListener 'click', ->
         confirmation_action.dataset.method = "post"
-        confirmation_action.href = "/leagues/#{league_id}/swing/#{user_id}"
+        confirmation_action.href = "/leagues/#{league_id}/swing/#{this.dataset.userid}"
         confirmation_meessage.innerText = "Are you sure you to engage in a fistfight with #{this.dataset.username}?"
         confirmation_modal.classList.add "is-active"
 

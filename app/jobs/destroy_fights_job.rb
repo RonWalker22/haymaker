@@ -5,7 +5,7 @@ class DestroyFightsJob < ApplicationJob
     destroy_fights
     destroy_bets
     reset_league_users
-    go_to_round_2
+    reset_league
   end
 
   private
@@ -24,7 +24,7 @@ class DestroyFightsJob < ApplicationJob
     end
   end
 
-  def go_to_round_2
-    League.first.update_attributes round:2
+  def reset_league
+    League.first.update_attributes round:2, active:true
   end
 end

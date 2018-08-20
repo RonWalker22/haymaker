@@ -13,6 +13,7 @@ class NewRoundJob < ApplicationJob
       @users_stats = leaderboards
       @fistfights = @league.fistfights.where(active:true)
       disable_shields
+      end_bets if @league.round == @league.rounds
       end_fistfights if @league.round > 1
       update_stats
       @alive_users = @league.league_users.where alive:true
@@ -48,19 +49,22 @@ class NewRoundJob < ApplicationJob
       decide_round_champ(fistfight)
       fistfight.active = false
       fistfight.save
-      @fight_loser.portfolio = @users_stats[@fight_loser][:cash]
-      @fight_loser.score     = @users_stats[@fight_loser][:score]
-      @fight_loser.rank      = 0
-      @fight_loser.alive     = false
-      @fight_loser.save
-
-      @fight_winner.increment! 'blocks'
-      @fight_winner.save
+      update_fighters_stats
     end
   end
 
+  def update_fighters_stats
+    @fight_loser.portfolio = @users_stats[@fight_loser][:cash]
+    @fight_loser.score     = @users_stats[@fight_loser][:score]
+    @fight_loser.rank      = -1
+    @fight_loser.alive     = false
+    @fight_loser.save
+
+    @fight_winner.increment! 'blocks'
+    @fight_winner.save
+  end
+
   def end_game
-    end_bets
     @alive_users = @league.league_users.where alive:true
     update_stats
     decide_champ

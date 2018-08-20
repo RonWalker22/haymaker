@@ -66,8 +66,8 @@
             <div>
               <p class="heading">Rank</p>
               <p class="title ">
-                <% if @league_user.rank > 0%>
-                  <%= number_with_delimiter (@users_stats[@league_user][:rank])%>
+                <% if @users_stats[@league_user][:rank] > 0%>
+                  <%= @users_stats[@league_user][:rank]%>
                 <% elsif @league_user.rank < 0%>
                   <%= "KO'd" %>
                 <% else%>

@@ -1,4 +1,4 @@
-class DestroyFightsJob < ApplicationJob
+class ResetLeaguesJob < ApplicationJob
   queue_as :default
 
   def perform
@@ -20,7 +20,8 @@ class DestroyFightsJob < ApplicationJob
 
   def reset_league_users
     LeagueUser.all.each do |lu|
-      lu.update_attributes alive:true, leverage_points:0, rank: 0, shield: false, blocks:0
+      lu.update_attributes alive:true, net_bonus:0, rank: 0, shield: false,
+                           blocks:0, champ: false, score:0, portfolio:0
     end
   end
 

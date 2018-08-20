@@ -162,20 +162,7 @@ class LeaguesController < ApplicationController
   end
 
   def deleverage
-    bet = @league_user.bets.last
-    leverage = Leverage.find (@league_user.bets.last.leverage_id)
-    current_cash_value = portfolio_value @league_user
-    if bet && bet.active
-      bet.active = false
-      @size = leverage.size.to_i - 1
-      @league_user.alive = false if current_cash_value <= bet.liquidation
-      @league_user.leverage_points += ((current_cash_value - bet.baseline) * @size).round(2)
-      @league_user.save
-      bet.post_value = current_cash_value
-      if bet.save
-        flash[:notice] = "Leverage has been successfully deactivated."
-      end
-    end
+    end_bet @league_user
     redirect_to league_path @league
   end
 
@@ -201,7 +188,7 @@ class LeaguesController < ApplicationController
       flash[:notice] = "#{@leverage.size}x leverage was unsuccessful.
                         You can't use leverage more than once per league."
     else
-      baseline = portfolio_value @league_user
+      baseline = @users_stats[@league_user][:cash]
       new_bet = Bet.new(
                     leverage_id: @leverage.id,
                     league_user_id: @league_user.id,
@@ -243,6 +230,7 @@ class LeaguesController < ApplicationController
       set_btc_price
       set_tickers
       set_league_wallets
+      set_users_stats
     end
 
     def check_user_alive
@@ -270,6 +258,10 @@ class LeaguesController < ApplicationController
 
     def set_tickers
       @tickers = Ticker.all
+    end
+
+    def set_users_stats
+      @users_stats = leaderboards
     end
 
     def set_league_wallets

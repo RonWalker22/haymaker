@@ -24,15 +24,14 @@ class FightJob < ApplicationJob
       )
 
       if fistfight.save
-        @league_user.shield = true
-        @league_user.save
-        @league_defender.shield = true
-        @league_defender.save
+        @league_user.update_attributes     shield: true
+        @league_defender.update_attributes shield: true
       end
     end
 
-    LeagueUser.all.each do |user|
-      user.points = @baseline
+    @league.league_users.each do |user|
+      user.baseline = @baseline
+      user.score    = 20_000
       user.save
     end
   end

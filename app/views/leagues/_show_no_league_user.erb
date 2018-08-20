@@ -228,7 +228,9 @@
                     <% end %>
 
                   </td>
-                  <td><%= number_with_delimiter (league_user.points + league_user.leverage_points) %></td>
+                  <td>
+                  <%= number_with_delimiter league_user.score%>
+                  </td>
                 </tr>
               <% end %>
             </tbody>

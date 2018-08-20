@@ -21,7 +21,7 @@
 }
 
 .fist{
-  height: 3em;
+  height: 2.5em;
   &:hover {
     cursor: pointer;
   }
@@ -29,4 +29,20 @@
 
 .is-what-title {
   display: inline-block;
+}
+
+.type-action {
+  width: 5.2em;
+}
+
+.count-action {
+ width: 2.3em;
+}
+
+.status-action {
+  width: 4.3em;
+}
+
+.stat-line {
+  color: black
 }

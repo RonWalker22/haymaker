@@ -42,13 +42,15 @@
         participating in a fistfight. This shield expires at the end of the
         round.</p>
 
-        <p class="content">A player’s round performance is determined by
-        percentage change of their portfolio from the beginning of the round
-        compared to the end of the round. Leverage points are not considered in
-        round performance. For example, let's suppose player A1 and player B1
-        are in a fistfight. If A1 increases his portfolio by 10% and B1
-        increases his portfolio by 9%, A1 moves on to the next round and B1 is
-        knocked out of the league.  Each round is independent from the rest.</p>
+        <p class="content">A player’s round performance is determined by the
+        percentage change of their score from the beginning of the round
+        compared to the end of the round. A player's score consists of the
+        Players portfolio value plus or minus any bonus points for leverage.
+        For example, let's suppose player A1 and player B1 are in a fistfight.
+        If A1 increases his portfolio by 10% and B1 increases his portfolio by
+        9%, A1 moves on to the next round and B1 is knocked out of the league.
+        Each round is independent from the rest.
+        </p>
       <h3 class="title is-6">Bare Knuckle</h3>
 
       <p class="content"> Trading competition without rounds, fistfights, or
@@ -140,7 +142,7 @@
       <h2 class="title is-5 center">Liquidation Rates</h2>
       <table class='table is-striped'>
         <thead>
-          <th>Leverage</th>
+          <th>Size</th>
           <th>Liquidation Trigger</th>
         </thead>
 
@@ -156,11 +158,11 @@
       <h2 class="title is-3 center">Bonus/Penalty Examples</h2>
       <table class="table is-striped is-fullwidth">
         <thead>
-          <th>Leverage</th>
+          <th>Size</th>
           <th>Baseline</th>
           <th>Post Value</th>
-          <th>Bonus/Penalty</th>
-          <th>Total Points</th>
+          <th>Net Bonus</th>
+          <th>Score</th>
         </thead>
         <tbody>
           <% Leverage.all.each do |leverage|  %>

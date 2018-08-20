@@ -6,15 +6,54 @@
         <table class="table">
           <thead>
             <tr>
-              <th>Symbol</th>
-              <th>Quantity</th>
+              <th>Total USDT</th>
+              <th>Total BTC</th>
             </tr>
           </thead>
           <tbody>
+            <tr>
+              <td>
+                <%= number_to_currency(@users_stats[@league_user][:cash])%>
+              </td>
+              <td>
+                <%= number_with_delimiter( @users_stats[@league_user][:btce])%>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Quantity</th>
+              <th>BTC</th>
+              <th>USDT</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <th>Symbol</th>
+              <th>Quantity</th>
+              <th>BTC</th>
+              <th>USDT</th>
+            </tr>
+          </tfoot>
+          <tbody>
             <% current_user.wallets.where(league_user: @league_user).each do |w| %>
+            <% if  w.coin_type == 'BTC'  %>
+              <% usdt_value   = @btc_price %>
+              <% btc_quantity = w.total_quantity %>
+            <% else %>
+              <% btc_price    = Ticker.find_by(pair:"#{w.coin_type}-BTC").price.to_f %>
+              <% btc_quantity = (w.total_quantity * btc_price).round 8 %>
+              <% usdt_value   = (btc_quantity * @btc_price).round 2 %>
+            <% end %>
                 <tr>
-                  <td> <%= w.coin_type  %> </td>
-                  <td> <%= w.total_quantity %> </td>
+                  <td> <%= w.coin_type  %></td>
+                  <td> <%= number_with_delimiter w.total_quantity%></td>
+                  <td> <%= number_with_delimiter  btc_quantity%></td>
+                  <td><%= number_to_currency usdt_value%></td>
                 </tr>
             <% end %>
           </tbody>

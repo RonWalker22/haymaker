@@ -1,4 +1,3 @@
-
 <% if @league_user.champ %>
   <section class="hero is-info">
     <div class="hero-body">
@@ -66,9 +65,9 @@
           <div class="level-item has-text-centered">
             <div>
               <p class="heading">Rank</p>
-              <p class="title">
+              <p class="title ">
                 <% if @league_user.rank > 0%>
-                  <%= @league_user.rank %>
+                  <%= number_with_delimiter (@users_stats[@league_user][:rank])%>
                 <% elsif @league_user.rank < 0%>
                   <%= "KO'd" %>
                 <% else%>
@@ -80,24 +79,24 @@
           <div class="level-item has-text-centered">
             <div>
               <p class="heading">Score</p>
-              <p class="title">
-              <%= number_with_delimiter portfolio_value(@league_user) + @league_user.leverage_points%>
+              <p class="title ">
+              <%= number_with_delimiter @users_stats[@league_user][:score]%>
             </p>
             </div>
           </div>
           <div class="level-item has-text-centered">
             <div>
               <p class="heading">Portfolio</p>
-              <p class="title">
-                <%= number_to_currency (portfolio_value @league_user)%>
+              <p class="title ">
+                <%= number_to_currency @users_stats[@league_user][:cash]%>
               </p>
             </div>
           </div>
           <div class="level-item has-text-centered">
             <div>
               <p class="heading">Net Bonus</p>
-              <p class="title">
-                <%= number_with_delimiter @league_user.leverage_points %>
+              <p class="title ">
+                <%= number_with_delimiter @league_user.net_bonus %>
               </p>
             </div>
           </div>
@@ -171,7 +170,7 @@
   <div class="column is-9 is-5-desktop is-half">
     <div class="box">
       <% fistfights = @league.fistfights.order(id: :desc).page params[:page] %>
-      <h2 class="title is-5 -title center" id="fistfights-title">Fistfights</h2>
+      <h2 class="title is-4 -title center" id="fistfights-title">Fistfights</h2>
       <%= paginate fistfights, params: {anchor: 'fistfights-title'}  %>
       <table class="table is-striped is-fullwidth is-narrow">
         <thead>
@@ -184,48 +183,35 @@
         </thead>
         <tbody>
           <%  fistfights.each do |ff| %>
-            <% @ffa_results = nil %>
-            <% @attacker = nil %>
-            <% @league_attacker = nil %>
-            <% @ffd_results = nil %>
-            <% @defender = nil %>
-            <% @league_defender = nil %>
-            <% users_performance.each do |hash| %>
-                <% if ff.attacker.user_id == hash[:id] %>
-                  <% @ffa_results = hash[:fistfight] %>
-                  <% @attacker = hash[:user] %>
-                  <% @league_attacker = hash[:league_user]  %>
-                <% end %>
-                <% if ff.defender.user_id == hash[:id] %>
-                  <% @ffd_results = hash[:fistfight] %>
-                  <% @defender = hash[:user] %>
-                  <% @league_defender = hash[:league_user] %>
-                <% end %>
-                <% break if @ffa_results && @ffd_results %>
-            <% end %>
+            <% league_attacker = LeagueUser.find ff.attacker_id %>
+            <% attacker        = @users_stats[league_attacker][:user] %>
+            <% ffa_results     = @users_stats[league_attacker][:performance] %>
+            <% league_defender = LeagueUser.find ff.defender_id %>
+            <% defender        = @users_stats[league_defender][:user] %>
+            <% ffd_results     = @users_stats[league_defender][:performance] %>
             <tr>
               <td>
-                <% if @league_attacker.alive%>
-                  <%= link_to @attacker.name,
-                              user_path(@attacker.id) %>
+                <% if league_attacker.alive?%>
+                  <%= link_to attacker.name,
+                              user_path(attacker.id) %>
                 <% else %>
-                  <%= link_to @attacker.name,
-                              user_path(@attacker.id),
+                  <%= link_to attacker.name,
+                              user_path(attacker.id),
                               class: 'ko'%>
                 <% end %>
-        <%= ff.active? ? "(#{@ffa_results}%)" : "(#{ff.attacker_performance}%)"%>
+        <%= ff.active? ? "(#{ffa_results}%)" : "(#{ff.attacker_performance}%)"%>
               </td>
               <td>vs.</td>
               <td>
-                <% if @league_defender.alive%>
-                  <%= link_to @defender.name,
-                              user_path(@defender.id) %>
+                <% if league_defender.alive?%>
+                  <%= link_to defender.name,
+                              user_path(defender.id) %>
                 <% else %>
-                  <%= link_to @defender.name,
-                              user_path(@defender.id),
+                  <%= link_to defender.name,
+                              user_path(defender.id),
                               class: 'ko' %>
                 <% end %>
-        <%= ff.active? ? "(#{@ffd_results}%)" : "(#{ff.defender_performance}%)"%>
+        <%= ff.active? ? "(#{ffd_results}%)" : "(#{ff.defender_performance}%)"%>
               </td>
               <td><%=ff.round%></td>
             </tr>
@@ -243,42 +229,38 @@
 
     <div class="column is-12 is-3-desktop">
       <div class="box">
-        <h2 class="title is-5 center" id="actions-title">Actions</h2>
-          <% if @league_user.shield?%>
+        <h2 class="title is-4 center" id="actions-title">Actions</h2>
           <div class="tags has-addons">
-            <span class="tag is-dark margin-left">Shield</span>
-            <span class="tag is-info margin-right">active</span>
+            <span class="tag  type-action is-dark margin-left">Shield</span>
+            <span class="tag  count-action is-light">
+              x<%=@league_user.blocks%>
+            </span>
+            <span class="tag  status-action margin-right <%= @league_user.shield? ? 'is-info' : 'is-warning'%>">
+              <%= @league_user.shield? ? 'Active' : 'Inactive' %>
+            </span>
           </div>
+          <% if @league_user.shield?%>
             <p class="content">
-              While this shield is active you will not participate in any
+              While the shield is active you will not participate in any
               additional fistfights this round.
             </p>
-            <p class="content">
-              You have <%= @league_user.blocks %> blocks remaining.
-            </p>
-          <% else %>
-          <div class="tags has-addons">
-            <span class="tag is-dark margin-left">Shield</span>
-            <span class="tag margin-right">inactive</span>
-          </div>
-          <p class="content">
-            You have <%= @league_user.blocks %> blocks remaining.
-          </p>
           <% end %>
-          <% if @league_user.blocks > 0 %>
+          <% if @league_user.blocks > 0 && !@league_user.shield? %>
             <button type="button"
             class="button is-samll is-rounded activate-shield is-small">
               Activate Shield
             </button>
           <% end %>
-
           <hr>
           <% user_bet = Bet.find_by league_user: @league_user.id%>
           <% if user_bet %>
             <div class="tags has-addons">
-              <span class="tag is-dark margin-left">Leverage</span>
-              <span class="tag margin-right <%= user_bet.active? ? 'is-info':''%>">
-                <%= user_bet.active? ? 'Active':'Inactive' %>
+              <span class="tag  is-dark type-action margin-left">Leverage</span>
+              <span class="tag  count-action is-light">
+                x0
+              </span>
+              <span class="tag  status-action margin-right <%= user_bet.active? ? 'is-info':'is-warning'%>">
+                <%= user_bet.active? ? 'Active' : 'Inactive' %>
               </span>
             </div>
             <% leverage = Leverage.find @league_user.bets.last.leverage_id %>
@@ -291,7 +273,7 @@
               <dd></strong><%= number_to_currency @league_user.bets.last.liquidation %></dd>
               <dt><strong>Current Results:</strong></dt>
               <dd>
-                <% net_bonus = (portfolio_value(@league_user, @league,@btc_price) - @league_user.bets.last.baseline) * (leverage.size - 1 ) %>
+                <% net_bonus = (@users_stats[@league_user][:cash] - @league_user.bets.last.baseline) * (leverage.size - 1 ) %>
                 <%=number_with_delimiter net_bonus.abs%>
                 <% if net_bonus >= 0%>
                   Bonus
@@ -305,12 +287,15 @@
               </button>
             <% end %>
           <% else %>
-                <div class="title is-5 is-title center">
                   <div class="tags has-addons">
-                    <span class="tag margin-left is-dark">Leverage</span>
-                    <span class="tag margin-right">inactive</span>
+                    <span class="tag  margin-left type-action is-dark">
+                      Leverage
+                    </span>
+                    <span class="tag  count-action is-light">
+                      x1
+                    </span>
+                    <span class="tag  status-action margin-right is-warning">Inactive</span>
                   </div>
-                </div>
                   <div class="select">
                     <select name="leverage_size" value="leverage_size" data-currentuser=""
                     class="leverage-size">
@@ -361,9 +346,8 @@
   <div class="column">
     <div class="box">
       <% league_users = LeagueUser.where(alive:true, league_id: @league.id).order(:rank).page params[:leaderboards] %>
-      <h2 class="title is-5 center" id="leaderboards-title">Leaderboards</h2>
-      <%= paginate league_users, :param_name => "leaderboards", params: {anchor: 'leaderboards-title'} %>
-        <table class="table is-striped is-narrow">
+      <h2 class="title is-4 center" id="leaderboards-title">Leaderboards</h2>
+        <table class="table is-striped">
           <thead>
             <th>Rank</th>
             <th>Player</th>
@@ -377,30 +361,19 @@
             <th>Swing</th>
           </tfoot>
           <tbody>
-            <% league_users.each_with_index do |league_user, i| %>
-              <% user = User.find league_user.user_id %>
+            <% @users_stats.each_with_index do |hash, i| %>
+              <% league_user = hash[0] %>
+              <% stats       = hash[1] %>
+              <% next unless league_user.alive? %>
+              <% user = stats[:user] %>
               <tr>
+                <td><%= stats[:rank]%></td>
+                <td><%= stats[:user].name %></td>
                 <td>
-                  <% if league_user.rank > 0%>
-                    <%= league_user.rank %>
-                  <% elsif league_user.rank < 0%>
-                    <%= "KO'd" %>
-                  <% else%>
-                    <%= "Unranked" %>
-                  <% end %>
+                  <%= number_with_delimiter  stats[:score] %>
                 </td>
                 <td>
-                  <% if league_user.alive %>
-                    <%= link_to(user.name, user_path(user.id)) %>
-                  <% else %>
-                    <%= link_to(user.name, user_path(user.id),
-                                                class: 'ko') %>
-                  <% end %>
-
-                </td>
-                <td><%= number_with_delimiter (league_user.points + league_user.leverage_points) %></td>
-                <% if current_user.id != user.id %>
-                  <td>
+                  <% if current_user.id != user.id %>
                     <% if league_user.shield? %>
                       <i class="fa fa-shield fa-3x" aria-hidden="true"></i>
                     <% else %>
@@ -408,19 +381,16 @@
                       :'data-userid' => user.id, :'data-username' => user.name,
                       id:"fist#{i}") %>
                     <% end %>
-                  </td>
-                <% else %>
-                  <td>
+                  <% else %>
                     <% if league_user.shield? %>
                       <i class="fa fa-shield fa-3x" aria-hidden="true"></i>
                     <% end %>
-                  </td>
-                <% end %>
+                  <% end %>
+                </td>
               </tr>
             <% end %>
           </tbody>
         </table>
-        <%= paginate league_users, :param_name => "leaderboards", params: {anchor: 'leaderboards-title'} %>
     </div>
   </div>
 

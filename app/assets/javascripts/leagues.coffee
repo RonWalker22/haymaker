@@ -66,7 +66,7 @@ tryModal = ->
       activate_shield.addEventListener 'click', ->
         confirmation_action.dataset.method = "post"
         confirmation_meessage.innerText =
-          "Are you sure you want to activate a shield for this round? This will cost 1 block."
+          "Are you sure you want to activate a shield for this round?"
         confirmation_action.href = "/leagues/#{league_id}/shield/"
         confirmation_modal.classList.add "is-active"
 

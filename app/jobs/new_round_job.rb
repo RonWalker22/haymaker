@@ -9,57 +9,115 @@ class NewRoundJob < ApplicationJob
     leagues = League.all.where active: true
     leagues.each do |league|
       @league = league
-      @league.league_users.where(shield:true).each do |league_user|
-        league_user.update_attributes shield:false
-      end
+      @league_wallets = @league.wallets
+      @users_stats = leaderboards
+      @fistfights = @league.fistfights.where(active:true)
+      disable_shields
       end_fistfights if @league.round > 1
-      update_stats(league)
+      update_stats
+      @alive_users = @league.league_users.where alive:true
       if @league.round < @league.rounds
+        establish_baselines
         @league.round += 1
         @league.round_end += @league.round_steps.days
         @league.save
+      else
+        end_game
       end
     end
   end
 
   private
 
+  def disable_shields
+    @league.league_users.where(shield:true).each do |league_user|
+      league_user.shield = false
+      league_user.save
+    end
+  end
+
+  def establish_baselines
+    @alive_users.each do |league_user|
+      league_user.baseline = league_user.score
+    end
+  end
+
   def end_fistfights
-    fistfights = @league.fistfights.where('round = :league_round',
-                                          league_round: @league.round)
-    if fistfights.count > 0
-      fistfights.each do |fistfight|
-        @attacker = LeagueUser.find(fistfight.attacker_id)
-        @defender = LeagueUser.find(fistfight.defender_id)
-        knockout_loser
-        fistfight.attacker_performance = @attacker_performance
-        fistfight.defender_performance = @defender_performance
-        fistfight.active = false
-        fistfight.save
+    @fistfights.each do |fistfight|
+      update_fight_performance(fistfight)
+      decide_round_champ(fistfight)
+      fistfight.active = false
+      fistfight.save
+      @fight_loser.portfolio = @users_stats[@fight_loser][:cash]
+      @fight_loser.score     = @users_stats[@fight_loser][:score]
+      @fight_loser.rank      = 0
+      @fight_loser.alive     = false
+      @fight_loser.save
+
+      @fight_winner.increment! 'blocks'
+      @fight_winner.save
+    end
+  end
+
+  def end_game
+    end_bets
+    @alive_users = @league.league_users.where alive:true
+    update_stats @league
+    decide_champ
+    knockout_losers
+    @league.active = false
+    @league.save
+  end
+
+  def knockout_losers
+    @alive_users.where(champ:false).each do |league_user|
+      league_user.alive = false
+      league_user.save
+    end
+  end
+
+  def end_bets
+    @alive_users.each do
+      end_bet league_user
+    end
+  end
+
+  def decide_champ
+    max_score = @alive_users.maximum("score")
+    if max_score
+      champs = @alive_users.where score:max_score
+      champs.each do |chachampion|
+        chachampion.champ = true
+        chachampion.save
       end
     end
   end
 
-  def knockout_loser
-    @attacker_performance = round_performance(@attacker, @league, @btc_price )
-    @defender_performance = round_performance(@defender, @league, @btc_price )
+  def update_fight_performance(ff)
+      attcker     = LeagueUser.find ff.attacker_id
+      defender    = LeagueUser.find ff.defender_id
+      ff.attacker_performance = @users_stats[attcker][:performance]
+      ff.defender_performance = @users_stats[defender][:performance]
+      #ff.save
+  end
 
-    if @attacker_performance > @defender_performance
-      @winner = @attacker
-      @loser  = @defender
+  def decide_round_champ(ff)
+    if ff.attacker_performance > ff.defender_performance
+      @fight_winner = LeagueUser.find (ff.attacker_id)
+      @fight_loser  = LeagueUser.find ff.defender_id
     else
-      @winner = @defender
-      @loser  = @attacker
+      @fight_winner = LeagueUser.find ff.defender_id
+      @fight_loser  = LeagueUser.find ff.attacker_id
     end
+  end
 
-    @loser.alive = false
-    @loser.points = portfolio_value(@loser)
-    @loser.rank = -1
-    @loser.save
-
-    @winner.increment! 'blocks'
-    @winner.points = portfolio_value(@loser)
-    @winner.rank = current_rank @winner.user_id
-    @winner.save
+  def update_stats
+    @users_stats.each do |league_user, stats|
+      next unless league_user.alive?
+      league_user.rank      = stats[:rank]
+      league_user.score     = stats[:score]
+      league_user.portfolio = stats[:cash]
+      league_user.save
+    end
   end
 end

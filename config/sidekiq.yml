@@ -7,10 +7,6 @@ production:
   - default
 
 :schedule:
-  end_game:
-    cron: '0 0 0 * * *'
-    class: EndGameJob
-
   get_tickers:
     in: 999y
     class: GetTickersJob
@@ -30,7 +26,7 @@ production:
     class: FightJob
     enabled: false
 
-  destroy_fights:
+  reset_leagues:
     in: 900y
-    class: DestroyFightsJob
+    class: ResetLeaguesJob
     enabled: false

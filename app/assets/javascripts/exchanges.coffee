@@ -34,8 +34,6 @@ tryWebsocket  = ->
     cp0 =
       document.querySelector("#coin_0_balance_label").innerHTML.toLowerCase()
 
-    up_arrow        = document.querySelector(".fa-arrow-up")
-    down_arrow      = document.querySelector(".fa-arrow-down")
     coin_price      = document.querySelector("#coin_price")
     buy_btn         = document.querySelector('#buy_btn')
     sell_btn        = document.querySelector('#sell_btn')

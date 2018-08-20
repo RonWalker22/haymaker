@@ -89,8 +89,10 @@ ActiveRecord::Schema.define(version: 20180702021858) do
     t.boolean "alive", default: true, null: false
     t.integer "rank", default: 0, null: false
     t.decimal "btce", default: "1.0", null: false
-    t.decimal "points", default: "0.0", null: false
-    t.decimal "leverage_points", default: "0.0", null: false
+    t.decimal "portfolio", default: "0.0", null: false
+    t.decimal "net_bonus", default: "0.0", null: false
+    t.decimal "baseline", default: "0.0", null: false
+    t.decimal "score", default: "0.0", null: false
     t.boolean "champ", default: false, null: false
     t.integer "blocks", default: 0, null: false
     t.boolean "shield", default: false, null: false

@@ -6,10 +6,12 @@ class CreateLeagueUsers < ActiveRecord::Migration[5.1]
       t.boolean :ready,             default: false, null: false
       t.boolean :set_up,            default: false, null: false
       t.boolean :alive,             default: true,  null: false
-      t.integer :rank,              default: 0,    null: false
+      t.integer :rank,              default: 0,     null: false
       t.numeric :btce,              default: 1,     null: false
-      t.numeric :points,            default: 0,     null: false
-      t.numeric :leverage_points,   default: 0,     null: false
+      t.numeric :portfolio,         default: 0,     null: false
+      t.numeric :net_bonus,         default: 0,     null: false
+      t.numeric :baseline,          default: 0,     null: false
+      t.numeric :score,             default: 0,     null: false
       t.boolean :champ,             default: false, null: false
       t.integer :blocks,            default: 0,     null: false
       t.boolean :shield,            default: false, null: false

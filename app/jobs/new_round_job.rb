@@ -62,7 +62,7 @@ class NewRoundJob < ApplicationJob
   def end_game
     end_bets
     @alive_users = @league.league_users.where alive:true
-    update_stats @league
+    update_stats
     decide_champ
     knockout_losers
     @league.active = false
@@ -77,7 +77,7 @@ class NewRoundJob < ApplicationJob
   end
 
   def end_bets
-    @alive_users.each do
+    @alive_users.each do |league_user|
       end_bet league_user
     end
   end

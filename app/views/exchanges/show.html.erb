@@ -1,7 +1,8 @@
 <div class="column">
   <div class="box">
     <header id='exchange_info'>
-      <h1 class="card-header-title is-centered is-4 title" id='exchange'>
+      <h1 class="card-header-title is-centered is-4 title" id='exchange'
+          data-exchange="<%=@exchange.name%>">
         <%= @exchange.name %> Exchange @ <%=League.find(params[:id]).name%> League
       </h1>
     </header>

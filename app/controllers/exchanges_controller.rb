@@ -31,11 +31,9 @@ class ExchangesController < ApplicationController
       end
       update_order_history
     else
-      flash[:alert] =
-          'Your account does not have sufficient funds to cover your order.'
+      flash[:alert] = 'Your account does not have sufficient funds to cover your order.'
     end
-
-    redirect_to "/leagues/#{@league_id}/exchanges/#{@exchange.id}?p=#{@pair}"
+    redirect_to trade_path(@league_id, @exchange.id, p:@pair)
   end
 
   def delete_custom_order
@@ -44,7 +42,7 @@ class ExchangesController < ApplicationController
       remove_reserve
       @order.destroy
     else
-      flash[:warning] = "You can only cancel orders which belong to you."
+      flash[:alert] = "You can only cancel orders which belong to you."
     end
     redirect_back(fallback_location: root_path)
   end
@@ -220,18 +218,12 @@ class ExchangesController < ApplicationController
 
     def get_full_coin_list
       @coin_lists = {}
-      case @exchange.name
-      when "GDAX"     then target = "base_currency"
-      when "Binance"  then target = "quote_currency"
-      when "Poloniex" then target = "quote_currency"
-      when "Bitfinex" then target = "quote_currency"
-      end
 
-      @exchange.tickers.each do |ticker|
-        if @coin_lists[ticker[target]]
-          @coin_lists[ticker[target]] << ticker.pair
+      @exchange.tickers.order(:pair).each do |ticker|
+        if @coin_lists[ticker["quote_currency"]]
+          @coin_lists[ticker["quote_currency"]] << ticker.pair
         else
-          @coin_lists[ticker[target]] = [ticker.pair]
+          @coin_lists[ticker["quote_currency"]] = [ticker.pair]
         end
       end
       @base_tickers = @coin_lists.to_a

@@ -1,12 +1,13 @@
 module LeaguesHelper
   def leaderboards
-    @tickers = Ticker.all
+    #used to create less database queries
+    @tickers = Ticker.all.where quote_currency: 'BTC'
     hash = {}
     users = @league.users.order(:id)
     @league.league_users.order(:user_id).all.each_with_index do |league_user, index|
       @temp_user        = users[index]
       @temp_league_user = league_user
-      total_btc_estimate = alt_coins_estimate + total_btc
+      @user_wallets     = @temp_league_user.wallets
       hash[@temp_league_user] =  { btce: total_btc_estimate,
                                    user: @temp_user,
                                  }
@@ -47,59 +48,31 @@ module LeaguesHelper
   private
 
     def total_btc
-      arr = []
-      user        = @temp_user        || @user
-      league_user = @temp_league_user || @league_user
-      @user_wallets.each do |user_wallet|
+      btc = @user_wallets.find_by coin_type: 'BTC'
+      btc.total_quantity
+    end
 
-        if user_wallet.coin_type == 'BTC'
-          @btc_wallet = user_wallet
-          break
-        end
+    def total_usdt
+      usdt = @user_wallets.find_by coin_type: 'USDT'
+      if usdt
+        usdt.total_quantity / @btc_price
+      else
+        0 
       end
-      @btc_wallet.total_quantity
     end
 
     def alt_coins_estimate
-      hash          = {}
-      arr           = []
-      user          = @temp_user        || @user
-      league_user   = @temp_league_user || @league_user
-      @user_wallets = []
-      @league_wallets.each do |league_wallet|
-        if league_wallet.league_user_id == league_user.id
-          @user_wallets << league_wallet
-        end
+      estimate = 0
+      @user_wallets.each do |wallet|
+        next if wallet.coin_type == 'BTC'
+        next if wallet.coin_type == 'USDT'
+
+        ticker = @tickers.find_by base_currency: wallet.coin_type
+        estimate += wallet.total_quantity * ticker.price
       end
-
-
-      @user_wallets.each do |w|
-        base_currency = w.coin_type
-        next if base_currency == 'BTC'
-        quote_currency = 'BTC'
-
-
-        @tickers.each do |ticker|
-          if ticker.base_currency == base_currency && ticker.quote_currency == 'BTC'
-            @ticker = ticker
-            break
-          end
-        end
-
-        if hash["#{w.coin_type}#{w.exchange_id}"]
-          hash["#{w.coin_type}#{w.exchange_id}"][0] += w.total_quantity
-        else
-          hash["#{w.coin_type}#{w.exchange_id}"] =
-                                  [w.total_quantity, @ticker.price]
-        end
-      end
-      hash.each do |k, v|
-        hash[k][2] = v[0] * v[1]
-        arr << v[2]
-        hash[k][0] = '%.8f' % v[0]
-        hash[k][1] = '%.8f' % v[1]
-        hash[k][2] = '%.8f' % v[2]
-      end
-      arr.empty? ? 0 : arr.reduce(:+).round(8)
+      estimate
+    end
+    def total_btc_estimate
+      total_btc + alt_coins_estimate + total_usdt
     end
 end

@@ -1,18 +1,55 @@
-<div class="column">
-  <div class="box">
-    <header id='exchange_info'>
-      <h1 class="card-header-title is-centered is-4 title" id='exchange'
-          data-exchange="<%=@exchange.name%>">
-        <%= @exchange.name %> Exchange @ <%=League.find(params[:id]).name%> League
-      </h1>
-    </header>
+
+<div class="box">
+  <header id='exchange_info'>
+    <h1 class="is-centered is-4 title center" id='exchange'
+        data-exchange="<%=@exchange.name%>">
+      <%= @exchange.name %> Exchange @ <%=League.find(params[:id]).name%> League
+    </h1>
+  </header>
+  <div id="accordion" class="base_coins">
+    <div class="coin_list_options">
+      <div class="buttons has-addons is-centered">
+        <% @base_tickers.each_with_index do |ticker, i| %>
+          <% if i == 0 || ticker == @base_tickers[-1] %>
+          <button class="button is-rounded is-small" data-toggle="collapse"
+                  data-target="#collapse<%= i %>" aria-expanded="true"
+                  aria-controls="collapse<%= i %>">
+          <% else  %>
+          <button class="button is-small" data-toggle="collapse"
+                  data-target="#collapse<%= i %>" aria-expanded="true"
+                  aria-controls="collapse<%= i %>">
+          <% end %>
+          <%= ticker %>
+          </button>
+        <% end %>
+      </div>
+    </div>
+
+    <% @coin_lists.each_with_index do |list, i| %>
+      <% if i == 0 %>
+        <div id="collapse<%= i %>" class="collapse coin_list_table" aria-labelledby="heading<%= i %>" data-parent="#accordion">
+      <% else %>
+        <div id="collapse<%= i %>" class="collapse coin_list_table" aria-labelledby="heading<%= i %>" data-parent="#accordion">
+      <% end %>
+      <div class="columns is-multiline">
+        <% list.each do |pair| %>
+        <div class="column is-inline-flex is-narrow">
+            <%= link_to pair,trade_path(params[:id],
+              params[:xid], p: pair) %>
+        </div>
+        <% end %>
+      </div>
+          </div>
+      <% end %>
+    </div>
   </div>
-</div>
 
 
-<div class="columns is-multiline">
-  <div class="column is-3">
-    <div class="box">
+
+
+<div class="columns is-centered">
+  <div class="column is-narrow-desktop">
+    <div class="box order-box">
         <div class="order_and_balance_info">
         <div id="balance_block">
           <p id='trading_pair'><%= @pair %></p>
@@ -78,6 +115,8 @@
               <span id = "buy_btn" class = "button">Buy</span>
               <span id = "sell_btn" class = "button">Sell</span>
             </div>
+          </div>
+          <div class="control">
             <span id='price_label'>Current Price:</span>
             <span id="coin_price">
               <%= @exchange.tickers.find_by(pair: params[:p]).price%>
@@ -90,8 +129,8 @@
                 <%= hidden_field_tag :pair, params[:p] %>
                 <%= hidden_field_tag :coin_1_ticker, @coin_1_ticker %>
                 <%= hidden_field_tag :coin_2_ticker, @coin_2_ticker %>
-                <%= label_tag :coin_quantity, 'Quantity:', id: 'amount_label'%>
                 <div class="field has-addons">
+                  <%= label_tag :coin_quantity, 'Amount:', id: 'amount_label'%>
                   <p class="control">
                     <%= number_field_tag :order_quantity, nil, placeholder: 0.0000,
                       step: 0.00000001, min: 0.01, autofocus: 'autofocus',
@@ -104,7 +143,7 @@
                   </p>
                 </div>
                 <div id='allocation_box'>
-                  <div id= "capital_percentage center">
+                  <div id= "capital_percentage">
                     <button type="button" id = 'cap_25' name="25%"
                             class = "button is-small cap_btns">25%</button>
                     <button type="button" id = 'cap_50' name="50%"
@@ -163,8 +202,8 @@
       </div>
     </div>
   </div>
-  <div class="column is-6">
-    <div class="box">
+  <div class="column is-narrow-desktop">
+    <div class="box chart-box">
       <div class="tradingview-widget-container">
           <div id="tradingview_7ef5b"></div>
           <script type="text/javascript" src="https://s3.tradingview.com/tv.js">
@@ -174,9 +213,9 @@
           {
           "autosize": true,
           "symbol": "<%=Exchange.find(params[:xid]).name.upcase == 'GDAX' ? 'COINBASE' : Exchange.find(params[:xid]).name.upcase%>:<%= strip_dash_from_pair %>",
-          "interval": "D",
+          "interval": "H",
           "timezone": "Etc/UTC",
-          "theme": "Dark",
+          "theme": "Light",
           "style": "1",
           "locale": "en",
           "enable_publishing": false,
@@ -213,7 +252,6 @@
                 <tr>
                   <th>size</th>
                   <th>price</th>
-                  <th>fee</th>
                   <th>Time</th>
                 </tr>
               </thead>
@@ -225,7 +263,6 @@
                       <tr>
                         <td class="<%=side%>_side"> <%= o.size.to_f.round(8) %> </td>
                         <td> <%= o.price.to_f.round(8) %> </td>
-                        <td> <%= o.fee.to_f %> </td>
                         <td> <%= o.when %> </td>
                       </tr>
                     <% end %>
@@ -240,9 +277,7 @@
               <thead>
                 <tr>
                   <th>size</th>
-                  <th>filled(<%= @coin_1_ticker.downcase %>)</th>
                   <th>price</th>
-                  <th>fee</th>
                   <th>Time</th>
                   <th>Reserve</th>
                   <th>Cancel</th>
@@ -255,9 +290,7 @@
                       <% side = o.side %>
                       <tr>
                         <td class="<%=side%>_side"> <%= o.size.to_f.round(8) %> </td>
-                        <td>0%</td>
                         <td> <%= o.price.to_f.round(8) %> </td>
-                        <td> <%= o.fee.to_f %> </td>
                         <td> <%= o.when %></td>
                         <td><%= o.reserve_size %></td>
                         <td>
@@ -273,51 +306,6 @@
             </table>
           </div>
         </div>
-    </div>
-  </div>
-  <div class="column is-3 is-12-tablet-only">
-    <div class="box">
-      <div id="accordion" class="base_coins">
-        <div class="coin_list_options">
-          <div class="buttons has-addons is-centered">
-            <% @base_tickers.each_with_index do |ticker, i| %>
-              <% if i == 0 || ticker == @base_tickers[-1] %>
-              <button class="button is-rounded is-small" data-toggle="collapse"
-                      data-target="#collapse<%= i %>" aria-expanded="true"
-                      aria-controls="collapse<%= i %>">
-              <% else  %>
-              <button class="button is-small" data-toggle="collapse"
-                      data-target="#collapse<%= i %>" aria-expanded="true"
-                      aria-controls="collapse<%= i %>">
-              <% end %>
-              <%= ticker %>
-              </button>
-            <% end %>
-          </div>
-        </div>
-
-        <% @coin_lists.each_with_index do |list, i| %>
-          <% if i == 0 %>
-            <div id="collapse<%= i %>" class="collapse show coin_list_table" aria-labelledby="heading<%= i %>" data-parent="#accordion">
-          <% else %>
-            <div id="collapse<%= i %>" class="collapse coin_list_table" aria-labelledby="heading<%= i %>" data-parent="#accordion">
-          <% end %>
-                <table class="table">
-                  <tbody>
-                    <% list.each do |pair| %>
-                      <tr>
-                        <td>
-                          <%= link_to pair,trade_path(params[:id],
-                            params[:xid], p: pair) %>
-                        </td>
-                      </tr>
-                    <% end %>
-                    </tbody>
-                  </table>
-              </div>
-          <% end %>
-        </div>
-      </div>
     </div>
   </div>
 </div>

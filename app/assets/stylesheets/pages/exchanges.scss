@@ -130,21 +130,18 @@ input {
 }
 
 #buy_btn {
+  margin-left: auto;
   background: rgb(20, 154, 25);
   color: #bbe1ff;
 }
 
-#custom_order {
-  margin-left: 3.6em;
-}
-
 #buy_sell_btns {
-  margin-left: 2.75em;
   margin-top: 1em;
 }
 
 #sell_btn {
   color: #bbe1ff;
+  margin-right: auto;
 }
 
 #capital_percentage {
@@ -152,6 +149,7 @@ input {
     font-size: 0.7em;
     padding: .4em;
   }
+  margin-right: 1.3em;
 }
 
 .cap_btns {
@@ -233,8 +231,8 @@ input {
 
 
 .base_coins {
-  height: 59.9em;
-  overflow-y: hidden;
+  // max-height: 59.9em;
+  // overflow-y: hidden;
 }
 
 #tradingview_7ef5b {
@@ -243,20 +241,20 @@ input {
 
 .coin_list_table,
 .coin_list_table table {
-  height: 58em;
-  overflow-y: auto;
+  // max-height: 58em;
+  // overflow-y: auto;
 }
 
 
 .orders {
-  height: 35em;
+  max-height: 35em;
   overflow-y: auto;
 }
 
 
 #order_sec{
   text-align: center;
-  height: 32em;
+  height: 29em;
 }
 
 #price_target_label {
@@ -269,5 +267,20 @@ input {
 }
 
 #past_orders {
-  height: 38em;
+  max-height: 38em;
+}
+
+/* Mobile Landscape Screen Sizes */
+@media only screen and (min-width: 480px)  {
+}
+
+/* Desktop screen Sizes */
+@media only screen and (min-width: 768px) {
+  .order-box{
+    width: 18em;
+  }
+
+  .chart-box{
+    width: 40em;
+  }
 }

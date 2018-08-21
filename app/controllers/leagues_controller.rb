@@ -168,7 +168,11 @@ class LeaguesController < ApplicationController
 
   def swing
     setup_swing_params
-    start_fist_fight
+    if fight_illegal?
+      flash[:alert] = "Fistfight was unsuccessful due to your active shield."
+    else
+      start_fist_fight
+    end
     redirect_to league_path @league
   end
 
@@ -339,5 +343,17 @@ class LeaguesController < ApplicationController
       else
         flash[:alert] = "Fistfight was unable to start."
       end
+    end
+
+    def fight_illegal?
+      shields_active? || players_ko?
+    end
+
+    def shields_active?
+      @league_user.shield? || @target.shield?
+    end
+
+    def players_ko?
+      !@league_user.alive? || !@target.alive?
     end
 end

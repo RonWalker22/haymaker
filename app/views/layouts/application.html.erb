@@ -12,11 +12,26 @@
   <body class="<%= controller_name + "_" + action_name%>">
     <%= render 'shared/header' %>
     <div id='inner_body'>
-      <% if notice %>
-      <p class="notice notification is-success"><%= notice %></p>
-      <% end %>
-      <% if alert %>
-      <p class="alert notification is-warning"><%= alert %></p>
+      <% if flash[:notice] %>
+        <section class="hero is-small is-success">
+          <div class="hero-body">
+            <div class="container">
+              <p class="subtitle">
+                <%= flash[:notice] %>
+              </p>
+            </div>
+          </div>
+        </section>
+      <% elsif flash[:alert] %>
+        <section class="hero is-small is-warning">
+          <div class="hero-body">
+            <div class="container">
+              <p class="subtitle">
+                <%= flash[:alert] %>
+              </p>
+            </div>
+          </div>
+        </section>
       <% end %>
       <%= yield %>
     </div>

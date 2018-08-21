@@ -14,7 +14,7 @@ class NewRoundJob < ApplicationJob
       @fistfights = @league.fistfights.where(active:true)
       disable_shields
       end_bets if @league.round == @league.rounds
-      end_fistfights if @league.round > 1
+      end_fistfights
       update_stats
       @alive_users = @league.league_users.where alive:true
       if @league.round < @league.rounds

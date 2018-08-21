@@ -3,7 +3,7 @@ class LeaguesController < ApplicationController
   before_action :set_league_variables, except: [:create, :new, :index, :join,
                                                 :past, :current]
   before_action :set_league, only: [:join]
-  before_action :check_user_alive, only: [:deleverage, :swing, :bet, :shield]
+  before_action :check_actions_legal, only: [:deleverage, :swing, :bet, :shield]
   include LeaguesHelper
 
   # GET /leagues
@@ -36,9 +36,14 @@ class LeaguesController < ApplicationController
     rounds = {'1' => 1, '6' => 3, '12' => 3,
                   '28' => 4, '84' => 6, '360' => 12}
 
-   start_date = league_params[:start_date].to_datetime.midday
-   round_end  = league_params[:start_date].to_datetime + round_steps[params[:duration]].days
-   round_end  = round_end.end_of_day
+   # start_date = league_params[:start_date].to_datetime.midday
+   # round_end  = league_params[:start_date].to_datetime + round_steps[params[:duration]].days
+   # round_end  = round_end.end_of_day
+   # end_date   = league_params[:start_date].to_datetime + params[:duration].to_i.days
+   # end_date   = end_date.end_of_day
+
+   start_date = league_params[:start_date].to_datetime.end_of_day + 1.second
+   round_end  = start_date - 1.second
    end_date   = league_params[:start_date].to_datetime + params[:duration].to_i.days
    end_date   = end_date.end_of_day
 
@@ -65,7 +70,7 @@ class LeaguesController < ApplicationController
         format.html { redirect_to @league }
         format.json { render :show, status: :created, location: @league }
       else
-        flash.now[:notice] = 'League was not created.'
+        flash.now[:alert] = 'League was not created.'
         format.html { render :new }
         format.json { render json: @league.errors, status: :unprocessable_entity }
       end
@@ -81,7 +86,7 @@ class LeaguesController < ApplicationController
         format.html { redirect_to @league}
         format.json { render :show, status: :ok, location: @league }
       else
-        flash.now[:notice] = 'League was not updated.'
+        flash.now[:alert] = 'League was not updated.'
         format.html { render :edit }
         format.json { render json: @league.errors, status: :unprocessable_entity }
       end
@@ -101,10 +106,10 @@ class LeaguesController < ApplicationController
 
   def join
     if @league.start_date.past? && @league.round > 1
-      flash[:notice] = "This league is no longer accepting new players."
+      flash[:alert] = "This league is no longer accepting new players."
       return redirect_to leagues_url
     elsif @league.start_date.past? && !@league.late_join?
-      flash[:notice] = "This league does not accept late joiners."
+      flash[:alert] = "This league does not accept late joiners."
       return redirect_to leagues_url
     elsif @league.private?
       unless password_param[:password].downcase == @league.password.downcase
@@ -121,7 +126,7 @@ class LeaguesController < ApplicationController
       create_set_up_balance
       flash[:notice] = "You have successfully joined the #{@league.name} league."
     else
-      flash[:notice] = 'You have aleady joined this league.'
+      flash[:alert] = 'You have aleady joined this league.'
     end
     redirect_to league_path(@league)
   end
@@ -151,7 +156,7 @@ class LeaguesController < ApplicationController
 
   def leave
     if @league.start_date.past?
-      flash[:notice] = "You are unable to leave a league which has already started."
+      flash[:alert] = "You are unable to leave a league which has already started."
       return redirect_to league_url(@league)
     end
 
@@ -189,7 +194,7 @@ class LeaguesController < ApplicationController
     @league_user = LeagueUser.find_by(league_id: @league.id,
                                       user_id: current_user.id)
     if Bet.find_by league_user: @league_user.id
-      flash[:notice] = "#{@leverage.size}x leverage was unsuccessful.
+      flash[:alert] = "#{@leverage.size}x leverage was unsuccessful.
                         You can't use leverage more than once per league."
     else
       baseline = @users_stats[@league_user][:cash]
@@ -203,7 +208,7 @@ class LeaguesController < ApplicationController
       if new_bet.save
         flash[:notice] = "#{@leverage.size}x leverage is now active."
       else
-        flash[:notice] = "#{@leverage.size}x leverage was unsuccessful."
+        flash[:alert] = "#{@leverage.size}x leverage was unsuccessful."
       end
     end
     redirect_to league_path @league
@@ -214,7 +219,7 @@ class LeaguesController < ApplicationController
 
   def shield
     unless @league_user.blocks > 0
-      return flash[:notice] = "Shield unsuccessful. You don't have any blocks
+      return flash[:alert] = "Shield unsuccessful. You don't have any shield
                               available."
     end
 
@@ -239,8 +244,8 @@ class LeaguesController < ApplicationController
 
     def check_user_alive
       if !@league_user.alive?
-        flash[:notice] = "You have been knocked out of this league and are no
-                                  longer able to access any league features."
+        flash[:alert] = "You have been knocked out of this league and are no
+                                  longer able to access any league actions."
         return redirect_to @league
       end
     end
@@ -346,14 +351,25 @@ class LeaguesController < ApplicationController
     end
 
     def fight_illegal?
-      shields_active? || players_ko?
+      shields_active? && target_dead?
     end
 
     def shields_active?
       @league_user.shield? || @target.shield?
     end
 
-    def players_ko?
-      !@league_user.alive? || !@target.alive?
+    def target_dead?
+      !@target.alive?
+    end
+
+    def check_actions_legal
+      if !@league_user.alive?
+        flash[:alert] = "You have been knocked out of this league and are no
+                                  longer able to access any league actions."
+        return redirect_to @league
+      elsif @league.start_date.past? || @league.end_date.future?
+        flash[:alert] = "League actions are currently unavailable."
+        return redirect_to @league
+      end
     end
 end

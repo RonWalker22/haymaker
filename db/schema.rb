@@ -91,7 +91,7 @@ ActiveRecord::Schema.define(version: 20180702021858) do
     t.decimal "btce", default: "1.0", null: false
     t.decimal "portfolio", default: "0.0", null: false
     t.decimal "net_bonus", default: "0.0", null: false
-    t.decimal "baseline", default: "0.0", null: false
+    t.decimal "baseline", default: "1.0", null: false
     t.decimal "score", default: "0.0", null: false
     t.boolean "champ", default: false, null: false
     t.integer "blocks", default: 0, null: false
@@ -117,7 +117,7 @@ ActiveRecord::Schema.define(version: 20180702021858) do
     t.datetime "start_date", null: false
     t.datetime "end_date", null: false
     t.integer "rounds", default: 1, null: false
-    t.integer "round", default: 1, null: false
+    t.integer "round", default: 0, null: false
     t.datetime "round_end", null: false
     t.integer "round_steps", null: false
     t.boolean "active", default: true, null: false
@@ -140,7 +140,6 @@ ActiveRecord::Schema.define(version: 20180702021858) do
     t.decimal "size", null: false
     t.decimal "reserve_size", default: "0.0", null: false
     t.decimal "price", null: false
-    t.decimal "fee", default: "0.0", null: false
     t.string "product", null: false
     t.string "side", default: "buy", null: false
     t.string "kind", default: "market", null: false

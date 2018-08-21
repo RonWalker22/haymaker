@@ -57,15 +57,14 @@ module LeaguesHelper
       if usdt
         usdt.total_quantity / @btc_price
       else
-        0 
+        0
       end
     end
 
     def alt_coins_estimate
       estimate = 0
       @user_wallets.each do |wallet|
-        next if wallet.coin_type == 'BTC'
-        next if wallet.coin_type == 'USDT'
+        next if wallet.coin_type == 'BTC' || wallet.coin_type == 'USDT'
 
         ticker = @tickers.find_by base_currency: wallet.coin_type
         estimate += wallet.total_quantity * ticker.price

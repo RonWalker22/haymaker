@@ -10,7 +10,7 @@ class CreateLeagueUsers < ActiveRecord::Migration[5.1]
       t.numeric :btce,              default: 1,     null: false
       t.numeric :portfolio,         default: 0,     null: false
       t.numeric :net_bonus,         default: 0,     null: false
-      t.numeric :baseline,          default: 0,     null: false
+      t.numeric :baseline,          default: 1,     null: false
       t.numeric :score,             default: 0,     null: false
       t.boolean :champ,             default: false, null: false
       t.integer :blocks,            default: 0,     null: false

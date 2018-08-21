@@ -18,7 +18,7 @@
           Game Over
         </h1>
         <h2 class="subtitle">
-          You have been knocked out of <%= @league.name %> league.
+          You have been knocked out of the <%= @league.name %> league.
         </h2>
       </div>
     </div>
@@ -45,7 +45,7 @@
           League Locked
         </h1>
         <h2 class="subtitle">
-          <p><%= @league.name %> league will begin on
+          <p>The <%= @league.name %> league will begin on
             <%= local_time @league.start_date, format: '%b %e, %Y %l:%M%P'%>
           </p>
         </h2>

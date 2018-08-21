@@ -24,14 +24,15 @@
                     round_end: 1000.years.from_now,
                     round_steps: 1000,
                     rounds: 100,
-                    round: 2
+                    round: 1
                   )
 
     Exchange.create!( name: 'Binance' )
     ExchangeLeague.create!( exchange_id: 1, league_id: 1)
   end
 
-  LeagueUser.create!(user_id: n + 1, league_id: 1, set_up: true, ready: true)
+  LeagueUser.create!(user_id: n + 1, league_id: 1, set_up: true,
+                    ready: true, baseline: 6_500)
 
   Wallet.create!( coin_type: 'ETH',
                   total_quantity: [10, 20, 30, 25, 35, 40].sample,

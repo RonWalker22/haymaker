@@ -355,7 +355,7 @@
     <div class="box leaderboards-box">
       <% league_users = LeagueUser.where(alive:true, league_id: @league.id).order(:rank).page params[:leaderboards] %>
       <h2 class="title is-4 center" id="leaderboards-title">Leaderboards</h2>
-        <table class="table is-fullwidth is-striped">
+        <table class="table is-fullwidth is-hoverable">
           <thead>
             <th>Rank</th>
             <th>Player</th>

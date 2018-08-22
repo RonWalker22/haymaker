@@ -121,27 +121,31 @@
       </h2>
       <p class="content">
         <dl>
-          <dt><strong>Commissioner:</strong></dt>
+          <dt class="white">Commissioner:</dt>
           <dd> <%= link_to User.find(@league.commissioner_id).name,
                             user_path(User.find(@league.commissioner_id).id)%>
           </dd>
-          <dt><strong>Entry fee:</strong></dt>
+          <dt class="white">Entry fee:</dt>
           <dd><%= @league.entry_fee %>
-          <dt><strong>Player Count:</strong></dt>
+          <dt class="white">Player Count:</dt>
           <dd><%= @league.users.count %>
-          <dt><strong>Start date:</strong></dt>
+          <dt class="white">Start date:</dt>
           <dd>
             <%= local_time @league.start_date, format: '%b %e, %Y %l:%M%P'  %>
           </dd>
-          <dt><strong>End date:</strong></dt>
+          <dt class="white">End date:</dt>
           <dd>
             <%= local_time @league.end_date, format: '%b %e, %Y %l:%M%P'  %>
           </dd>
-          <dt><strong>Round:</strong></dt>
+          <dt class="white">Round:</dt>
           <dd><%= @league.round %> of <%= @league.rounds %></dd>
-          <dt><strong>Round Ends:</strong></dt>
+          <dt class="white">Round Ends:</dt>
           <dd>
               <%= local_time @league.round_end, format: '%b %e, %Y %l:%M%P'  %>
+          </dd>
+          <dt class="white">Swing Deadline:</dt>
+          <dd>
+            <%= local_time @league.swing_by, format: '%b %e, %Y %l:%M%P'   %>
           </dd>
         </dl>
         <button class="button is-rounded is-small " type="button"

@@ -4,6 +4,7 @@ class LeaguesController < ApplicationController
                                                 :past, :current]
   before_action :set_league, only: [:join]
   before_action :check_actions_legal, only: [:deleverage, :swing, :bet, :shield]
+  before_action :check_swing_deadline, only: [:swing, :show]
   include LeaguesHelper
 
   # GET /leagues
@@ -46,6 +47,7 @@ class LeaguesController < ApplicationController
    round_end  = start_date - 1.second
    end_date   = league_params[:start_date].to_datetime + params[:duration].to_i.days
    end_date   = end_date.end_of_day
+   swing_by   = Time.now
 
     @league = League.new( name: league_params[:name],
                           commissioner_id: league_params[:commissioner_id].to_i,
@@ -57,7 +59,8 @@ class LeaguesController < ApplicationController
                           mode:  params[:game_mode],
                           password: league_params[:password],
                           late_join: params[:late_join] == "true",
-                          round_steps: round_steps[params[:duration]]
+                          round_steps: round_steps[params[:duration]],
+                          swing_by: swing_by
                          )
     respond_to do |format|
       if @league.save
@@ -114,7 +117,7 @@ class LeaguesController < ApplicationController
     elsif @league.private?
       unless password_param[:password].downcase == @league.password.downcase
         flash[:alert] = "That password is incorrect."
-        return redirect_to leagues_url
+        return redirect_to league_path @league
       end
     end
 
@@ -370,6 +373,15 @@ class LeaguesController < ApplicationController
       elsif @league.start_date.future? || @league.end_date.past?
         flash[:alert] = "League actions are currently unavailable."
         return redirect_to @league
+      end
+    end
+
+    def check_swing_deadline
+      if @league.swing_by.past? && @league.active?
+        @league.league_users.each do |league_user|
+          next if league_user.shield?
+          league_user.update_attributes shield:true
+        end
       end
     end
 end

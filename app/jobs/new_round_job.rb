@@ -21,6 +21,7 @@ class NewRoundJob < ApplicationJob
         establish_baselines
         @league.round += 1
         @league.round_end += @league.round_steps.days
+        @league.swing_by = @league.round_end - (@league.round_steps / 2).days
         @league.save
       else
         end_game

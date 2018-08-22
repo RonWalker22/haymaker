@@ -121,6 +121,7 @@ ActiveRecord::Schema.define(version: 20180702021858) do
     t.datetime "round_end", null: false
     t.integer "round_steps", null: false
     t.boolean "active", default: true, null: false
+    t.datetime "swing_by", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["commissioner_id"], name: "index_leagues_on_commissioner_id"

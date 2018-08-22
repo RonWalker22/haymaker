@@ -217,19 +217,17 @@ class ExchangesController < ApplicationController
     end
 
     def get_full_coin_list
-      @coin_lists = {}
+      @ticker_list = {}
 
-      @exchange.tickers.order(:pair).each do |ticker|
-        if @coin_lists[ticker["quote_currency"]]
-          @coin_lists[ticker["quote_currency"]] << ticker.pair
+      Ticker.all.order(:pair).each do |ticker|
+        if @ticker_list[ticker["quote_currency"]]
+          @ticker_list[ticker["quote_currency"]] << ticker
         else
-          @coin_lists[ticker["quote_currency"]] = [ticker.pair]
+          @ticker_list[ticker["quote_currency"]] = [ticker]
         end
       end
-      @base_tickers = @coin_lists.to_a
-      @base_tickers.each {|list| list.delete_at(1)}
-      @base_tickers.map! {|ticker| ticker[0]}
-      @coin_lists = @coin_lists.values
+
+      @ticker_list = @ticker_list.values
     end
 
     def format_pair(pair, match)

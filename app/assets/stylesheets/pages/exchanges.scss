@@ -40,17 +40,13 @@ input {
 .buy_side {
   background-color: #149a19;
   background: linear-gradient(to right, #149a19 50%, transparent 0);
-  min-width: 1em;
-  background-size: 0.8em auto;
-  background-repeat: no-repeat;
+  background-size: 0.2em auto;
 }
 
 .sell_side {
   background-color: #de6161;
   background: linear-gradient(to right, #de6161 50%, transparent 0);
-  min-width: 1em;
-  background-size: 0.8em auto;
-  background-repeat: no-repeat;
+  background-size: 0.2em auto;
 }
 
 .inline_block_s {
@@ -70,8 +66,12 @@ input {
 }
 
 #price_label {
+  margin-right: .5em;
 }
 
+.amount_label_input {
+  margin-top: 1em;
+}
 #balance_sec {
   min-height: 208px
 }
@@ -111,10 +111,16 @@ input {
   text-align: center;
   width: 9em;
   margin: auto;
+  margin-bottom: 1em;
+  margin-top: 1em;
 }
 
 #exchange {
   margin-top: 0px;
+}
+
+.single-pair {
+  width: 4em;
 }
 
 .current_league a{
@@ -130,18 +136,17 @@ input {
 }
 
 #buy_btn {
-  margin-left: auto;
   background: rgb(20, 154, 25);
   color: #bbe1ff;
 }
 
 #buy_sell_btns {
   margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 #sell_btn {
   color: #bbe1ff;
-  margin-right: auto;
 }
 
 #capital_percentage {
@@ -159,17 +164,21 @@ input {
   }
 }
 
+#custom_order {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 #allocation_box {
-  margin: 1em;
-  margin-left: 2.3em;
+  margin-bottom: 1em;
+  margin-top: 1em;
 }
 
 #order_btn {
   display: block;
   background: rgb(20, 154, 25);
   color: #bbe1ff;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 #coin_quantity {
@@ -179,6 +188,7 @@ input {
 
 
 #amount_label {
+  margin-right: 3em;
   font-weight: normal;
 }
 
@@ -235,7 +245,7 @@ input {
   // overflow-y: hidden;
 }
 
-#tradingview_7ef5b {
+#tradingview_9766d {
   height: 20.6em;
 }
 
@@ -251,12 +261,6 @@ input {
   overflow-y: auto;
 }
 
-
-#order_sec{
-  text-align: center;
-  height: 29em;
-}
-
 #price_target_label {
   display: block;
 }
@@ -267,20 +271,44 @@ input {
 }
 
 #past_orders {
-  max-height: 38em;
+  min-height: 39em;
 }
 
+.reserve {
+  border-bottom-style: solid;
+  border-bottom-width: thin;
+}
+
+#coin_0_balance_label,
+#coin_1_balance_label{
+  padding: .2em;
+  border-left-style: solid;
+  border-bottom-style: solid;
+}
+
+
 /* Mobile Landscape Screen Sizes */
-@media only screen and (min-width: 480px)  {
+// @media only screen and (min-width: 480px)  {
+// }
+
+/* table Screen Sizes */
+@media only screen and (min-width: 750px)  {
+  .orders-box{
+    min-width: 18em;
+    min-height: 32em;
+  }
+  .order-box {
+    min-height: 32em;
+  }
+  #tradingview_9766d {
+    min-width: 31em;
+    min-height: 29em;
+  }
+  .chart-box {
+    min-height: 32em;
+  }
 }
 
 /* Desktop screen Sizes */
-@media only screen and (min-width: 768px) {
-  .order-box{
-    width: 18em;
-  }
-
-  .chart-box{
-    width: 40em;
-  }
+@media only screen and (min-width: 1024px) {
 }

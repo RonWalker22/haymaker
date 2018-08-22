@@ -75,7 +75,7 @@ tryWebsocket  = ->
     for btn in delete_btns
       btn.addEventListener 'mouseover', ->
         @default_color = this.parentNode.parentNode.parentNode.style.background
-        this.parentNode.parentNode.parentNode.style.background = 'black'
+        this.parentNode.parentNode.parentNode.style.background = '#6f2222'
       btn.addEventListener 'mouseout', ->
         this.parentNode.parentNode.parentNode.style.background = @default_color
 

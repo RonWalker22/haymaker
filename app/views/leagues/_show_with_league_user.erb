@@ -115,7 +115,7 @@
 
 <div class="columns is-multiline is-centered">
   <div class="column is-3">
-    <div class="box">
+    <div class="box league_info_box">
       <h2 class="title is-4 center" id="league-info" data-leagueid = "<%=@league.id%>" data-userid = "<%=current_user.id%>">
         League Info
       </h2>
@@ -168,58 +168,66 @@
   </div>
 
   <div class="column is-9 is-5-desktop is-half">
-    <div class="box">
-      <% fistfights = @league.fistfights.order(id: :desc).page params[:page] %>
+    <div class="box fistfight-box">
       <h2 class="title is-4 -title center" id="fistfights-title">Fistfights</h2>
-      <%= paginate fistfights, params: {anchor: 'fistfights-title'}  %>
-      <table class="table is-striped is-fullwidth is-narrow">
-        <thead>
-          <tr>
-            <th>Attacker</th>
-            <th></th>
-            <th>Defender</th>
-            <th>Round</th>
-          </tr>
-        </thead>
-        <tbody>
-          <%  fistfights.each do |ff| %>
-            <% league_attacker = LeagueUser.find ff.attacker_id %>
-            <% attacker        = @users_stats[league_attacker][:user] %>
-            <% ffa_results     = @users_stats[league_attacker][:performance] %>
-            <% league_defender = LeagueUser.find ff.defender_id %>
-            <% defender        = @users_stats[league_defender][:user] %>
-            <% ffd_results     = @users_stats[league_defender][:performance] %>
+      <% if @league.fistfights.count > 0%>
+      <div class="fistfights-table">
+        <table class="table is-striped is-fullwidth is-narrow">
+          <thead>
             <tr>
-              <td>
-                <% if league_attacker.alive?%>
-                  <%= link_to attacker.name,
-                              user_path(attacker.id) %>
-                <% else %>
-                  <%= link_to attacker.name,
-                              user_path(attacker.id),
-                              class: 'ko'%>
-                <% end %>
-        <%= ff.active? ? "(#{ffa_results}%)" : "(#{ff.attacker_performance}%)"%>
-              </td>
-              <td>vs.</td>
-              <td>
-                <% if league_defender.alive?%>
-                  <%= link_to defender.name,
-                              user_path(defender.id) %>
-                <% else %>
-                  <%= link_to defender.name,
-                              user_path(defender.id),
-                              class: 'ko' %>
-                <% end %>
-        <%= ff.active? ? "(#{ffd_results}%)" : "(#{ff.defender_performance}%)"%>
-              </td>
-              <td><%=ff.round%></td>
+              <th>Attacker</th>
+              <th></th>
+              <th>Defender</th>
+              <th>Round</th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
-      <%= paginate fistfights, params: {anchor: 'fistfights-title'}  %>
-      <%if @league.fistfights.count == 0  %>
+          </thead>
+          <tfoot>
+            <tr>
+              <th>Attacker</th>
+              <th></th>
+              <th>Defender</th>
+              <th>Round</th>
+            </tr>
+          </tfoot>
+          <tbody>
+            <%  @league.fistfights.order(id: :desc).each do |ff| %>
+              <% league_attacker = LeagueUser.find ff.attacker_id %>
+              <% attacker        = @users_stats[league_attacker][:user] %>
+              <% ffa_results     = @users_stats[league_attacker][:performance] %>
+              <% league_defender = LeagueUser.find ff.defender_id %>
+              <% defender        = @users_stats[league_defender][:user] %>
+              <% ffd_results     = @users_stats[league_defender][:performance] %>
+              <tr>
+                <td>
+                  <% if league_attacker.alive?%>
+                    <%= link_to attacker.name,
+                                user_path(attacker.id) %>
+                  <% else %>
+                    <%= link_to attacker.name,
+                                user_path(attacker.id),
+                                class: 'ko'%>
+                  <% end %>
+          <%= ff.active? ? "(#{ffa_results}%)" : "(#{ff.attacker_performance}%)"%>
+                </td>
+                <td>vs.</td>
+                <td>
+                  <% if league_defender.alive?%>
+                    <%= link_to defender.name,
+                                user_path(defender.id) %>
+                  <% else %>
+                    <%= link_to defender.name,
+                                user_path(defender.id),
+                                class: 'ko' %>
+                  <% end %>
+          <%= ff.active? ? "(#{ffd_results}%)" : "(#{ff.defender_performance}%)"%>
+                </td>
+                <td><%=ff.round%></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <%else%>
         <p class="content">
             There are no past or active Fistfights.
         </p>
@@ -228,7 +236,7 @@
   </div>
 
     <div class="column is-12 is-3-desktop">
-      <div class="box">
+      <div class="box actions-box">
         <h2 class="title is-4 center" id="actions-title">Actions</h2>
           <div class="tags has-addons">
             <span class="tag  type-action is-dark margin-left">Shield</span>
@@ -343,11 +351,11 @@
   <% end %>
 
 
-  <div class="column">
-    <div class="box">
+  <div class="column is-12">
+    <div class="box leaderboards-box">
       <% league_users = LeagueUser.where(alive:true, league_id: @league.id).order(:rank).page params[:leaderboards] %>
       <h2 class="title is-4 center" id="leaderboards-title">Leaderboards</h2>
-        <table class="table is-striped">
+        <table class="table is-fullwidth is-striped">
           <thead>
             <th>Rank</th>
             <th>Player</th>

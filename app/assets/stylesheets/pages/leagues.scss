@@ -46,3 +46,40 @@
 .stat-line {
   color: black
 }
+
+.fistfights-table {
+  max-height:  29em;
+  overflow-y: auto;
+}
+
+/* Mobile Landscape Screen Sizes */
+// @media only screen and (min-width: 480px)  {
+// }
+
+/* table Screen Sizes */
+@media only screen and (min-width: 750px)  {
+  .orders-box{
+    min-width: 18em;
+    min-height: 32em;
+  }
+  .order-box {
+    min-height: 32em;
+  }
+  #tradingview_9766d {
+    min-width: 31em;
+    min-height: 29em;
+  }
+  .chart-box {
+    min-height: 32em;
+  }
+
+  .league_info_box,
+  .fistfight-box,
+  .actions-box {
+    min-height: 35em;
+  }
+}
+
+/* Desktop screen Sizes */
+@media only screen and (min-width: 1024px) {
+}

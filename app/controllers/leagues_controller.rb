@@ -367,7 +367,7 @@ class LeaguesController < ApplicationController
         flash[:alert] = "You have been knocked out of this league and are no
                                   longer able to access any league actions."
         return redirect_to @league
-      elsif @league.start_date.past? || @league.end_date.future?
+      elsif @league.start_date.future? || @league.end_date.past?
         flash[:alert] = "League actions are currently unavailable."
         return redirect_to @league
       end

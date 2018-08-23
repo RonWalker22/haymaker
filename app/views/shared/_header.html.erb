@@ -21,7 +21,7 @@
           <div class="navbar-item has-dropdown is-hoverable">
             <a href="#" class=navbar-link>My Leagues</a>
             <div class="navbar-dropdown is-boxed">
-              <% current_user.leagues.each do |l| %>
+              <% current_user.leagues.where(active:true).each do |l| %>
                 <%= link_to l.name, league_path(l.id), :class =>"navbar-item" %>
               <% end %>
             </div>

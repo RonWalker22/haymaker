@@ -87,6 +87,8 @@ tryModal = ->
     private_league_message = document.querySelector    ".private_league_message"
     private_cancel         = document.querySelector    ".private_cancel"
     join_form              = document.querySelector    ".join-form"
+    league_info            = document.querySelector    "#league-info"
+    league_id              = league_info.dataset.leagueid
 
     if private_cancel
       private_cancel.addEventListener 'click', ->
@@ -96,6 +98,8 @@ tryModal = ->
           public_league.style = 'display: block'
           private_form.style = 'display: none'
           confirmation_modal.classList.add "is-active"
+          confirmation_action.href = "/leagues/#{league_id}/join/"
+          confirmation_action.dataset.method = "post"
     if join_private_btn
         join_private_btn.addEventListener 'click', ->
           private_form.style = 'display: block'

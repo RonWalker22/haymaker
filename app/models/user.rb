@@ -18,7 +18,7 @@ class User < ApplicationRecord
             foreign_key: "sender_id",
             class_name: "LeagueInvite"
 
-  paginates_per 10
+  paginates_per 25
 
   def coin_total(coin)
     league_user = LeagueUser.find_by user_id: self.id

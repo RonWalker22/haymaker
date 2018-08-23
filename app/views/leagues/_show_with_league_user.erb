@@ -147,6 +147,12 @@
           <dd>
             <%= local_time @league.swing_by, format: '%b %e, %Y %l:%M%P'   %>
           </dd>
+          <% if @league.private? %>
+            <dt class="white">Password:</dt>
+            <dd>
+              <%= @league.password  %>
+            </dd>
+          <% end %>
         </dl>
         <button class="button is-rounded is-small " type="button"
                 data-toggle="collapse" data-target="#collapseSettting"

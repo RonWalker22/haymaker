@@ -110,7 +110,9 @@ class LeaguesController < ApplicationController
       flash[:alert] = "This league does not accept late joiners."
       return redirect_to leagues_url
     elsif @league.private?
-      unless password_param[:password].downcase == @league.password.downcase
+      if current_user.received_league_invites.find_by league_id:@league.id
+        nil
+      elsif password_param[:password].downcase != @league.password.downcase
         flash[:alert] = "That password is incorrect."
         return redirect_to league_path @league
       end

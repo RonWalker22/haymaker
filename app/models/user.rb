@@ -14,9 +14,6 @@ class User < ApplicationRecord
   has_many :sent_league_invites,
             foreign_key: "sender_id",
             class_name: "LeagueInvite"
-  has_many :sent_league_invites,
-            foreign_key: "sender_id",
-            class_name: "LeagueInvite"
 
   paginates_per 25
 

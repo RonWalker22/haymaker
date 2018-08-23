@@ -48,6 +48,7 @@ class LeaguesController < ApplicationController
    end_date   = league_params[:start_date].to_datetime + params[:duration].to_i.days
    end_date   = end_date.end_of_day
    swing_by   = Time.now
+   password = league_params[:password].empty? ? '123' : league_params[:password]
 
     @league = League.new( name: league_params[:name],
                           commissioner_id: league_params[:commissioner_id].to_i,
@@ -57,7 +58,7 @@ class LeaguesController < ApplicationController
                           rounds: rounds[params[:duration]],
                           private: params[:community].downcase == 'private',
                           mode:  params[:game_mode],
-                          password: league_params[:password],
+                          password: password,
                           late_join: params[:late_join] == "true",
                           round_steps: round_steps[params[:duration]],
                           swing_by: swing_by

@@ -101,14 +101,17 @@ tryPassword = ->
   community_select = document.querySelector('#league_community')
   password_input = document.querySelector('#league_password')
 
+  if community_select.value == 'Private'
+    password_input.removeAttribute "readonly"
+    password_input.setAttribute 'required', true
+
   community_select.addEventListener 'change', ->
     if community_select.value == 'Public'
-      console.log 'hi'
-      password_input.setAttribute 'disabled', true
+      password_input.value = ''
+      password_input.setAttribute 'readonly', true
       password_input.removeAttribute "required"
     if community_select.value == 'Private'
-      console.log 'hi'
-      password_input.removeAttribute "disabled"
+      password_input.removeAttribute "readonly"
       password_input.setAttribute 'required', true
 
 document.addEventListener 'turbolinks:load', ->

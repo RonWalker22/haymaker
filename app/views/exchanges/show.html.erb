@@ -131,7 +131,7 @@
                 <%= label_tag :coin_quantity, 'Amount:', id: 'amount_label'%>
                 <p class="control">
                   <%= number_field_tag :order_quantity, nil, placeholder: 0.0000,
-                    step: 0.00000001, min: 0.01, autofocus: 'autofocus',
+                    step: 0.00000001, min: 0.00000001, autofocus: 'autofocus',
                     class: 'input is-small'%>
                 </p>
                 <p class="control">
@@ -165,7 +165,7 @@
 
                 <%= label_tag(:price_target, "Target:", id: "price_target_label") %>
                 <%= number_field_tag :price_target, nil, placeholder: 0.0000,
-                  step: 0.00000001, min: 0.01, autofocus: 'autofocus',
+                  step: 0.00000001, min: 0.00000001, autofocus: 'autofocus',
                   class: 'input is-small'%>
 
 
@@ -175,7 +175,7 @@
                   <div class="field has-addons">
                     <p class="control">
                       <%= number_field_tag :price_limit, nil, placeholder: 0.0000,
-                        step: 0.00000001, min: 0, autofocus: 'autofocus',
+                        step: 0.00000001, autofocus: 'autofocus', min: 0.00000001
                         class: 'input is-small'%>
                     </p>
                     <p class="control">

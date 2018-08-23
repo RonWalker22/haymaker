@@ -24,8 +24,9 @@
     <%= form.label :game_mode, class: "label" %>
     <div class="control">
       <div class="select is-small">
-        <select name="game_mode" id="league_game_mode" >
-          <%= options_for_select(['Slugfest', 'Bare Knuckle'])%>
+        <select name="game_mode" id="league_game_mode" readonly=true>
+          <option selected="selected">Slugfest</option>
+          <option disabled="disabled">Bare Knuckle</option>
         </select>
       </div>
     </div>

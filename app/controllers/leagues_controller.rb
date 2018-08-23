@@ -37,12 +37,6 @@ class LeaguesController < ApplicationController
     rounds = {'1' => 1, '6' => 3, '12' => 3,
                   '28' => 4, '84' => 6, '360' => 12}
 
-   # start_date = league_params[:start_date].to_datetime.midday
-   # round_end  = league_params[:start_date].to_datetime + round_steps[params[:duration]].days
-   # round_end  = round_end.end_of_day
-   # end_date   = league_params[:start_date].to_datetime + params[:duration].to_i.days
-   # end_date   = end_date.end_of_day
-
    start_date = league_params[:start_date].to_datetime.end_of_day + 1.second
    round_end  = start_date - 1.second
    end_date   = league_params[:start_date].to_datetime + params[:duration].to_i.days

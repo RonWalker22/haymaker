@@ -222,11 +222,25 @@ class LeaguesController < ApplicationController
     end
 
     @league_user.shield = true
+    @league_user.decrement 'blocks'
     if @league_user.save
-      @league_user.decrement! 'blocks'
-      flash[:success] = "Shield is now active. You are shielded from participating in a fistfight in this round."
+      flash[:success] = "Shield is now active."
     end
 
+    redirect_to league_path @league
+  end
+
+  def auto_shield
+    if @league_user.blocks > 0
+      @league_user.auto_shield = true
+      @league_user.decrement 'blocks'
+      @league_user.save
+      flash[:notice] = "Auto shield is now active. You will be shielded from
+                        all fistfights during the next round."
+    else
+      flash[:alert] = "Auto shield was unsuccessful. You don't have any shields
+                        remaining."
+    end
     redirect_to league_path @league
   end
 
@@ -340,8 +354,12 @@ class LeaguesController < ApplicationController
       )
 
       if fistfight.save
-        @league_user.update_attributes shield: true
-        @target.update_attributes shield: true
+        @league_user.increment 'blocks'
+        @league_user.shield = true
+        @league_user.save
+        @target.shield = true
+        @target.increment 'blocks'
+        @target.save
         flash[:notice] = "Fistfight has begun."
       else
         flash[:alert] = "Fistfight was unable to start."

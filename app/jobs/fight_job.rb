@@ -32,6 +32,7 @@ class FightJob < ApplicationJob
     @league.league_users.each do |user|
       user.baseline = @baseline
       user.score    = 20_000
+      user.increment 'blocks'
       user.save
     end
   end

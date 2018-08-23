@@ -57,4 +57,5 @@ Rails.application.routes.draw do
   post 'leagues/:id/deleverage'   => 'leagues#deleverage', :as => 'deleverage'
 
   post 'leagues/:id/shield'       => 'leagues#shield', :as => 'shield'
+  post 'leagues/:id/auto_shield'  => 'leagues#auto_shield', :as => 'auto_shield'
 end

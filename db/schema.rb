@@ -96,6 +96,7 @@ ActiveRecord::Schema.define(version: 20180702021858) do
     t.boolean "champ", default: false, null: false
     t.integer "blocks", default: 0, null: false
     t.boolean "shield", default: false, null: false
+    t.boolean "auto_shield", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["league_id", "user_id"], name: "index_league_users_on_league_id_and_user_id", unique: true
@@ -110,7 +111,7 @@ ActiveRecord::Schema.define(version: 20180702021858) do
     t.decimal "starting_balance", default: "1.0", null: false
     t.boolean "balance_revivable", default: false, null: false
     t.boolean "private", default: false, null: false
-    t.string "password", default: "pass", null: false
+    t.string "password", default: "123", null: false
     t.string "mode", default: "Slugfest", null: false
     t.boolean "late_join", default: true, null: false
     t.bigint "commissioner_id", null: false

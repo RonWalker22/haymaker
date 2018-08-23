@@ -15,6 +15,7 @@ class CreateLeagueUsers < ActiveRecord::Migration[5.1]
       t.boolean :champ,             default: false, null: false
       t.integer :blocks,            default: 0,     null: false
       t.boolean :shield,            default: false, null: false
+      t.boolean :auto_shield,       default: false, null: false
 
       t.timestamps
     end

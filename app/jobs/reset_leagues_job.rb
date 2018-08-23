@@ -21,7 +21,8 @@ class ResetLeaguesJob < ApplicationJob
   def reset_league_users
     LeagueUser.all.each do |lu|
       lu.update_attributes alive:true, net_bonus:0, rank: 0, shield: false,
-                           blocks:0, champ: false, score:0, portfolio:0
+                           blocks:0, champ: false, score:0, portfolio:0,
+                           auto_shield: false
     end
   end
 

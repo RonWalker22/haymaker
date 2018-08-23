@@ -160,6 +160,12 @@
                 League Settings
         </button>
         <div class="collapse" id="collapseSettting">
+        <% if @league_user.blocks > 0%>
+          <button type="button"
+          class="button is-success activate-auto-shield is-small">
+            Activate Auto-Shield
+          </button>
+        <% end %>
         <% if @league.id == 1 %>
           <button type="button" class="button reset is-danger is-small">
             Reset Funds
@@ -255,6 +261,12 @@
             </span>
             <span class="tag  status-action margin-right <%= @league_user.shield? ? 'is-info' : 'is-warning'%>">
               <%= @league_user.shield? ? 'Active' : 'Inactive' %>
+            </span>
+          </div>
+          <div class="tags has-addons">
+            <span class="tag  is-dark margin-left">Auto Shield</span>
+            <span class="tag  margin-right <%= @league_user.auto_shield? ? 'is-info' : 'is-warning'%>">
+              <%= @league_user.auto_shield? ? 'Active' : 'Inactive' %>
             </span>
           </div>
           <% if @league_user.shield?%>

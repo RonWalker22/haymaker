@@ -25,8 +25,8 @@ tryWebsocket  = ->
     filled_orders_btn     = document.querySelector("#filled-orders-btn")
     open_orders_btn       = document.querySelector("#open-orders-btn")
     delete_btns           = document.querySelectorAll(".delete")
-    price_climbs          = document.querySelectorAll(".price_climbs")
-    price_falls           = document.querySelectorAll(".price_falls")
+    price_climbs          = document.querySelector("#price_climbs")
+    price_falls           = document.querySelector("#price_falls")
 
     trading_pair = document.querySelector("#trading_pair").innerHTML
     cp1 =
@@ -66,10 +66,10 @@ tryWebsocket  = ->
       price_limit.value = ''
       price_limit_container.style.display = 'none'
       if current_value(order_btn) == 'Place Buy Order'
-        direction.value    = 'price_falls'
+        direction.selectedIndex = 0
         price_limit_label.innerHTML = 'Floor:'
       else
-        direction.value    = 'price_climbs'
+        direction.selectedIndex = 1
         price_limit_label.innerHTML = 'Ceiling:'
 
     for btn in delete_btns
@@ -195,11 +195,11 @@ tryWebsocket  = ->
           +after_order_value_1.innerHTML, 8
       activate_allocation_listeners('buy')
       price_limit_container.style.display = 'none'
-      direction.innerHTML =
-        "<option value='" + "price_falls" + "'>" +"Price fall to" +
-          "</option> <option value='" + "price_climbs" + "'>" +
-            "Price climbs within" + "</option>"
-      direction.value = 'price_falls'
+      price_climbs.innerHTML = "Price climbs within"
+      price_falls.innerHTML  = "Price falls to"
+      direction.selectedIndex = 0
+      price_falls.removeAttribute 'disabled'
+      price_climbs.setAttribute 'disabled', 'true'
       price_limit_label.innerHTML = 'Floor:'
       price_limit.value = ''
       price_target.value = ''
@@ -220,12 +220,12 @@ tryWebsocket  = ->
           +after_order_value_1.innerHTML, 8
       activate_allocation_listeners('sell')
       price_limit_container.style.display = 'none'
-      direction.value = 'price_climbs'
-      direction.innerHTML =
-        "<option value='" + "price_falls" + "'>" +"Price fall within" +
-          "</option> <option value='" + "price_climbs" + "'>" +
-            "Price climbs to" + "</option>"
-      direction.value = 'price_climbs'
+      price_climbs.innerHTML = "Price climbs to"
+      price_falls.innerHTML  = "Price falls within"
+      direction.selectedIndex = 0
+      price_climbs.removeAttribute 'disabled'
+      price_falls.setAttribute 'disabled', 'true'
+      direction.selectedIndex = 1
       price_limit_label.innerHTML = 'Ceiling:'
       price_limit.value = ''
       price_target.value = ''

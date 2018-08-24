@@ -8,6 +8,7 @@ class GetTickerPricesJob < ApplicationJob
         binance = Exchange.find_by(name: 'Binance')
         exchange = binance.name
         Thread.new do
+          Sidekiq::Stats.new.reset
           sleep 3000
           @ws.close
         end

@@ -47,13 +47,13 @@ class LimitOrdersJob < ApplicationJob
         if limit_order.side == 'buy'
           base_coin.increment! 'total_quantity', limit_order.size
           quote_coin.decrement! 'total_quantity',
-                                  (limit_order.size * ).round(8)
+                                  (limit_order.size * new_price).round(8)
 
           reserve_coin = quote_coin
         else
           base_coin.decrement! 'total_quantity', limit_order.size
           quote_coin.increment! 'total_quantity',
-                                  (limit_order.size * ).round(8)
+                                  (limit_order.size * new_price).round(8)
 
           reserve_coin = base_coin
         end

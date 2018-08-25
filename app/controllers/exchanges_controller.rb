@@ -308,20 +308,18 @@ class ExchangesController < ApplicationController
       end
     end
 
-    #limit order
-    def custom_order_without_cap?
+    def limit_order
       order_params[:price_target] != "" && order_params[:price_cap] == ""
     end
 
-    #stop-limit order
-    def custom_order_with_cap?
+    def stop_limit_order
       order_params[:price_target] !=  "" && order_params[:price_cap] != ""
     end
 
     def establish_price
-      if custom_order_without_cap?
+      if limit_order
         @price = order_params[:price_target].to_f
-      elsif custom_order_with_cap?
+      elsif stop_limit_order
         @price = order_params[:price_cap].to_f
       else
         @price = @exchange.tickers.find_by(exchange_id: @exchange.id,

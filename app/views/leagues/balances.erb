@@ -40,7 +40,7 @@
             </tr>
           </tfoot>
           <tbody>
-            <% current_user.wallets.where(league_user: @league_user).each do |w| %>
+            <% @league_user.wallets.where(league_user: @league_user).each do |w| %>
             <% next if w.total_quantity == 0 %>
             <% if  w.coin_type == 'BTC'  %>
               <% usdt_value   = @btc_price * w.total_quantity%>

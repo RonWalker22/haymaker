@@ -14,15 +14,6 @@ class User < ApplicationRecord
 
   paginates_per 25
 
-  def coin_total(coin)
-    league_user = LeagueUser.find_by user_id: self.id
-    arr = []
-    league_user.wallets.where({coin_type: coin}).each do
-      |wallet| arr << wallet.total_quantity.to_f
-    end
-    arr.sum
-  end
-
   def self.search(search)
     where("name ILIKE ?", "%#{search}%")
   end

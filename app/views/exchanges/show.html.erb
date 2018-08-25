@@ -158,8 +158,12 @@
                   <!-- <%= select_tag(:direction, options_for_select(['Price falls within',
                                                                 'Price climbs within']) ) %> -->
                   <select class="" name="" id="direction">
-                    <option value="price_falls" id="price_falls">Price falls to</option>
-                    <option value="price_climbs" id="price_climbs" disabled="disabled">Price climbs within</option>
+                    <option value="price_falls" id="price_falls">
+                      Price falls to
+                    </option>
+                    <option value="price_climbs" id="price_climbs">
+                        Price climbs within
+                    </option>
                   </select>
                 </div>
 
@@ -181,11 +185,6 @@
                     <p class="control">
                       <a id='price_cap_max' class="button is-small">
                         max
-                      </a>
-                    </p>
-                    <p class="control">
-                      <a id='price_cap_min' class="button is-small">
-                        min
                       </a>
                     </p>
                   </div>

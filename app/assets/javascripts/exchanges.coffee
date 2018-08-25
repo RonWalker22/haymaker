@@ -16,11 +16,10 @@ tryWebsocket  = ->
     price_target          = document.querySelector("#price_target")
     custom_order          = document.querySelector("#custom_order")
     direction             = document.querySelector("#direction")
-    price_cap           = document.querySelector("#price_cap")
-    price_cap_container = document.querySelector("#price_cap_container")
-    price_cap_label     = document.querySelector("#price_cap_label")
-    price_cap_min       = document.querySelector("#price_cap_min")
-    price_cap_max       = document.querySelector("#price_cap_max")
+    price_cap             = document.querySelector("#price_cap")
+    price_cap_container   = document.querySelector("#price_cap_container")
+    price_cap_label       = document.querySelector("#price_cap_label")
+    price_cap_max         = document.querySelector("#price_cap_max")
     past_orders_title     = document.querySelector("#past_orders_title")
     filled_orders_btn     = document.querySelector("#filled-orders-btn")
     open_orders_btn       = document.querySelector("#open-orders-btn")
@@ -80,12 +79,10 @@ tryWebsocket  = ->
         this.parentNode.parentNode.parentNode.style.background = @default_color
 
     price_cap_max.addEventListener 'click', ->
-      if document.querySelector('#order_btn').value == 'Place Buy Order'
-        price_max = Math.roundTo +balance_pair_values_0.textContent, 8 /
-          Math.roundTo +document.querySelector('#order_quantity').value, 8
-        price_cap.value = Math.roundTo price_max, 8
-      else
-        price_cap.value = 0
+      available_quantity = Math.roundTo +balance_pair_values_0.textContent, 8
+      order_quantity = Math.roundTo +document.querySelector('#order_quantity').value, 8
+      price_max = available_quantity / order_quantity
+      price_cap.value = Math.roundTo price_max, 8
 
     filled_orders_btn.addEventListener 'click', ->
       if past_orders_title.innerHTML != 'Filled Orders'
@@ -94,9 +91,6 @@ tryWebsocket  = ->
     open_orders_btn.addEventListener 'click', ->
       if past_orders_title.innerHTML != 'Open Orders'
         past_orders_title.innerHTML = 'Open Orders'
-
-    price_cap_min.addEventListener 'click', ->
-      price_cap.value = document.querySelector('#price_target').value
 
     direction.addEventListener 'change', ->
       if current_value(order_btn) == 'Place Buy Order' && current_value(direction) == 'price_climbs'
@@ -198,11 +192,10 @@ tryWebsocket  = ->
       price_climbs.innerHTML = "Price climbs within"
       price_falls.innerHTML  = "Price falls to"
       direction.selectedIndex = 0
-      price_falls.removeAttribute 'disabled'
-      price_climbs.setAttribute 'disabled', 'true'
       price_cap_label.innerHTML = 'Floor:'
       price_cap.value = ''
       price_target.value = ''
+      price_cap_max.style.display = 'inline-flex'
 
 
     sell_btn.addEventListener 'click', ->
@@ -223,12 +216,11 @@ tryWebsocket  = ->
       price_climbs.innerHTML = "Price climbs to"
       price_falls.innerHTML  = "Price falls within"
       direction.selectedIndex = 0
-      price_climbs.removeAttribute 'disabled'
-      price_falls.setAttribute 'disabled', 'true'
       direction.selectedIndex = 1
       price_cap_label.innerHTML = 'Ceiling:'
       price_cap.value = ''
       price_target.value = ''
+      price_cap_max.style.display = 'none'
 
   catch error
     puts 'waiting to connect through click'

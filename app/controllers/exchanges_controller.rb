@@ -121,7 +121,7 @@ class ExchangesController < ApplicationController
     end
 
     def order_params
-      params.permit(:price_target, :direction, :price_limit, :oid)
+      params.permit(:price_target, :direction, :price_cap, :oid)
     end
 
     def remove_reserve
@@ -308,19 +308,21 @@ class ExchangesController < ApplicationController
       end
     end
 
-    def custom_order_without_limit?
-      order_params[:price_target] != "" && order_params[:price_limit] == ""
+    #limit order
+    def custom_order_without_cap?
+      order_params[:price_target] != "" && order_params[:price_cap] == ""
     end
 
-    def custom_order_with_limit?
-      order_params[:price_target] !=  "" && order_params[:price_limit] != ""
+    #stop-limit order
+    def custom_order_with_cap?
+      order_params[:price_target] !=  "" && order_params[:price_cap] != ""
     end
 
     def establish_price
-      if custom_order_without_limit?
+      if custom_order_without_cap?
         @price = order_params[:price_target].to_f
-      elsif custom_order_with_limit?
-        @price = order_params[:price_limit].to_f
+      elsif custom_order_with_cap?
+        @price = order_params[:price_cap].to_f
       else
         @price = @exchange.tickers.find_by(exchange_id: @exchange.id,
                                            pair: @pair).price

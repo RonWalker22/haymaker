@@ -16,11 +16,11 @@ tryWebsocket  = ->
     price_target          = document.querySelector("#price_target")
     custom_order          = document.querySelector("#custom_order")
     direction             = document.querySelector("#direction")
-    price_limit           = document.querySelector("#price_limit")
-    price_limit_container = document.querySelector("#price_limit_container")
-    price_limit_label     = document.querySelector("#price_limit_label")
-    price_limit_min       = document.querySelector("#price_limit_min")
-    price_limit_max       = document.querySelector("#price_limit_max")
+    price_cap           = document.querySelector("#price_cap")
+    price_cap_container = document.querySelector("#price_cap_container")
+    price_cap_label     = document.querySelector("#price_cap_label")
+    price_cap_min       = document.querySelector("#price_cap_min")
+    price_cap_max       = document.querySelector("#price_cap_max")
     past_orders_title     = document.querySelector("#past_orders_title")
     filled_orders_btn     = document.querySelector("#filled-orders-btn")
     open_orders_btn       = document.querySelector("#open-orders-btn")
@@ -63,14 +63,14 @@ tryWebsocket  = ->
 
     custom_order.addEventListener 'click', ->
       price_target.value = ''
-      price_limit.value = ''
-      price_limit_container.style.display = 'none'
+      price_cap.value = ''
+      price_cap_container.style.display = 'none'
       if current_value(order_btn) == 'Place Buy Order'
         direction.selectedIndex = 0
-        price_limit_label.innerHTML = 'Floor:'
+        price_cap_label.innerHTML = 'Floor:'
       else
         direction.selectedIndex = 1
-        price_limit_label.innerHTML = 'Ceiling:'
+        price_cap_label.innerHTML = 'Ceiling:'
 
     for btn in delete_btns
       btn.addEventListener 'mouseover', ->
@@ -79,13 +79,13 @@ tryWebsocket  = ->
       btn.addEventListener 'mouseout', ->
         this.parentNode.parentNode.parentNode.style.background = @default_color
 
-    price_limit_max.addEventListener 'click', ->
+    price_cap_max.addEventListener 'click', ->
       if document.querySelector('#order_btn').value == 'Place Buy Order'
         price_max = Math.roundTo +balance_pair_values_0.textContent, 8 /
           Math.roundTo +document.querySelector('#order_quantity').value, 8
-        price_limit.value = Math.roundTo price_max, 8
+        price_cap.value = Math.roundTo price_max, 8
       else
-        price_limit.value = 0
+        price_cap.value = 0
 
     filled_orders_btn.addEventListener 'click', ->
       if past_orders_title.innerHTML != 'Filled Orders'
@@ -95,20 +95,20 @@ tryWebsocket  = ->
       if past_orders_title.innerHTML != 'Open Orders'
         past_orders_title.innerHTML = 'Open Orders'
 
-    price_limit_min.addEventListener 'click', ->
-      price_limit.value = document.querySelector('#price_target').value
+    price_cap_min.addEventListener 'click', ->
+      price_cap.value = document.querySelector('#price_target').value
 
     direction.addEventListener 'change', ->
       if current_value(order_btn) == 'Place Buy Order' && current_value(direction) == 'price_climbs'
-        price_limit_container.style.display = 'block'
+        price_cap_container.style.display = 'block'
       else if current_value(order_btn) == 'Place Sell Order' && current_value(direction) == 'price_falls'
-        price_limit_container.style.display = 'block'
+        price_cap_container.style.display = 'block'
       else
-        price_limit_container.style.display = 'none'
+        price_cap_container.style.display = 'none'
       if current_value(direction) == 'price_falls'
-        price_limit_label.innerHTML = 'Floor:'
+        price_cap_label.innerHTML = 'Floor:'
       else
-        price_limit_label.innerHTML = 'Ceiling:'
+        price_cap_label.innerHTML = 'Ceiling:'
 
     ao_0 = [after_order_sign_0, after_order_value_0, after_order_total_0,
             ao_equal_sign_0, ]
@@ -194,14 +194,14 @@ tryWebsocket  = ->
         Math.roundTo +balance_pair_values_1.innerHTML +
           +after_order_value_1.innerHTML, 8
       activate_allocation_listeners('buy')
-      price_limit_container.style.display = 'none'
+      price_cap_container.style.display = 'none'
       price_climbs.innerHTML = "Price climbs within"
       price_falls.innerHTML  = "Price falls to"
       direction.selectedIndex = 0
       price_falls.removeAttribute 'disabled'
       price_climbs.setAttribute 'disabled', 'true'
-      price_limit_label.innerHTML = 'Floor:'
-      price_limit.value = ''
+      price_cap_label.innerHTML = 'Floor:'
+      price_cap.value = ''
       price_target.value = ''
 
 
@@ -219,15 +219,15 @@ tryWebsocket  = ->
         Math.roundTo +balance_pair_values_1.innerHTML -
           +after_order_value_1.innerHTML, 8
       activate_allocation_listeners('sell')
-      price_limit_container.style.display = 'none'
+      price_cap_container.style.display = 'none'
       price_climbs.innerHTML = "Price climbs to"
       price_falls.innerHTML  = "Price falls within"
       direction.selectedIndex = 0
       price_climbs.removeAttribute 'disabled'
       price_falls.setAttribute 'disabled', 'true'
       direction.selectedIndex = 1
-      price_limit_label.innerHTML = 'Ceiling:'
-      price_limit.value = ''
+      price_cap_label.innerHTML = 'Ceiling:'
+      price_cap.value = ''
       price_target.value = ''
 
   catch error

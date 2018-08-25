@@ -2,6 +2,7 @@ class LeagueUser < ApplicationRecord
   belongs_to :league
   belongs_to :user
   has_many   :wallets, dependent: :delete_all
+  has_many   :orders,  through: :wallets         
   has_many   :bets,    dependent: :delete_all
   has_many   :attacks,
               class_name: "Fistfight",

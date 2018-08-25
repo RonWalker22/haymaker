@@ -1,10 +1,12 @@
 class ExchangesController < ApplicationController
   before_action :check_signed_in
   before_action :set_exchange, except: [:create, :index, :new]
+  before_action :set_league_user, except: [:create, :index, :new, :update,
+                                          :destroy]
   before_action :check_trading_window, only: [:order]
   before_action :order_params, only: [:order]
   before_action :user_signed_in?, only: [:show, :edit, :update, :destroy,
-                                          :order]
+                                        :order]
 
   def order
     @pair = params[:pair]
@@ -14,11 +16,8 @@ class ExchangesController < ApplicationController
     @order_type = params[:commit] == "Place Buy Order" ? 'buy' : 'sell'
     @order_quantity = params[:order_quantity].to_f
 
-    league_user = LeagueUser.find_by(user_id: current_user.id,
-                                    league_id: params[:id].to_i)
-
-    @wallets = current_user.wallets.where(exchange_id: @exchange.id,
-                                          league_user_id: league_user.id )
+    @wallets = @league_user.wallets.where(exchange_id: @exchange.id,
+                                          league_user_id: @league_user.id )
     establish_price
     set_coin_tickers
     find_and_set_coins
@@ -37,7 +36,7 @@ class ExchangesController < ApplicationController
   end
 
   def delete_custom_order
-    @order = current_user.orders.find order_params[:oid]
+    @order = @league_user.orders.find order_params[:oid]
     if @order
       remove_reserve
       @order.destroy
@@ -55,14 +54,12 @@ class ExchangesController < ApplicationController
   def show
     @pair = params[:p]
     set_coin_tickers
-    league_user = LeagueUser.find_by(user_id: current_user.id,
-                                    league_id: params[:id].to_i)
-    if !league_user.alive?
+    if !@league_user.alive?
       flash[:notice] = "You have been knocked out of this league and are no
                                 longer able to access any league featues."
       return redirect_back(fallback_location: root_path)
     end
-    @wallets = league_user.wallets.where(exchange_id: @exchange.id)
+    @wallets = @league_user.wallets.where(exchange_id: @exchange.id)
 
     @wallet = @wallets.find_by(coin_type:@coin_1_ticker)
     find_and_set_coins
@@ -113,6 +110,11 @@ class ExchangesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_exchange
       @exchange = Exchange.find(params[:xid])
+    end
+
+    def set_league_user
+      @league_user = LeagueUser.find_by(user_id: current_user.id,
+                                        league_id: params[:id].to_i)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
@@ -195,13 +197,11 @@ class ExchangesController < ApplicationController
     end
 
     def create_wallet_if_missing
-      league_user = LeagueUser.find_by league_id: params[:id].to_i,
-                                       user_id: current_user.id
       unless @coin_1
         Wallet.create!({coin_type:  @coin_1_ticker,
                         total_quantity: 0,
                         exchange_id: @exchange.id,
-                        league_user_id: league_user.id,
+                        league_user_id: @league_user.id,
                         public_key: SecureRandom.hex(20)
                       })
       end
@@ -209,7 +209,7 @@ class ExchangesController < ApplicationController
         Wallet.create!({coin_type:  @coin_2_ticker,
                         total_quantity: 0,
                         exchange_id: @exchange.id,
-                        league_user_id: league_user.id,
+                        league_user_id: @league_user.id,
                         public_key: SecureRandom.hex(20)
                       })
       end

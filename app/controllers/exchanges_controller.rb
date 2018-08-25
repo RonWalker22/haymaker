@@ -173,7 +173,11 @@ class ExchangesController < ApplicationController
       wallet       = @wallets.find_by(coin_type:@coin_1_ticker)
       type         = wallet.coin_type
       product      = @pair
-      kind         = (custom_order? ? 'limit' : 'market' )
+      if custom_order?
+        kind = limit_order? ? 'limit' : 'stop'
+      else
+        kind = 'market'
+      end
       order_open   = (custom_order? ? true : false )
       Order.create!(product: @pair,
                     size: @order_quantity,
@@ -252,18 +256,18 @@ class ExchangesController < ApplicationController
       end
     end
 
-    def limit_order
+    def limit_order?
       order_params[:price_target] != "" && order_params[:price_cap] == ""
     end
 
-    def stop_limit_order
+    def stop_limit_order?
       order_params[:price_target] !=  "" && order_params[:price_cap] != ""
     end
 
     def establish_price
-      if limit_order
+      if limit_order?
         @price = order_params[:price_target].to_f
-      elsif stop_limit_order
+      elsif stop_limit_order?
         @price = order_params[:price_cap].to_f
       else
         @price = @exchange.tickers.find_by(exchange_id: @exchange.id,

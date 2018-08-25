@@ -241,62 +241,6 @@ class ExchangesController < ApplicationController
       "#{coin_1_ticker.join}-#{coin_2_ticker.join}"
     end
 
-    def sufficient_funds_to_transfer?
-      @giving_coin.total_quantity >= params[:withdrawal_quantity].to_f
-    end
-
-    def equivalent_pairs?
-      receiving_target = {public_key: params[:deposit_address]}
-      giving_target = {exchange_id: params[:xid], league_id: params[:id],
-                      coin_type: params[:cid] }
-      @receiving_coin = current_user.wallets.find_by(receiving_target)
-      @giving_coin = current_user.wallets.find_by(giving_target)
-      return false if @receiving_coin == nil || @giving_coin == nil
-      @receiving_coin.coin_type == @giving_coin.coin_type &&
-        @receiving_coin.league_id == @giving_coin.league_id
-    end
-
-    def transfer_to_same_user?
-      @receiving_coin.user_id == @giving_coin.user_id
-    end
-
-    def giving_coin_not_usd?
-      @giving_coin.coin_type.upcase != 'USD'
-    end
-
-    def qualifying_transaction?
-      equivalent_pairs? && sufficient_funds_to_transfer? &&
-        giving_coin_not_usd? && transfer_to_same_user?
-    end
-
-    def transfer_funds
-      @transfer_quanity = params[:withdrawal_quantity].to_f
-      updated_quantity = @receiving_coin.total_quantity  + @transfer_quanity
-
-      @receiving_coin.total_quantity = updated_quantity
-      if @receiving_coin.save
-        updated_quantity = @giving_coin.total_quantity  - @transfer_quanity
-        @giving_coin.total_quantity = updated_quantity
-        @giving_coin.save
-        update_transaction_history
-      end
-    end
-
-    def method_name
-
-    end
-
-    def update_transaction_history
-      target_hash = {wallet_id: @giving_coin.id, amount:@transfer_quanity,
-                      address: @giving_coin.public_key,
-                      coin: @giving_coin.coin_type, deposit_type:false}
-      TransactionHistory.create!(target_hash)
-      target_hash = {wallet_id: @receiving_coin.id, amount:@transfer_quanity,
-                      address: @receiving_coin.public_key,
-                      coin: @receiving_coin.coin_type, deposit_type:true}
-      TransactionHistory.create!(target_hash)
-    end
-
     def check_trading_window
       league = League.find(params[:id])
       if league.start_date.future? || league.end_date.past?

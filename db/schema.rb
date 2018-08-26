@@ -142,7 +142,7 @@ ActiveRecord::Schema.define(version: 20180702021858) do
     t.decimal "size", null: false
     t.decimal "reserve_size", default: "0.0", null: false
     t.decimal "price", null: false
-    t.decimal "trigger", default: "0.0", null: false
+    t.decimal "cap", default: "0.0", null: false
     t.string "product", null: false
     t.string "side", default: "buy", null: false
     t.string "kind", default: "market", null: false

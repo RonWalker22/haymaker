@@ -294,7 +294,8 @@
                       <td> <%= o.when %></td>
                       <td><%= o.reserve_size %></td>
                       <td>
-                        <%= link_to cancel_order_path(o.id), method: "delete" do %>
+                        <%= link_to cancel_order_path(@league.id, o.id),
+                          method: "delete" do %>
                           <button class="delete is-medium"></button>
                         <% end %>
                       </td>

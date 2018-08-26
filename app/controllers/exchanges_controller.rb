@@ -3,6 +3,7 @@ class ExchangesController < ApplicationController
   before_action :set_exchange, except: [:create, :index, :new]
   before_action :set_league_user, except: [:create, :index, :new, :update,
                                           :destroy]
+  before_action :set_league, only: [:show]
   before_action :check_trading_window, only: [:order]
   before_action :order_params, only: [:order]
   before_action :user_signed_in?, only: [:show, :edit, :update, :destroy,
@@ -117,6 +118,10 @@ class ExchangesController < ApplicationController
                                         league_id: params[:id].to_i)
     end
 
+    def set_league
+      @league = League.find(params[:id])
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def exchange_params
       params.fetch(:exchange, {})
@@ -169,12 +174,16 @@ class ExchangesController < ApplicationController
     end
 
     def update_order_history
-      establish_reserve_size
       wallet       = @wallets.find_by(coin_type:@coin_1_ticker)
       type         = wallet.coin_type
       product      = @pair
       if custom_order?
-        kind = limit_order? ? 'limit' : 'stop'
+        if limit_order?
+          kind = 'limit'
+        else 'stop'
+          kind = 'stop'
+          cap = order_params[:price_cap].to_f
+        end
       else
         kind = 'market'
       end
@@ -185,19 +194,27 @@ class ExchangesController < ApplicationController
                     side: @order_type,
                     open: order_open,
                     kind: kind,
+                    cap: cap || 0,
                     reserve_size: @reserve_size,
                     base_currency_id: @coin_1.id,
                     quote_currency_id: @coin_2.id )
     end
 
     def establish_reserve_size
-      return @reserve_size = 0 unless custom_order?
-
-      if @order_type == 'buy'
-        @reserve_size = @coin_2_decrement.abs
+      if custom_order?
+        if @order_type == 'buy'
+          if limit_order?
+            @reserve_size = @coin_2_decrement.abs
+          else
+            @reserve_size = @order_quantity * order_params[:price_cap].to_f
+          end
+        else
+          @reserve_size = @order_quantity
+        end
       else
-        @reserve_size = @order_quantity
+        @reserve_size = 0
       end
+      @reserve_size = @reserve_size.to_f
     end
 
     def create_wallet_if_missing
@@ -265,10 +282,8 @@ class ExchangesController < ApplicationController
     end
 
     def establish_price
-      if limit_order?
+      if limit_order? || stop_limit_order?
         @price = order_params[:price_target].to_f
-      elsif stop_limit_order?
-        @price = order_params[:price_cap].to_f
       else
         @price = @exchange.tickers.find_by(exchange_id: @exchange.id,
                                            pair: @pair).price
@@ -280,10 +295,11 @@ class ExchangesController < ApplicationController
     end
 
     def update_reserves
+      establish_reserve_size
       if @order_type == 'buy'
-        @coin_2.increment! 'reserve_quantity', @coin_2_decrement.abs
+        @coin_2.increment! 'reserve_quantity', @reserve_size
       else
-        @coin_1.increment! 'reserve_quantity', @coin_1_increment.abs
+        @coin_1.increment! 'reserve_quantity', @reserve_size
       end
     end
 end

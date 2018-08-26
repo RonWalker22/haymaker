@@ -1,6 +1,7 @@
 class OrdersController < ApplicationController
   before_action :check_signed_in
-  before_action :set_order, only: [:show, :edit, :update]
+  before_action :set_order, only: [:show, :edit, :update, :destroy]
+  before_action :set_league_user, only: [:destroy]
 
   # GET /orders
   # GET /orders.json
@@ -55,12 +56,11 @@ class OrdersController < ApplicationController
   # DELETE /orders/1
   # DELETE /orders/1.json
   def destroy
-    @order = current_user.orders.find params[:id]
     if @order
       if @order.side == 'buy'
-        reserve_coin = current_user.wallets.find @order.quote_currency_id
+        reserve_coin = @league_user.wallets.find @order.quote_currency_id
       else
-        reserve_coin = current_user.wallets.find @order.base_currency_id
+        reserve_coin = @league_user.wallets.find @order.base_currency_id
       end
       reserve_coin.decrement! 'reserve_quantity', @order.reserve_size
       @order.destroy
@@ -75,6 +75,10 @@ class OrdersController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_order
       @order = Order.find(params[:id])
+    end
+
+    def set_league_user
+      @league_user = LeagueUser.find_by user_id: current_user.id, league_id: params[:lid]
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -48,7 +48,7 @@ Rails.application.routes.draw do
                                                    :as => 'send_league_invite'
   post 'league_invites/:lid/decline'              => 'league_invites#decline',
                                                   :as => 'decline_league_invite'
-  delete 'orders/:id'               => 'orders#destroy', :as => 'cancel_order'
+  delete 'leagues/:lid/orders/:id'               => 'orders#destroy', :as => 'cancel_order'
 
   post 'leagues/:id/swing/:target'          => 'leagues#swing',  :as => 'swing'
 

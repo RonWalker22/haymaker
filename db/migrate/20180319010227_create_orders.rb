@@ -19,7 +19,7 @@ class CreateOrders < ActiveRecord::Migration[5.1]
                 null: false
       t.decimal :price,
                 null: false
-      t.decimal :trigger,
+      t.decimal :cap,
                 default:0.00,
                 null: false
       t.string :product,

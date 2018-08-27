@@ -3,9 +3,8 @@
 
 User.create!(name: 'Ron',
              email: 'ron@gmail.com',
-             password: Rails.application.credentials.haymaker,
-             password_confirmation: Rails.application.credentials.haymaker,
-             admin: true
+             password: '123456',
+             password_confirmation: '123456',
             )
 
 League.create!( name: 'Practice',
@@ -42,3 +41,5 @@ Leverage.create!(size: 10,  liquidation: 0.0867)
 Leverage.create!(size: 25,  liquidation: 0.0338)
 Leverage.create!(size: 50,  liquidation: 0.0147)
 Leverage.create!(size: 100, liquidation: 0.0049)
+
+GetTickersJob.perform_later

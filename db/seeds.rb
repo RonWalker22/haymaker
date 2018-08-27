@@ -16,6 +16,7 @@ League.create!( name: 'Practice',
                 round_end: 1000.years.from_now,
                 round_steps: 1000,
                 rounds: 1,
+                mode: 'Bare Knuckle',
                 round: 1
               )
 

@@ -10,17 +10,23 @@ class NewRoundJob < ApplicationJob
       @league = league
       @league_wallets = @league.wallets
       @users_stats = leaderboards
-      @fistfights = @league.fistfights.where(active:true)
-      end_bets if @league.round == @league.rounds
-      end_fistfights
+
+      if league.mode == 'Swing'
+        @fistfights = @league.fistfights.where(active:true)
+        end_bets if @league.round == @league.rounds
+        end_fistfights
+      end
+
       update_stats
       @alive_users = @league.league_users.where alive:true
-      update_shields
       if @league.round < @league.rounds
-        establish_baselines
         @league.round += 1
         @league.round_end += @league.round_steps.days
-        @league.swing_by = @league.round_end - (@league.round_steps / 2).days
+        if league.mode == 'Swing'
+          update_shields
+          establish_baselines
+          @league.swing_by = @league.round_end - (@league.round_steps / 2).days
+        end
         @league.save
       else
         end_game

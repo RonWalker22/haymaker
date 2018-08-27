@@ -84,22 +84,24 @@
             </p>
             </div>
           </div>
-          <div class="level-item has-text-centered">
-            <div>
-              <p class="heading">Portfolio</p>
-              <p class="title ">
-                <%= number_to_currency @users_stats[@league_user][:cash]%>
-              </p>
+          <% if @league.mode == 'Slugfest' %>
+            <div class="level-item has-text-centered">
+              <div>
+                <p class="heading">Portfolio</p>
+                <p class="title ">
+                  <%= number_to_currency @users_stats[@league_user][:cash]%>
+                </p>
+              </div>
             </div>
-          </div>
-          <div class="level-item has-text-centered">
-            <div>
-              <p class="heading">Net Bonus</p>
-              <p class="title ">
-                <%= number_with_delimiter @league_user.net_bonus %>
-              </p>
+            <div class="level-item has-text-centered">
+              <div>
+                <p class="heading">Net Bonus</p>
+                <p class="title ">
+                  <%= number_with_delimiter @league_user.net_bonus %>
+                </p>
+              </div>
             </div>
-          </div>
+          <% end %>
         </nav>
       <% end %>
       <% if @league.start_date.past?%>
@@ -125,10 +127,12 @@
           <dd> <%= link_to User.find(@league.commissioner_id).name,
                             user_path(User.find(@league.commissioner_id).id)%>
           </dd>
+          <dt class="white">Game Mode:</dt>
+          <dd><%= @league.mode %></dd>
           <dt class="white">Entry fee:</dt>
-          <dd><%= @league.entry_fee %>
+          <dd><%= @league.entry_fee %></dd>
           <dt class="white">Player Count:</dt>
-          <dd><%= @league.users.count %>
+          <dd><%= @league.users.count %></dd>
           <dt class="white">Start date:</dt>
           <dd>
             <%= local_time @league.start_date, format: '%b %e, %Y %l:%M%P'  %>
@@ -182,7 +186,7 @@
       </p>
     </div>
   </div>
-
+<% if @league.mode == 'Slugfest' %>
   <div class="column is-9 is-5-desktop is-half">
     <div class="box fistfight-box">
       <h2 class="title is-4 -title center" id="fistfights-title">Fistfights</h2>
@@ -342,6 +346,57 @@
           <% end %>
       </div>
     </div>
+<% end %>
+    <div class="column">
+      <div class="box leaderboards-box">
+        <% league_users = LeagueUser.where(alive:true, league_id: @league.id).order(:rank).page params[:leaderboards] %>
+        <h2 class="title is-4 center" id="leaderboards-title">Leaderboards</h2>
+          <table class="table is-fullwidth is-striped">
+            <thead>
+              <th>Rank</th>
+              <th>Player</th>
+              <th>Score</th>
+              <th>Swing</th>
+            </thead>
+            <tfoot>
+              <th>Rank</th>
+              <th>Player</th>
+              <th>Score</th>
+              <th>Swing</th>
+            </tfoot>
+            <tbody>
+              <% @users_stats.each_with_index do |hash, i| %>
+                <% league_user = hash[0] %>
+                <% stats       = hash[1] %>
+                <% next unless league_user.alive? %>
+                <% user = stats[:user] %>
+                <tr>
+                  <td><%= stats[:rank]%></td>
+                  <td><%= stats[:user].name %></td>
+                  <td>
+                    <%= number_with_delimiter  stats[:score] %>
+                  </td>
+                  <td>
+                    <% if current_user.id != user.id %>
+                      <% if league_user.shield? %>
+                        <i class="fa fa-shield fa-3x" aria-hidden="true"></i>
+                      <% else %>
+                      <%= fist_image = image_tag("hm_fist_2.svg", alt:'Fist', class:'fist',
+                        :'data-userid' => user.id, :'data-username' => user.name,
+                        id:"fist#{i}") %>
+                      <% end %>
+                    <% else %>
+                      <% if league_user.shield? %>
+                        <i class="fa fa-shield fa-3x" aria-hidden="true"></i>
+                      <% end %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+      </div>
+    </div>
 </div>
 
 
@@ -372,57 +427,6 @@
   </div>
   <% end %>
 
-
-  <div class="column is-12">
-    <div class="box leaderboards-box">
-      <% league_users = LeagueUser.where(alive:true, league_id: @league.id).order(:rank).page params[:leaderboards] %>
-      <h2 class="title is-4 center" id="leaderboards-title">Leaderboards</h2>
-        <table class="table is-fullwidth is-hoverable">
-          <thead>
-            <th>Rank</th>
-            <th>Player</th>
-            <th>Score</th>
-            <th>Swing</th>
-          </thead>
-          <tfoot>
-            <th>Rank</th>
-            <th>Player</th>
-            <th>Score</th>
-            <th>Swing</th>
-          </tfoot>
-          <tbody>
-            <% @users_stats.each_with_index do |hash, i| %>
-              <% league_user = hash[0] %>
-              <% stats       = hash[1] %>
-              <% next unless league_user.alive? %>
-              <% user = stats[:user] %>
-              <tr>
-                <td><%= stats[:rank]%></td>
-                <td><%= stats[:user].name %></td>
-                <td>
-                  <%= number_with_delimiter  stats[:score] %>
-                </td>
-                <td>
-                  <% if current_user.id != user.id %>
-                    <% if league_user.shield? %>
-                      <i class="fa fa-shield fa-3x" aria-hidden="true"></i>
-                    <% else %>
-                    <%= fist_image = image_tag("hm_fist_2.svg", alt:'Fist', class:'fist',
-                      :'data-userid' => user.id, :'data-username' => user.name,
-                      id:"fist#{i}") %>
-                    <% end %>
-                  <% else %>
-                    <% if league_user.shield? %>
-                      <i class="fa fa-shield fa-3x" aria-hidden="true"></i>
-                    <% end %>
-                  <% end %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-    </div>
-  </div>
 
 <div class="modal confirmation-modal">
   <div class="modal-background"></div>

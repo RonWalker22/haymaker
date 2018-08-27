@@ -49,7 +49,7 @@
         are in a fistfight. If A1 increases his score by 10% and B1 increases
         his score by 9%, A1 moves on to the next round and B1 is knocked out of
         the league. Each round is independent from the rest, so every  player's
-        performance is reset to 0 at the beginning round.</p>
+        performance is reset to 0 at the beginning of each round.</p>
 
       <h3 class="title is-6">Bare Knuckle</h3>
 
@@ -83,11 +83,8 @@
           </li>
         </ol>
       </p>
-      <p class="content">The system liquidates accounts every 30 minutes . So
-      if this does occur, you may receive a tiny grace period to improve
-      your portfolio. If by the end of the grace period the value of
-      your portfolio is at or below the liquidation point, you will be
-      knocked out of the league.</p>
+      <p class="help"> * The system liquidates eligible accounts every 10
+      seconds.</p>
       <p class="content">
         <h3 class="title is-6">When does the bet end? </h3>
 
@@ -96,14 +93,10 @@
         <ol>
           <li>
             You click the deleverage button located within the league’s
-            homepage
+            homepage.
           </li>
           <li>
-            Your portfolio falls to or below the liquidation point AND
-            it stays at or below the liquidation point beyond the grace period.
-          </li>
-          <li>
-            The current round ends
+            Your portfolio falls to or below the liquidation point.
           </li>
         </ol>
       </p>
@@ -116,13 +109,13 @@
         View the chart below for examples.
       </p>
       <p class="content">
-        <h3 class="title is-6">How is the liquidation point calculated? </h3>
+        <h3 class="title is-6">How is the liquidation trigger point calculated?
+        </h3>
 
         At the start of the bet the current value of your portfolio will be used
         to gather a baseline. This baseline and the leverage type will determine
         the liquidation point. See the table below for the general liquidation
-        trigger points. The calculator will provide precise liquidation trigger
-        points based on the current value of your portfolio.
+        trigger points.
       </p>
       <p class="content">
         <h3 class="title is-6">What's the difference between earned and unearned
@@ -130,7 +123,9 @@
         considered unearned points. These points are not considered in the
         calculation of your score.  After you deleverage(end the bet), you earn
         the points. These points are considered in the calculation of your
-        score.
+        score. The system will also automatically deleverage all players with
+        outstanding bets at the end of each game thereby transforming those
+        points into earned points.
       </p>
       <p class="content">
       </p>

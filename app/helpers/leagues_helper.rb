@@ -1,7 +1,7 @@
 module LeaguesHelper
   def leaderboards
     #used to create less database queries
-    @tickers = Ticker.all.where quote_currency: 'BTC'
+    @tickers ||=  Ticker.all.where quote_currency: 'BTC'
     hash = {}
     users = @league.users.order(:id)
     @league.league_users.order(:user_id).all.each_with_index do |league_user, index|

@@ -372,7 +372,7 @@
                 <% user = stats[:user] %>
                 <tr>
                   <td><%= stats[:rank]%></td>
-                  <td><%= stats[:user].name %></td>
+                  <td><%= link_to user.name, user_path(user.id)  %></td>
                   <td>
                     <%= number_with_delimiter  stats[:score] %>
                   </td>

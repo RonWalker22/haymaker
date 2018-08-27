@@ -31,7 +31,9 @@ class GetTickerPricesJob < ApplicationJob
                                                              {price: ticker.price,
                                                                pair:  ticker.pair,
                                                                exchange: exchange}
-               LimitOrdersJob.perform_later(ticker.pair, ticker.price)
+               Thread.new do
+                process_orders(ticker.pair, ticker.price)
+              end
              end
 
              @ws.on :close do |event|
@@ -47,5 +49,43 @@ class GetTickerPricesJob < ApplicationJob
        websocket
      end
    end
+  end
+
+  private
+
+  def process_orders(product, new_price)
+
+    sell_limit = "kind = 'limit' AND
+                  product = '#{product}' AND
+                  price <= #{new_price} AND
+                  side = 'sell' AND
+                  open = true"
+    buy_limit = "kind = 'limit' AND
+                  product = '#{product}' AND
+                  price >= #{new_price} AND
+                  side = 'buy' AND
+                  open = true"
+
+    limit_orders = Order.where(sell_limit).or Order.where(buy_limit)
+
+    limit_orders.each do |limit_order|
+      limit_order.update_attributes! open: false
+      base_coin  = Wallet.find limit_order.base_currency_id
+      quote_coin = Wallet.find limit_order.quote_currency_id
+      if limit_order.side == 'buy'
+        base_coin.increment! 'total_quantity', limit_order.size
+        quote_coin.decrement! 'total_quantity',
+                                (limit_order.size * limit_order.price).round(8)
+
+        reserve_coin = quote_coin
+      else
+        base_coin.decrement! 'total_quantity', limit_order.size
+        quote_coin.increment! 'total_quantity',
+                                (limit_order.size * limit_order.price).round(8)
+
+        reserve_coin = base_coin
+      end
+      reserve_coin.decrement! 'reserve_quantity', limit_order.reserve_size
+    end
   end
 end

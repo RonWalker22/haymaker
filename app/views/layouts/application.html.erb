@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>HayMaker</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,7 +12,7 @@
   <body class="<%= controller_name + "_" + action_name%>">
     <%= render 'shared/header' %>
     <div id='inner_body'>
-      <% if flash[:notice] %>
+      <% if flash[:notice]%>
         <section class="hero is-small is-success">
           <div class="hero-body">
             <div class="container">

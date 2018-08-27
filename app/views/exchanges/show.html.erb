@@ -161,7 +161,7 @@
                     <option value="price_falls" id="price_falls">
                       Price falls to
                     </option>
-                    <option value="price_climbs" id="price_climbs">
+                    <option value="price_climbs" id="price_climbs" disabled>
                         Price climbs within
                     </option>
                   </select>
@@ -278,9 +278,10 @@
                 <th>side</th>
                 <th>size</th>
                 <th>price</th>
-                <th>Time</th>
-                <th>Reserve</th>
-                <th>Cancel</th>
+                <th>type</th>
+                <th>time</th>
+                <th>reserve</th>
+                <th>cancel</th>
               </tr>
             </thead>
             <tbody>
@@ -291,6 +292,7 @@
                       <td class="<%=o.side%>_side"> <%= o.side.capitalize %></td>
                       <td> <%= o.size.to_f.round(8) %> </td>
                       <td> <%= o.price.to_f.round(8) %> </td>
+                      <td><%= o.kind %></td>
                       <td> <%= o.when %></td>
                       <td><%= o.reserve_size %></td>
                       <td>

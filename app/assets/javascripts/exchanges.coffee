@@ -196,6 +196,8 @@ tryWebsocket  = ->
       price_cap.value = ''
       price_target.value = ''
       price_cap_max.style.display = 'inline-flex'
+      price_falls.removeAttribute 'disabled'
+      price_climbs.setAttribute 'disabled', 'true'
 
 
     sell_btn.addEventListener 'click', ->
@@ -218,6 +220,8 @@ tryWebsocket  = ->
       direction.selectedIndex = 0
       direction.selectedIndex = 1
       price_cap_label.innerHTML = 'Ceiling:'
+      price_falls.setAttribute 'disabled', 'true'
+      price_climbs.removeAttribute 'disabled'
       price_cap.value = ''
       price_target.value = ''
       price_cap_max.style.display = 'none'

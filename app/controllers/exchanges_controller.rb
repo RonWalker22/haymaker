@@ -195,7 +195,7 @@ class ExchangesController < ApplicationController
                     open: order_open,
                     kind: kind,
                     cap: cap || 0,
-                    reserve_size: @reserve_size,
+                    reserve_size: @reserve_size || 0,
                     base_currency_id: @coin_1.id,
                     quote_currency_id: @coin_2.id )
     end
@@ -211,8 +211,6 @@ class ExchangesController < ApplicationController
         else
           @reserve_size = @order_quantity
         end
-      else
-        @reserve_size = 0
       end
       @reserve_size = @reserve_size.to_f
     end

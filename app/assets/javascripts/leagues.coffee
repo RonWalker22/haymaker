@@ -40,7 +40,7 @@ tryModal = ->
       reset.addEventListener 'click', ->
         confirmation_action.dataset.method = "post"
         confirmation_meessage.innerText = "Reset your practice league funds?"
-        confirmation_action.href = "/leagues/1/reset_funds"
+        confirmation_action.href = "/leagues/1/reset"
         confirmation_modal.classList.add "is-active"
 
     if leave_btn

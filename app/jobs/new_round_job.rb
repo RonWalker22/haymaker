@@ -4,9 +4,8 @@ class NewRoundJob < ApplicationJob
 
   def perform
     @btc_price = Ticker.find_by(pair:"BTC-USDT", exchange_id: 1).price.to_f
-    # leagues = League.all.where('round_end <= :now AND active = true AND
-    #                             round <= rounds', :now => Time.now)
-    leagues = League.all.where active: true
+    leagues = League.all.where('round_end <= :now AND active = true AND
+                                round <= rounds', :now => Time.now)
     leagues.each do |league|
       @league = league
       @league_wallets = @league.wallets

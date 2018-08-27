@@ -8,25 +8,15 @@ production:
 
 :schedule:
   get_tickers:
-    in: 999y
+    in: 1y
     class: GetTickersJob
     enabled: false
 
   get_ticker_prices:
-    in: 900y
+    in: 1y
     class: GetTickerPricesJob
     enabled: false
 
   new_round:
     cron: '0 0 0 * * *'
     class: NewRoundJob
-
-  fight:
-    in: 900y
-    class: FightJob
-    enabled: false
-
-  reset_leagues:
-    in: 900y
-    class: ResetLeaguesJob
-    enabled: false

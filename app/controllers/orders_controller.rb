@@ -56,17 +56,24 @@ class OrdersController < ApplicationController
   # DELETE /orders/1
   # DELETE /orders/1.json
   def destroy
-    if @order
-      if @order.side == 'buy'
-        reserve_coin = @league_user.wallets.find @order.quote_currency_id
+    order = @league_user.orders.find(params[:id])
+    if !order.open?
+      flash[:alert] = "Order cancel unsuccessful. This order has already been filled."
+    elsif order.ready?
+       flash[:alert] = "Order cancel unsuccessful. The conditions for this order have
+                        already been met. This order will fill shortly."
+    elsif order
+      if order.side == 'buy'
+        reserve_coin = @league_user.wallets.find order.quote_currency_id
       else
-        reserve_coin = @league_user.wallets.find @order.base_currency_id
+        reserve_coin = @league_user.wallets.find order.base_currency_id
       end
-      reserve_coin.decrement! 'reserve_quantity', @order.reserve_size
-      @order.destroy
+      reserve_coin.decrement! 'reserve_quantity', order.reserve_size
+      if order.destroy
+        flash[:notice] = "Order cancel was successful."
+      end
     else
-      flash[:warning] =
-            "Order could not be cancelled and may no longer be active."
+      flash[:alert] = "Order cancel unsuccessful."
     end
     redirect_back(fallback_location: root_path)
   end

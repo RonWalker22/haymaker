@@ -36,17 +36,6 @@ class ExchangesController < ApplicationController
     redirect_to trade_path(@league_id, @exchange.id, p:@pair)
   end
 
-  def delete_custom_order
-    @order = @league_user.orders.find order_params[:oid]
-    if @order
-      remove_reserve
-      @order.destroy
-    else
-      flash[:alert] = "You can only cancel orders which belong to you."
-    end
-    redirect_back(fallback_location: root_path)
-  end
-
   def index
     @exchanges = Exchange.all
   end

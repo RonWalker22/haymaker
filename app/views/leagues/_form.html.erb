@@ -25,8 +25,8 @@
     <div class="control">
       <div class="select is-small">
         <select name="game_mode" id="league_game_mode" readonly=true>
-          <option selected="selected">Slugfest</option>
-          <option>Bare Knuckle</option>
+          <option selected="selected" id="slugfest-gm" value="slugfest">Slugfest</option>
+          <option id="bare-knuckle-gm" value="bare-knuckle">Bare Knuckle</option>
         </select>
       </div>
     </div>
@@ -97,7 +97,7 @@
     <div class="control">
       <%= form.label :start_date, class: "label"%>
       <%= form.date_field :start_date, id: :league_start_date, min: Date.today,
-      prompt: {hour: true}, class:"input"%>
+      prompt: {hour: true}, class:"input", required:true%>
     </div>
   </div>
 
@@ -106,12 +106,24 @@
       <%= form.label :duration, class: "label" %>
       <div class="select is-small">
         <select class="" name="duration" id="league_duration">
-          <option value="1">1 Day (1round)</option>
-          <option value="6">6 Days (3rounds-- 1r/2 days)</option>
-          <option value="12">12 Days (3rounds-- 1r/4 days)</option>
-          <option value="28">28 Days (4rounds-- 1r/7 days)</option>
-          <option value="84">84 Days (6rounds-- 1r/14 days)</option>
-          <option value="360">360 Days(12rounds-- 1r/30 days)</option>
+          <option value="1" id="day-1-option">
+            1 Day (1round)
+          </option>
+          <option value="6"  id="days-6-option">
+            6 Days (3rounds-- 1r/2 days)
+          </option>
+          <option value="12"  id="days-12-option">
+            12 Days (3rounds-- 1r/4 days)
+          </option>
+          <option value="28"  id="days-28-option">
+            28 Days (4rounds-- 1r/7 days)
+          </option>
+          <option value="84" id="days-84-option">
+            84 Days (6rounds-- 1r/14 days)
+          </option>
+          <option value="360" id="days-360-option">
+            360 Days(12rounds-- 1r/30 days)
+          </option>
         </select>
       </div>
     </div>

@@ -196,6 +196,9 @@ class LeaguesController < ApplicationController
     if Bet.find_by league_user: @league_user.id
       flash[:alert] = "#{@leverage.size}x leverage was unsuccessful.
                         You can't use leverage more than once per league."
+    elsif @league.mode != 'Slugfest'
+      flash[:alert] = "#{@leverage.size}x leverage was unsuccessful.
+                        Leverage is not available in this game mode."
     else
       baseline = @users_stats[@league_user][:cash]
       new_bet = Bet.new(

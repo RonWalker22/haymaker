@@ -31,9 +31,7 @@ class GetTickerPricesJob < ApplicationJob
                                                              {price: ticker.price,
                                                                pair:  ticker.pair,
                                                                exchange: exchange}
-               Thread.new do
-                process_orders(ticker.pair, ticker.price)
-              end
+               ready_orders(ticker.pair, ticker.price)
              end
 
              @ws.on :close do |event|
@@ -53,39 +51,26 @@ class GetTickerPricesJob < ApplicationJob
 
   private
 
-  def process_orders(product, new_price)
+    def ready_orders(product, new_price)
 
-    sell_limit = "kind = 'limit' AND
-                  product = '#{product}' AND
-                  price <= #{new_price} AND
-                  side = 'sell' AND
-                  open = true"
-    buy_limit = "kind = 'limit' AND
-                  product = '#{product}' AND
-                  price >= #{new_price} AND
-                  side = 'buy' AND
-                  open = true"
+      sell_limit = "kind = 'limit' AND
+                    product = '#{product}' AND
+                    price <= #{new_price} AND
+                    side = 'sell' AND
+                    open = true AND
+                    ready = false"
+      buy_limit = "kind = 'limit' AND
+                    product = '#{product}' AND
+                    price >= #{new_price} AND
+                    side = 'buy' AND
+                    open = true AND
+                    ready = false"
 
-    limit_orders = Order.where(sell_limit).or Order.where(buy_limit)
+      limit_orders = Order.where(sell_limit).or Order.where(buy_limit)
 
-    limit_orders.each do |limit_order|
-      limit_order.update_attributes! open: false
-      base_coin  = Wallet.find limit_order.base_currency_id
-      quote_coin = Wallet.find limit_order.quote_currency_id
-      if limit_order.side == 'buy'
-        base_coin.increment! 'total_quantity', limit_order.size
-        quote_coin.decrement! 'total_quantity',
-                                (limit_order.size * limit_order.price).round(8)
-
-        reserve_coin = quote_coin
-      else
-        base_coin.decrement! 'total_quantity', limit_order.size
-        quote_coin.increment! 'total_quantity',
-                                (limit_order.size * limit_order.price).round(8)
-
-        reserve_coin = base_coin
+      limit_orders.each do |limit_order|
+        #trigger_price could get changed multiple times
+        limit_order.update_attributes! ready: true, trigger_price: new_price
       end
-      reserve_coin.decrement! 'reserve_quantity', limit_order.reserve_size
     end
-  end
 end

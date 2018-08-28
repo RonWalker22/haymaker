@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_02_021858) do
+ActiveRecord::Schema.define(version: 2018_08_28_124611) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -148,6 +148,8 @@ ActiveRecord::Schema.define(version: 2018_07_02_021858) do
     t.string "kind", default: "market", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "ready", default: false, null: false
+    t.decimal "trigger_price", default: "0.0", null: false
     t.index ["base_currency_id", "quote_currency_id", "id"], name: "index_orders_on_base_currency_id_and_quote_currency_id_and_id", unique: true
     t.index ["base_currency_id"], name: "index_orders_on_base_currency_id"
     t.index ["quote_currency_id"], name: "index_orders_on_quote_currency_id"

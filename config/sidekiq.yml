@@ -24,3 +24,7 @@ production:
   liquidation:
     every: ['10s']
     class: LiquidationJob
+
+  limit_orders:
+    every: ['10s']
+    class: LimitOrdersJob

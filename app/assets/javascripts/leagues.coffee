@@ -139,21 +139,6 @@ tryMode = ->
   eighty_four_days  = document.querySelector('#days-84-option')
   three_sixty_days  = document.querySelector('#days-360-option')
 
-  if game_mode.value != 'slugfest'
-    one_day.innerHTML = "1 Day"
-    six_days.innerHTML = "6 Days"
-    twelve_days.innerHTML = "12 Days"
-    twenty_eight_days.innerHTML = "28 Days"
-    eighty_four_days.innerHTML = "84 Days"
-    three_sixty_days.innerHTML = "350 Days"
-  else
-    one_day.innerHTML = "1 Day (1round)"
-    six_days.innerHTML = "6 Days (3rounds-- 1r/2 days)"
-    twelve_days.innerHTML = "12 Days (3rounds-- 1r/4 days)"
-    twenty_eight_days.innerHTML = "28 Days (4rounds-- 1r/7 days)"
-    eighty_four_days.innerHTML = "84 Days (6rounds-- 1r/14 days)"
-    three_sixty_days.innerHTML = "360 Days(12rounds-- 1r/30 days)"
-
   game_mode.addEventListener 'change', ->
     if game_mode.value == 'slugfest'
       one_day.innerHTML = "1 Day (1round)"

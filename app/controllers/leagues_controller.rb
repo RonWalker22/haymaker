@@ -34,9 +34,12 @@ class LeaguesController < ApplicationController
     puts ">>>>>-------->>>>#{params}"
     round_steps = {'1' => 1, '6' => 2, '12' => 4,
                   '28' => 7, '84' => 14, '360' => 30 }
-    rounds = {'1' => 1, '6' => 3, '12' => 3,
-                  '28' => 4, '84' => 6, '360' => 12}
-
+    round_options = {'1' => 1, '6' => 3, '12' => 3,
+                    '28' => 4, '84' => 6, '360' => 12}
+   rounds = 1
+   if params[:game_mode].downcase == 'slugfest'
+     rounds = round_options[params[:duration]]
+   end
    start_date = league_params[:start_date].to_datetime.end_of_day + 1.second
    round_end  = start_date - 1.second
    end_date   = league_params[:start_date].to_datetime + params[:duration].to_i.days
@@ -49,9 +52,9 @@ class LeaguesController < ApplicationController
                           start_date: start_date,
                           end_date: end_date,
                           round_end: round_end,
-                          rounds: rounds[params[:duration]],
+                          rounds: rounds,
                           private: params[:community].downcase == 'private',
-                          mode:  params[:game_mode],
+                          mode:  params[:game_mode].upcase,
                           password: password,
                           late_join: params[:late_join] == "true",
                           round_steps: round_steps[params[:duration]],

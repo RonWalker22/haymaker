@@ -21,12 +21,14 @@ class NewRoundJob < ApplicationJob
       @alive_users = @league.league_users.where alive:true
       if @league.round < @league.rounds
         @league.round += 1
-        @league.round_end += @league.round_steps.days
         if league.mode == 'Swing'
+          @league.round_end += @league.round_steps.days
           update_shields
-          establish_baselines
           @league.swing_by = @league.round_end - (@league.round_steps / 2).days
+        else
+          @league.round_end = @league.end_date
         end
+        establish_baselines
         @league.save
       else
         end_game

@@ -96,7 +96,7 @@
   <div class="field">
     <div class="control">
       <%= form.label :start_date, class: "label"%>
-      <%= form.date_field :start_date, id: :league_start_date, min: Date.today,
+      <%= form.date_field :start_date, id: :league_start_date, min: Date.today + 1.day,
       prompt: {hour: true}, class:"input", required:true%>
     </div>
   </div>

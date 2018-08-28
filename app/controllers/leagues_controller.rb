@@ -135,12 +135,14 @@ class LeaguesController < ApplicationController
     league = League.find(1)
     league_user = LeagueUser.find_by league_id: 1, user_id: current_user.id
     wallets = Wallet.where league_user_id: league_user.id
+    wallets = Wallet.where league_user_id: league_user.id
 
     wallets.each do |wallet|
       if wallet.coin_type == 'BTC'
-        wallet.update_attributes total_quantity: league.starting_balance
+        wallet.update_attributes total_quantity: league.starting_balance,
+                                 reserve_quantity: 0
       else
-        wallet.update_attributes total_quantity: 0
+        wallet.destroy
       end
       flash[:notice] = 'Funds in Practice League have been reset.'
     end

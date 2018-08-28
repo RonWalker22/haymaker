@@ -9,7 +9,7 @@ class GetTickerPricesJob < ApplicationJob
         exchange = binance.name
         Thread.new do
           Sidekiq::Stats.new.reset
-          sleep 3000
+          sleep 72000
           @ws.close
         end
         EM.run {

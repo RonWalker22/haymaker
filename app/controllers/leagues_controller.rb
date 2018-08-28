@@ -147,7 +147,7 @@ class LeaguesController < ApplicationController
       else
         wallet.destroy
       end
-      flash[:notice] = 'Funds in Practice League have been reset.'
+      flash[:notice] = "Funds have been reset."
     end
 
     redirect_to league_path(1)

@@ -399,35 +399,6 @@
     </div>
 </div>
 
-
-<% if flash[:reset_funds]%>
-<div class="notification">
-  <p class="notice center">
-    <%= flash[:reset_funds] %>
-   <%= link_to "Yes", reset_path(@league), method: :post,
-                class:"button is-rounded is-danger is-small"%>
-   <%= link_to "No", league_path(@league),
-                class:"button is-rounded  is-inverted is-small"%>
-  </p>
-</div>
-<% end %>
-
-<p class="notice center">
-  <% if flash[:request_leave]%>
-  <div class="notification">
-    <p class="notice center">
-    <%= flash[:request_leave] %>
-    <%=  link_to "Yes",
-                  leave_path(id:@league.id, pid: current_user.id ),
-                  class:"button  is-rounded is-danger is-small",
-                    method: :delete%>
-   <%= link_to "No", league_path(league:@league.id),
-                class:"button is-rounded  is-inverted is-small"%>
-    </p>
-  </div>
-  <% end %>
-
-
 <div class="modal confirmation-modal">
   <div class="modal-background"></div>
   <div class="modal-content">

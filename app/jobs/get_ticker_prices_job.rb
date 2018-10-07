@@ -3,50 +3,46 @@ class GetTickerPricesJob < ApplicationJob
 
   def perform
     # binance ws will disconnect after a continuous 24 hour connect.
-    Thread.new do
-      def websocket
-        binance = Exchange.find_by(name: 'Binance')
-        exchange = binance.name
-        Thread.new do
-          Sidekiq::Stats.new.reset
-          sleep 72000
-          @ws.close
-        end
-        EM.run {
-           pairs = []
-           tickers = binance.tickers
-           tickers.each {|t| pairs << "#{t.natural_pair.downcase}@aggTrade"}
-           pairs = pairs.join("/")
-           @ws = Faye::WebSocket::Client.new("wss://stream.binance.com:9443/ws/#{pairs}")
-             @ws.on :open do |event|
-               p [:open]
-             end
+    def websocket
+      binance = Exchange.find_by(name: 'Binance')
+      exchange = binance.name
+      EM.run {
+         pairs = []
+         tickers = binance.tickers
+         tickers.each {|t| pairs << "#{t.natural_pair.downcase}@aggTrade"}
+         pairs = pairs.join("/")
+         @ws = Faye::WebSocket::Client.new("wss://stream.binance.com:9443/ws/#{pairs}")
+           @ws.on :open do |event|
+             p [:open]
+           end
 
-             @ws.on :message do |event|
-               message = JSON.parse event.data
-               ticker = tickers.find_by natural_pair: message["s"]
-               ticker.price = message["p"].to_f
-               ticker.save
-               ActionCable.server.broadcast 'binance_ticker_channel',
-                                                             {price: ticker.price,
-                                                               pair:  ticker.pair,
-                                                               exchange: exchange}
-               ready_orders(ticker.pair, ticker.price)
-             end
+           @ws.on :message do |event|
+             message = JSON.parse event.data
+             ticker = tickers.find_by natural_pair: message["s"]
+             ticker.price = message["p"].to_f
+             ticker.save
+             ActionCable.server.broadcast 'binance_ticker_channel',
+                                                           {price: ticker.price,
+                                                             pair:  ticker.pair,
+                                                             exchange: exchange}
+             ready_orders(ticker.pair, ticker.price)
+           end
 
-             @ws.on :close do |event|
-               p [:close, event.code, event.reason]
-               ws = nil
-               EventMachine.stop
-               ActiveRecord::Base.connection.close
-             end
-         }
-       end
-
-     loop do
-       websocket
+           @ws.on :close do |event|
+             p [:close, event.code, event.reason]
+             ws = nil
+             ActiveRecord::Base.connection.close
+             EventMachine.stop
+           end
+       }
      end
-   end
+
+    loop do
+      websocket
+      sleep 72000
+      Sidekiq::Stats.new.reset
+      @ws.close
+    end
   end
 
   private

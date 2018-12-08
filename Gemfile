@@ -92,3 +92,5 @@ gem 'sidekiq-scheduler'
 gem 'kaminari'
 
 gem 'local_time'
+
+gem 'eventmachine'

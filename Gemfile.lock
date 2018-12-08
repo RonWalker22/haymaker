@@ -276,6 +276,7 @@ DEPENDENCIES
   capybara (~> 2.13)
   coffee-rails (~> 4.2)
   devise
+  eventmachine
   faker
   faye-websocket
   font-awesome-rails

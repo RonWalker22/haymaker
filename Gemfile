@@ -5,10 +5,10 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-ruby '2.5.1'
+ruby '2.6.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.1'
+gem 'rails', '~> 5.2.2'
 # Use postgresql as the database for Active Record
 
 gem 'rails-html-sanitizer', '~> 1.0.4'
@@ -42,7 +42,7 @@ gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
-gem 'redis', '~> 3.3'
+gem 'redis', '>= 4.1.0'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.11'
 
@@ -58,8 +58,9 @@ group :development, :test do
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
   gem 'rails-controller-testing'
-  gem 'minitest', '~>5.10.3'
+  gem 'minitest', '>= 5.11.3'
   gem 'minitest-reporters'
+  gem 'rb-readline'
 end
 
 group :development do
@@ -83,7 +84,7 @@ gem 'faye-websocket'
 
 gem 'devise'
 
-gem 'sidekiq'
+gem 'sidekiq', ">= 5.2.5"
 
 gem 'bootstrap'
 
@@ -94,3 +95,13 @@ gem 'kaminari'
 gem 'local_time'
 
 gem 'eventmachine'
+
+gem "loofah", ">= 2.2.3"
+
+gem "rack", ">= 2.0.6"
+
+gem "rubyzip", ">= 1.2.2"
+
+gem "nokogiri", ">= 1.8.5"
+
+gem 'bootsnap', require: false

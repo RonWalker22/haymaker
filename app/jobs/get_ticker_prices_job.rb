@@ -11,13 +11,14 @@ class GetTickerPricesJob < ApplicationJob
          tickers = binance.tickers
          tickers.each {|t| pairs << "#{t.natural_pair.downcase}@aggTrade"}
          pairs = pairs.join("/")
-         @ws = Faye::WebSocket::Client.new("wss://stream.binance.com:9443/ws/#{pairs}")
-           @ws.on :open do |event|
+         @ws =  WebSocket::EventMachine::Client.connect( uri:
+                    "wss://stream.binance.com:9443/ws/#{pairs}")
+           @ws.onopen do
              p [:open]
            end
 
-           @ws.on :message do |event|
-             message = JSON.parse event.data
+           @ws.onmessage do |message, type|
+             message = JSON.parse message
              ticker = tickers.find_by natural_pair: message["s"]
              ticker.price = message["p"].to_f
              ticker.save
@@ -28,20 +29,21 @@ class GetTickerPricesJob < ApplicationJob
              ready_orders(ticker.pair, ticker.price)
            end
 
-           @ws.on :close do |event|
-             p [:close, event.code, event.reason]
+           @ws.onclose do |cdoe, reason|
+             p [:close, code, reason]
              ws = nil
              ActiveRecord::Base.connection.close
              EventMachine.stop
            end
        }
      end
-
-    loop do
-      websocket
-      sleep 72000
-      Sidekiq::Stats.new.reset
-      @ws.close
+    Thread.new do
+      loop do
+        websocket
+        sleep 72000
+        Sidekiq::Stats.new.reset
+        @ws.close
+      end
     end
   end
 

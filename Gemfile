@@ -105,3 +105,5 @@ gem "rubyzip", ">= 1.2.2"
 gem "nokogiri", ">= 1.8.5"
 
 gem 'bootsnap', require: false
+
+gem 'websocket-eventmachine-client'

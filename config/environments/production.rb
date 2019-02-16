@@ -41,9 +41,12 @@ Rails.application.configure do
 
   # Mount Action Cable outside main process or domain
   # config.action_cable.mount_path = nil
-  # config.action_cable.url = 'wss://example.com/cable'
-  config.action_cable.allowed_request_origins = ['https://haymakerx.herokuapp.com', 'http://haymakerx.herokuapp.com']
-  config.web_socket_server_url = "wss://haymakerx.herokuapp.com/cable"
+  config.action_cable.url = 'wss://haymaker.app/cable'
+  # config.action_cable.allowed_request_origins =
+  # ['https://haymakerx.herokuapp.com', 'http://haymakerx.herokuapp.com',
+  # "https://websocket.org"]
+  config.action_cable.disable_request_forgery_protection = true
+  # config.web_socket_server_url = "wss://haymakerx.herokuapp.com/cable"
   
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = false

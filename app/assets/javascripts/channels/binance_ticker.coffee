@@ -1,8 +1,6 @@
 App.binance_ticker = App.cable.subscriptions.create "BinanceTickerChannel",
   connected: ->
-    console.log 'Connected to B ticker'
   disconnected: ->
-    console.log 'Disconnected'
 
   received: (data) ->
     coin_price   = document.querySelector("#coin_price")

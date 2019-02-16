@@ -31,7 +31,6 @@ class LeaguesController < ApplicationController
   # POST /leagues.json
   def create
     league_params
-    puts ">>>>>-------->>>>#{params}"
     round_steps = {'1' => 1, '6' => 2, '12' => 4,
                   '28' => 7, '84' => 14, '360' => 30 }
     round_options = {'1' => 1, '6' => 3, '12' => 3,

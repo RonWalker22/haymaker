@@ -6,8 +6,6 @@ tryWebsocket  = ->
   try
     Math.roundTo = (number, precision) ->
       Math.round(number * 10**precision) / 10**precision
-    puts = (string) ->
-      console.log string
     current_value = (element) ->
       document.querySelector("##{element.id}").value
     current_ihtml = (element) ->
@@ -116,7 +114,6 @@ tryWebsocket  = ->
             coin_price = document.querySelector('#coin_price')
             all_coin = Math.roundTo +balance_pair_values_0.textContent /
               +coin_price.innerHTML, 8
-            puts all_coin
           else
             coin_price = document.querySelector("#price_target")
             all_coin = Math.roundTo +balance_pair_values_0.textContent /
@@ -227,7 +224,6 @@ tryWebsocket  = ->
       price_cap_max.style.display = 'none'
 
   catch error
-    puts 'waiting to connect through click'
     callback = tryWebsocket
     setTimeout callback, 1000
 

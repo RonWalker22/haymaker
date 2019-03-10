@@ -1,7 +1,8 @@
 class BinanceTickerChannel < ApplicationCable::Channel
   def subscribed
-    # stop_all_streams
-    stream_from 'binance_ticker_channel'
+    stop_all_streams
+    ticker = Ticker.find_by(pair: params["room"])
+    stream_for ticker
   end
 
   def unsubscribed

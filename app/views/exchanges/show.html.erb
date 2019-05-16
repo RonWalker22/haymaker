@@ -11,16 +11,12 @@
     <div class="coin_list_options">
       <div class="buttons has-addons is-centered">
         <% @ticker_list.each_with_index do |tickers, i| %>
-          <% if tickers.first.quote_currency == 'USDT' %>
-            <button class="button" data-toggle="collapse"
-            data-target="#collapse<%= i %>" aria-expanded="true"
-            aria-controls="collapse<%= i %>">
-          <% elsif i == 0 || i == @ticker_list.count - 1 %>
-          <button class="button is-rounded" disabled data-toggle="collapse"
+          <% if i == 0 || i == @ticker_list.count - 1 %>
+          <button class="button is-rounded" data-toggle="collapse"
                   data-target="#collapse<%= i %>" aria-expanded="true"
                   aria-controls="collapse<%= i %>">
           <% else  %>
-          <button class="button" disabled data-toggle="collapse"
+          <button class="button" data-toggle="collapse"
                   data-target="#collapse<%= i %>" aria-expanded="true"
                   aria-controls="collapse<%= i %>">
           <% end %>

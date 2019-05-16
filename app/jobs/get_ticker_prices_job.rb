@@ -8,7 +8,7 @@ class GetTickerPricesJob < ApplicationJob
       exchange = binance.name
       EM.run {
         pairs = []
-        tickers = binance.tickers.where(quote_currency: 'USDT')
+        tickers = binance.tickers
         tickers.each {|t| pairs << "#{t.natural_pair.downcase}@aggTrade"}
         pairs = pairs.join("/")
         @ws =  WebSocket::EventMachine::Client.connect( uri:
@@ -24,7 +24,7 @@ class GetTickerPricesJob < ApplicationJob
           ProcessTickerJob.perform_later(ticker, price)
         end
 
-        @ws.onclose do |cdoe, reason|
+        @ws.onclose do |code, reason|
           p [:close, code, reason]
           ws = nil
           ActiveRecord::Base.connection.close

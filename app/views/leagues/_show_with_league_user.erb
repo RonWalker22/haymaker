@@ -107,7 +107,7 @@
       <% if @league.start_date.past?%>
           <% @league.exchanges.each do |x|%>
             <%= link_to "Trade @ #{x.name}X", trade_path(@league.id, x.id, p:
-            'BTC-USDT'), class:"button is-medium is-fullwidth",
+            'ETH-BTC'), class:"button is-medium is-fullwidth",
             data: { turbolinks: false }%>
           <% end %>
       <% end %>

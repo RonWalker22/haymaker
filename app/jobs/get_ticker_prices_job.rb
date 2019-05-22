@@ -8,24 +8,22 @@ class GetTickerPricesJob < ApplicationJob
       exchange = binance.name
       EM.run {
         pairs = []
-        tickers = binance.tickers
-        tickers.each {|t| pairs << "#{t.natural_pair.downcase}@tickerArr"}
+        tickers = binance.tickers.where quote_currency: "USDT"
+        tickers.each {|t| pairs << "#{t.natural_pair.downcase}@ticker"}
         pairs = pairs.join("/")
         @ws =  WebSocket::EventMachine::Client.connect( uri:
-                    "wss://stream.binance.com:9443/ws/!ticker@arr")
+                    "wss://stream.binance.com:9443/ws/#{pairs}")
         @ws.onopen do
           p [:open]
         end
 
         @ws.onmessage do |message, type|
           ticker_stream = JSON.parse message
-          ticker_stream.each do |ticker_hash|
-            ticker = tickers.find_by natural_pair: ticker_hash["s"]
-            if ticker
-              price = ticker_hash["c"].to_f
-              ProcessTickerJob.perform_later(ticker, price)
-            end
-          end 
+          ticker = tickers.find_by natural_pair: ticker_stream["s"]
+          if ticker
+            price = ticker_stream["c"].to_f
+            ProcessTickerJob.perform_later(ticker, price)
+          end
         end
 
         @ws.onclose do |code, reason|

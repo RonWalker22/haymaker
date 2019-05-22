@@ -109,7 +109,7 @@ GEM
     faye-websocket (0.10.7)
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.5.1)
-    ffi (1.10.0)
+    ffi (1.11.1)
     font-awesome-rails (4.7.0.5)
       railties (>= 3.2, < 6.1)
     fugit (1.2.1)
@@ -248,14 +248,14 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    selenium-webdriver (3.142.2)
+    selenium-webdriver (3.142.3)
       childprocess (>= 0.5, < 2.0)
       rubyzip (~> 1.2, >= 1.2.2)
-    sidekiq (5.2.7)
-      connection_pool (~> 2.2, >= 2.2.2)
+    sidekiq (6.0.0.pre1)
+      connection_pool (>= 2.2.2)
       rack (>= 1.5.0)
       rack-protection (>= 1.5.0)
-      redis (>= 3.3.5, < 5)
+      redis (>= 4.0.2)
     sidekiq-scheduler (3.0.0)
       redis (>= 3, < 5)
       rufus-scheduler (~> 3.2)
@@ -346,8 +346,8 @@ DEPENDENCIES
   rubyzip (>= 1.2.2)
   sass-rails (~> 5.0)
   selenium-webdriver
-  sidekiq (>= 5.2.5)
-  sidekiq-scheduler
+  sidekiq (>= 6.0.0.pre1)
+  sidekiq-scheduler (>= 3.0.0)
   spring
   spring-watcher-listen (~> 2.0.0)
   sprockets (~> 3.7.2)

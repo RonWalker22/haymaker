@@ -84,9 +84,9 @@ gem 'faye-websocket'
 
 gem 'devise'
 
-gem 'sidekiq', ">= 5.2.5"
+gem 'sidekiq', ">= 6.0.0.pre1"
 
-gem 'sidekiq-scheduler'
+gem 'sidekiq-scheduler', ">= 3.0.0"
 
 gem 'kaminari'
 

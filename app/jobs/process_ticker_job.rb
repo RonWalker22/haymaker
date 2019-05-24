@@ -2,10 +2,12 @@ class ProcessTickerJob < ApplicationJob
   queue_as :default
 
   def perform(ticker, price)
-    ticker.price = price
-    if ticker.save
-      BinanceTickerChannel.broadcast_to ticker, {price: ticker.price}
-      ready_orders(ticker.pair, ticker.price)
+    ActiveRecord::Base.connection_pool.with_connection do
+      ticker.price = price
+      if ticker.save
+        BinanceTickerChannel.broadcast_to ticker, {price: price}
+        ready_orders(ticker.pair, price)
+      end
     end
   end
 

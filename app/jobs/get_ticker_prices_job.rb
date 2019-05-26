@@ -22,7 +22,9 @@ class GetTickerPricesJob < ApplicationJob
           ticker = tickers.find_by natural_pair: ticker_stream["s"]
           if ticker
             price = ticker_stream["p"].to_f
-            ProcessTickerJob.perform_later(ticker, price)
+            ticker.update_attributes price: price
+            BinanceTickerChannel.broadcast_to ticker, {price: price}
+            ProcessTickerJob.perform_later(ticker.pair, price)
           end
         end
 

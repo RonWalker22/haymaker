@@ -14,7 +14,7 @@ production:
     enabled: false
 
   get_ticker_prices:
-    in: 1y
+    every: ['3s']
     class: GetTickerPricesJob
     enabled: false
 

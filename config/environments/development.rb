@@ -36,6 +36,9 @@ Rails.application.configure do
   # Disabling logging entirely
   config.logger = Logger.new('/dev/null')
 
+  # Disable rails log for ActionCable events
+  ActionCable.server.config.logger = Logger.new(nil)
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 

@@ -9,12 +9,6 @@ class GetTickerPricesJob < ApplicationJob
       EM.run {
         pairs = []
         tickers = binance.tickers
-        tickers = tickers.where(quote_currency: 'USDT', 
-                                base_currency: 'BTC' ).or(
-                  tickers.where(quote_currency: 'USDT', 
-                                base_currency: 'XRP' )).or(
-                  tickers.where(quote_currency: 'USDT', 
-                                base_currency: 'ETH' ))
         tickers.each {|t| pairs << "#{t.natural_pair.downcase}@aggTrade"}
         pairs = pairs.join("/")
         @ws =  WebSocket::EventMachine::Client.connect( uri:
@@ -24,13 +18,15 @@ class GetTickerPricesJob < ApplicationJob
         end
 
         @ws.onmessage do |message, type|
-          ticker_stream = JSON.parse message
-          ticker = tickers.find_by natural_pair: ticker_stream["s"]
-          if ticker
-            price = ticker_stream["p"].to_f
-            ticker.update_attributes price: price
-            BinanceTickerChannel.broadcast_to ticker, {price: price}
-            process_ticker(ticker.pair, price)
+          Thread.new do 
+            ticker_stream = JSON.parse message
+            ticker = tickers.find_by natural_pair: ticker_stream["s"]
+            if ticker
+              price = ticker_stream["p"].to_f
+              ticker.update_attributes price: price
+              BinanceTickerChannel.broadcast_to ticker, {price: price}
+              process_ticker(ticker.pair, price)
+            end
           end
         end
 

@@ -8,11 +8,11 @@ class GetTickerPricesJob < ApplicationJob
       exchange = binance.name
       EM.run {
         pairs = []
-        tickers = tickers.where(quote_currency: 'USDT', 
+        tickers = binance.tickers.where(quote_currency: 'USDT', 
                             base_currency: 'BTC' ).or(
-                  tickers.where(quote_currency: 'USDT', 
+                  binance.tickers.where(quote_currency: 'USDT', 
                             base_currency: 'XRP' )).or(
-                  tickers.where(quote_currency: 'USDT', 
+                  binance.tickers.where(quote_currency: 'USDT', 
                             base_currency: 'ETH' ))
         tickers.each {|t| pairs << "#{t.natural_pair.downcase}@aggTrade"}
         pairs = pairs.join("/")
@@ -55,16 +55,16 @@ class GetTickerPricesJob < ApplicationJob
 
   private
 
-    def process_ticker(product, price)
+    def process_ticker(product, new_price)
       sell_limit = "kind = 'limit' AND
                     product = '#{product}' AND
-                    price <= #{price} AND
+                    price <= #{new_price} AND
                     side = 'sell' AND
                     open = true AND
                     ready = false"
       buy_limit = "kind = 'limit' AND
                   product = '#{product}' AND
-                  price >= #{price} AND
+                  price >= #{new_price} AND
                   side = 'buy' AND
                   open = true AND
                   ready = false"

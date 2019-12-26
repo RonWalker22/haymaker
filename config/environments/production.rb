@@ -41,7 +41,7 @@ Rails.application.configure do
 
   # Mount Action Cable outside main process or domain
   # config.action_cable.mount_path = nil
-  # config.action_cable.url = 'wss://haymaker.app/cable'
+  config.action_cable.url = 'wss://haymaker.app/cable'
   # config.action_cable.allowed_request_origins =
   # ['https://haymakerx.herokuapp.com', 'http://haymakerx.herokuapp.com',
   # "https://websocket.org"]
@@ -95,10 +95,4 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-
-  # Disabling logging entirely
-  config.logger = Logger.new('/dev/null')
-
-  # Disable rails log for ActionCable events
-  ActionCable.server.config.logger = Logger.new(nil)
 end

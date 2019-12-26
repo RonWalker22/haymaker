@@ -8,34 +8,23 @@ class GetTickerPricesJob < ApplicationJob
       exchange = binance.name
       EM.run {
         pairs = []
-        tickers = binance.tickers.where(quote_currency: 'USDT', 
-                            base_currency: 'BTC' ).or(
-                  binance.tickers.where(quote_currency: 'USDT', 
-                            base_currency: 'XRP' )).or(
-                  binance.tickers.where(quote_currency: 'USDT', 
-                            base_currency: 'ETH' ))
+        tickers = binance.tickers.where(quote_currency: 'USDT')
         tickers.each {|t| pairs << "#{t.natural_pair.downcase}@aggTrade"}
         pairs = pairs.join("/")
         @ws =  WebSocket::EventMachine::Client.connect( uri:
-                    "wss://stream.binance.com:9443/ws/#{pairs}")
+                  "wss://stream.binance.com:9443/ws/#{pairs}")
         @ws.onopen do
           p [:open]
         end
 
         @ws.onmessage do |message, type|
-          Thread.new do 
-            ticker_stream = JSON.parse message
-            ticker = tickers.find_by natural_pair: ticker_stream["s"]
-            if ticker
-              price = ticker_stream["p"].to_f
-              ticker.update_attributes price: price
-              BinanceTickerChannel.broadcast_to ticker, {price: price}
-              process_ticker(ticker.pair, price)
-            end
-          end
+          message = JSON.parse message
+          ticker = tickers.find_by natural_pair: message["s"]
+          price = message["p"].to_f
+          ProcessTickerJob.perform_later(ticker, price)
         end
 
-        @ws.onclose do |code, reason|
+        @ws.onclose do |cdoe, reason|
           p [:close, code, reason]
           ws = nil
           ActiveRecord::Base.connection.close
@@ -52,28 +41,4 @@ class GetTickerPricesJob < ApplicationJob
       end
     end
   end
-
-  private
-
-    def process_ticker(product, new_price)
-      sell_limit = "kind = 'limit' AND
-                    product = '#{product}' AND
-                    price <= #{new_price} AND
-                    side = 'sell' AND
-                    open = true AND
-                    ready = false"
-      buy_limit = "kind = 'limit' AND
-                  product = '#{product}' AND
-                  price >= #{new_price} AND
-                  side = 'buy' AND
-                  open = true AND
-                  ready = false"
-
-      limit_orders = Order.where(sell_limit).or Order.where(buy_limit)
-
-      limit_orders.each do |limit_order|
-        # trigger_price could get changed multiple times
-        limit_order.update_attributes! ready: true, trigger_price: new_price
-      end
-    end
 end

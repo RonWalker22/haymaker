@@ -39,10 +39,4 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
-
-  # Disabling logging entirely
-  config.logger = Logger.new('/dev/null')
-
-  # Disable rails log for ActionCable events
-  ActionCable.server.config.logger = Logger.new(nil)
 end

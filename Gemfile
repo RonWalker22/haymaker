@@ -8,7 +8,7 @@ end
 ruby '2.6.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '6.0.0.rc1'
+gem 'rails', '~> 5.2.2'
 # Use postgresql as the database for Active Record
 
 gem 'rails-html-sanitizer', '~> 1.0.4'
@@ -30,7 +30,7 @@ gem 'sprockets-rails', :require => 'sprockets/railtie'
 
 gem 'jquery-rails'
 
-gem 'popper_js', '~> 1.14.3'
+gem 'popper_js', '~> 1.12.9'
 
 gem "font-awesome-rails"
 
@@ -84,9 +84,11 @@ gem 'faye-websocket'
 
 gem 'devise'
 
-gem 'sidekiq', ">= 6.0.0.pre1"
+gem 'sidekiq', ">= 5.2.5"
 
-gem 'sidekiq-scheduler', ">= 3.0.0"
+gem 'bootstrap'
+
+gem 'sidekiq-scheduler'
 
 gem 'kaminari'
 
@@ -105,9 +107,3 @@ gem "nokogiri", ">= 1.8.5"
 gem 'bootsnap', require: false
 
 gem 'websocket-eventmachine-client'
-
-gem "actionview", ">= 6.0.0.rc1"
-
-gem "railties", ">= 6.0.0.rc1"
-
-gem "bootstrap", ">= 4.3.1"

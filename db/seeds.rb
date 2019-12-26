@@ -2,9 +2,11 @@
 # The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
 
 User.create!(name: 'Ron',
-             email: 'ron@gmail.com',
-             password: '123456',
-             password_confirmation: '123456',
+             email: Rails.application.credentials.admin[:email],
+             password: Rails.application.credentials.admin[:password],
+             password_confirmation: 
+              Rails.application.credentials.admin[:password],
+             admin: true
             )
 
 League.create!( name: 'Practice',

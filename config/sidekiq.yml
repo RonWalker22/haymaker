@@ -1,5 +1,5 @@
 development:
-  :concurrency: 5
+  :concurrency: 20
   max_retries: 0
 production:
   :concurrency: 20
@@ -20,14 +20,14 @@ production:
   new_round:
     cron: '0 0 0 * * *'
     class: NewRoundJob
-    enabled: false
+    enabled: true
 
   liquidation:
     every: ['10s']
     class: LiquidationJob
-    enabled: false
+    enabled: true
 
   limit_orders:
     every: ['10s']
     class: LimitOrdersJob
-    enabled: false
+    enabled: true

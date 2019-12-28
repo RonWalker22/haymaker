@@ -66,7 +66,7 @@ Rails.application.configure do
   # config.active_job.queue_name_prefix = "paper_gains_2_#{Rails.env}"
   config.action_mailer.perform_caching = false
 
-  config.action_mailer.default_url_options = { host: 'www.haymakerx.com',
+  config.action_mailer.default_url_options = { host: 'www.haymaker.app',
                                               port: 80 }
 
   # Ignore bad email addresses and do not raise email delivery errors.

@@ -20,14 +20,14 @@ production:
   new_round:
     cron: '0 0 0 * * *'
     class: NewRoundJob
-    enabled: true
+    enabled: false
 
   liquidation:
     every: ['10s']
     class: LiquidationJob
-    enabled: true
+    enabled: false
 
   limit_orders:
     every: ['10s']
     class: LimitOrdersJob
-    enabled: true
+    enabled: false

@@ -1,6 +1,6 @@
 $table-striped-row-even-background-color: #0b6892;
 $table-striped-row-even-hover-background-color: #0b6892;
-$table-color: #bbe1ff;
+$table-color: white;
 $table-background-color: transparent;
 $table-row-hover-background-color: #0095d8;
 $table-striped-row-even-hover-background-color: white;
@@ -10,7 +10,7 @@ $tabs-link-active-border-bottom-color: white;
 $tabs-border-bottom-color: #00b5ff;
 $tabs-link-color: #00b5ff;
 $tabs-link-hover-color: black;
-$title-color: #bbe1ff;
+$title-color: white;
 
 @import "bulma";
 
@@ -24,7 +24,7 @@ html {
   background: #19547b;
   // background: -webkit-linear-gradient(to right,#19547b, #2C5364,#2C5364,#19547b);
   // background: linear-gradient(to right, #19547b, #2C5364,#2C5364,#19547b);
-  color: #bbe1ff;
+  color: white;
 }
 
 .card {
@@ -41,12 +41,12 @@ html {
 }
 
 .button {
-  color: #bbe1ff;
+  color: white;
   background: #4B79A1;
   border: none;
   &:hover {
     background-color: #3273dc;
-    color: #bbe1ff;
+    color: white;
   }
 }
 
@@ -60,7 +60,7 @@ html {
 
 .box {
   background: transparent;
-  color: #bbe1ff;
+  color: white;
   box-shadow: none;
   background: #0b6892;
 }

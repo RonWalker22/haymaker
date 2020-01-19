@@ -30,7 +30,7 @@ gem 'sprockets-rails', :require => 'sprockets/railtie'
 
 gem 'jquery-rails'
 
-gem 'popper_js', '~> 1.12.9'
+gem 'popper_js', '>= 1.14.3'
 
 gem "font-awesome-rails"
 
@@ -86,7 +86,7 @@ gem "devise", ">= 4.7.1"
 
 gem 'sidekiq', ">= 5.2.5"
 
-gem 'bootstrap'
+gem "bootstrap", ">= 4.3.1"
 
 gem 'sidekiq-scheduler'
 

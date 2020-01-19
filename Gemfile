@@ -82,7 +82,7 @@ gem 'httparty'
 
 gem 'faye-websocket'
 
-gem 'devise'
+gem "devise", ">= 4.7.1"
 
 gem 'sidekiq', ">= 5.2.5"
 

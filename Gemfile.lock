@@ -289,7 +289,7 @@ DEPENDENCIES
   byebug
   capybara (~> 2.13)
   coffee-rails (~> 4.2)
-  devise
+  devise (>= 4.7.1)
   eventmachine
   faker
   faye-websocket

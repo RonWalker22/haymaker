@@ -18,8 +18,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
                                         ready: true,
                                         set_up: true})
       Exchange.all.each do |exchange|
-        Wallet.create!( coin_type: 'BTC',
-                        total_quantity: '1.00',
+        Wallet.create!( coin_type: 'USDT',
+                        total_quantity: league_user.league.starting_balance,
                         league_user_id: league_user.id,
                         exchange_id: exchange.id,
                         public_key: SecureRandom.hex(20)

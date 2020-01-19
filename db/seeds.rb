@@ -9,7 +9,7 @@ User.create!(name: 'Ron',
              admin: true
             )
 
-League.create!( name: 'Practice',
+league = League.create!( name: 'Practice',
                 commissioner_id: 1,
                 balance_revivable: true,
                 start_date: Time.now,
@@ -30,8 +30,8 @@ LeagueUser.create!(user_id: 1, league_id: 1, set_up: true,
 
 
 
-Wallet.create!( coin_type: 'BTC',
-                total_quantity: 1,
+Wallet.create!( coin_type: 'USDT',
+                total_quantity: league.starting_balance,
                 exchange_id: 1,
                 league_user_id: 1,
                 public_key: SecureRandom.hex(20)

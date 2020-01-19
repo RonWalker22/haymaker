@@ -65,7 +65,7 @@ class LeaguesController < ApplicationController
         flash[:notice] = 'League was successfully created.'
         @league_user = LeagueUser.create!({league_id:@league.id,
                                   user_id:current_user.id})
-        create_btc_wallets
+        create_usdt_wallets
         create_set_up_balance
         format.html { redirect_to @league }
         format.json { render :show, status: :created, location: @league }
@@ -124,7 +124,7 @@ class LeaguesController < ApplicationController
                       league_id: @league.id})
     if @new_league_user.save
       accpet_league_invite
-      create_btc_wallets
+      create_usdt_wallets
       create_set_up_balance
       flash[:notice] = "You have successfully joined the #{@league.name} league."
     else
@@ -140,7 +140,7 @@ class LeaguesController < ApplicationController
     wallets = Wallet.where league_user_id: league_user.id
 
     wallets.each do |wallet|
-      if wallet.coin_type == 'BTC'
+      if wallet.coin_type == 'USDT'
         wallet.update_attributes total_quantity: league.starting_balance,
                                  reserve_quantity: 0
       else
@@ -222,6 +222,20 @@ class LeaguesController < ApplicationController
   end
 
   def balances
+    @balances = []
+    @league_user.wallets.where(league_user: @league_user).each do |w|
+      next if w.total_quantity == 0
+      if w.coin_type == 'USDT'
+        usdt_price = 1
+      else
+        usdt_price = Ticker.find_by(pair:"#{w.coin_type}-USDT").price.to_f
+      end
+      usdt_value = (w.total_quantity * usdt_price).round 2
+
+      @balances.push(symbol: w.coin_type,
+                     quantity: w.total_quantity,
+                     value: usdt_value)
+    end
   end
 
   def shield
@@ -257,7 +271,6 @@ class LeaguesController < ApplicationController
     def set_league_variables
       set_league
       set_league_user
-      set_btc_price
       set_tickers
       set_league_wallets
       set_users_stats
@@ -273,10 +286,6 @@ class LeaguesController < ApplicationController
 
     def set_league
       @league = League.find(params[:id])
-    end
-
-    def set_btc_price
-      @btc_price = Ticker.find_by(pair:"BTC-USDT", exchange_id: 1).price.to_f
     end
 
     def set_league_user
@@ -327,7 +336,7 @@ class LeaguesController < ApplicationController
     def create_set_up_balance
       league_user = @league_user || @new_league_user
       wallet = Wallet.find_by(league_user_id: league_user.id,
-                              coin_type: 'BTC')
+                              coin_type: 'USDT')
       wallet.total_quantity = @league.starting_balance
 
       if wallet.save
@@ -335,11 +344,11 @@ class LeaguesController < ApplicationController
       end
     end
 
-    def create_btc_wallets
+    def create_usdt_wallets
       league_user = @league_user || @new_league_user
       Wallet.create!(league_user_id: league_user.id,
                       exchange_id: 1,
-                      coin_type: 'BTC',
+                      coin_type: 'USDT',
                       total_quantity: 0.00,
                       public_key: SecureRandom.hex(20)
                       )

@@ -4,7 +4,7 @@ class CreateLeagues < ActiveRecord::Migration[5.1]
       t.string :name,                                           null: false
       t.string :entry_fee,          default: 'FREE',            null: false
       t.string :prize,              default: 'Bragging Rights', null: false
-      t.decimal :starting_balance,  default: 1.0,               null: false
+      t.decimal :starting_balance,  default: 1_000.0,           null: false
       t.boolean :balance_revivable, default: false,             null: false
       t.boolean :private,           default: false,             null: false
       t.string  :password,          default: '123',             null: false

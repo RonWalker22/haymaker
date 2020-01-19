@@ -7,16 +7,12 @@
           <thead>
             <tr>
               <th>Total USDT Estimate</th>
-              <th>Total BTC Estimate</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>
                 <%= number_to_currency(@users_stats[@league_user][:cash])%>
-              </td>
-              <td>
-                <%= number_with_delimiter( @users_stats[@league_user][:btce].round 8)%>
               </td>
             </tr>
           </tbody>
@@ -27,7 +23,6 @@
             <tr>
               <th>Symbol</th>
               <th>Quantity</th>
-              <th>BTC</th>
               <th>USDT</th>
             </tr>
           </thead>
@@ -35,30 +30,16 @@
             <tr>
               <th>Symbol</th>
               <th>Quantity</th>
-              <th>BTC</th>
               <th>USDT</th>
             </tr>
           </tfoot>
           <tbody>
-            <% @league_user.wallets.where(league_user: @league_user).each do |w| %>
-            <% next if w.total_quantity == 0 %>
-            <% if  w.coin_type == 'BTC'  %>
-              <% usdt_value   = @btc_price * w.total_quantity%>
-              <% btc_quantity = w.total_quantity%>
-            <% elsif w.coin_type == 'USDT'%>
-              <% usdt_value   = w.total_quantity.round 2  %>
-              <% btc_quantity = (w.total_quantity / @btc_price).round 2 %>
-            <% else %>
-              <% btc_price    = Ticker.find_by(pair:"#{w.coin_type}-BTC").price.to_f %>
-              <% btc_quantity = (w.total_quantity * btc_price).round 8 %>
-              <% usdt_value   = (btc_quantity * @btc_price).round 2 %>
-            <% end %>
-                <tr>
-                  <td> <%= w.coin_type  %></td>
-                  <td> <%= number_with_delimiter w.total_quantity%></td>
-                  <td> <%= number_with_delimiter  btc_quantity%></td>
-                  <td><%= number_to_currency usdt_value%></td>
-                </tr>
+            <% @balances.each do |coin| %>
+              <tr>
+                <td><%= coin[:symbol]%></td>
+                <td><%= number_with_delimiter coin[:quantity]%></td>
+                <td><%= number_with_delimiter coin[:value]%></td>
+              </tr>
             <% end %>
           </tbody>
         </table>

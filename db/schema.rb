@@ -88,7 +88,6 @@ ActiveRecord::Schema.define(version: 2018_08_28_124611) do
     t.boolean "set_up", default: false, null: false
     t.boolean "alive", default: true, null: false
     t.integer "rank", default: 0, null: false
-    t.decimal "btce", default: "1.0", null: false
     t.decimal "portfolio", default: "0.0", null: false
     t.decimal "net_bonus", default: "0.0", null: false
     t.decimal "baseline", default: "1.0", null: false
@@ -108,7 +107,7 @@ ActiveRecord::Schema.define(version: 2018_08_28_124611) do
     t.string "name", null: false
     t.string "entry_fee", default: "FREE", null: false
     t.string "prize", default: "Bragging Rights", null: false
-    t.decimal "starting_balance", default: "1.0", null: false
+    t.decimal "starting_balance", default: "1000.0", null: false
     t.boolean "balance_revivable", default: false, null: false
     t.boolean "private", default: false, null: false
     t.string "password", default: "123", null: false

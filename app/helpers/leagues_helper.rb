@@ -8,13 +8,13 @@ module LeaguesHelper
       @temp_user        = users[index]
       @temp_league_user = league_user
       @user_wallets     = @temp_league_user.wallets
-      hash[@temp_league_user] =  { btce: total_btc_estimate,
+      hash[@temp_league_user] =  { usdte: total_usdte,
                                    user: @temp_user,
                                  }
     end
 
     hash.each do |league_user, stats|
-      stats[:cash] = (stats[:btce].to_f * @btc_price).round 2
+      stats[:cash] = (stats[:usdte].to_f).round 2
       stats[:score] = (stats[:cash] + league_user.net_bonus).round 2
       performance = (stats[:score] - league_user.baseline ) / league_user.baseline
       stats[:performance] = (performance * 100).round 2
@@ -46,32 +46,17 @@ module LeaguesHelper
   end
 
   private
-
-    def total_btc
-      btc = @user_wallets.find_by coin_type: 'BTC'
-      btc.total_quantity
-    end
-
-    def total_usdt
-      usdt = @user_wallets.find_by coin_type: 'USDT'
-      if usdt
-        usdt.total_quantity / @btc_price
-      else
-        0
-      end
-    end
-
-    def alt_coins_estimate
+    
+    def total_usdte
       estimate = 0
       @user_wallets.each do |wallet|
-        next if wallet.coin_type == 'BTC' || wallet.coin_type == 'USDT'
-
-        btc_ticker = @tickers.find_by base_currency: wallet.coin_type, quote_currency: 'BTC'
-        estimate += wallet.total_quantity * btc_ticker.price
+        if wallet.coin_type == 'USDT'
+          estimate += wallet.total_quantity
+        else 
+          usdt_ticker = @tickers.find_by base_currency: wallet.coin_type,                                      quote_currency: 'USDT'
+          estimate += wallet.total_quantity * usdt_ticker.price
+        end
       end
       estimate
-    end
-    def total_btc_estimate
-      total_btc + alt_coins_estimate + total_usdt
     end
 end

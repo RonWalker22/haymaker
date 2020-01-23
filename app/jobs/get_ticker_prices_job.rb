@@ -1,8 +1,11 @@
+require 'sidekiq/api'
+
 class GetTickerPricesJob < ApplicationJob
   queue_as :default
 
   def perform
     # binance ws will disconnect after a continuous 24 hour connect.
+    # pong responses are sent automatically by client.
     def websocket
       binance = Exchange.find_by(name: 'Binance')
       exchange = binance.name
@@ -24,20 +27,21 @@ class GetTickerPricesJob < ApplicationJob
           ProcessTickerJob.perform_later(ticker, price)
         end
 
-        @ws.onclose do |cdoe, reason|
+        @ws.onclose do |code, reason|
           p [:close, code, reason]
-          ws = nil
-          ActiveRecord::Base.connection.close
-          EventMachine.stop
         end
        }
-     end
+    end
+
     Thread.new do
       loop do
-        websocket
-        sleep 72000
-        Sidekiq::Stats.new.reset
+        Thread.new do
+          websocket
+        end
+        sleep 86_000
         @ws.close
+        Sidekiq::Stats.new.reset
+        sleep 1
       end
     end
   end

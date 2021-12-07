@@ -1,24 +1,15 @@
-# README
+# Video Demos
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+[Intro- Bare Knuckle league](https://www.youtube.com/watch?v=tFpHcRG_Ccc&t=3s)
 
-Things you may want to cover:
+[Trading 101](https://www.youtube.com/watch?v=IS6SVvSh1Kc)
 
-* Ruby version
+[Slugfest league & leverage 101](https://www.youtube.com/watch?v=E4p6hMOahF8)
 
-* System dependencies
+[Fistfight Part 1](https://www.youtube.com/watch?v=vC9PkRqZiIw)
 
-* Configuration
+[Fistfight part 2](https://www.youtube.com/watch?v=oJ7DAhw8_20)
 
-* Database creation
+[Shields](https://www.youtube.com/watch?v=KXMjMsXr-o4)
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+[Auto Shields](https://www.youtube.com/watch?v=udGyufWmi2E)

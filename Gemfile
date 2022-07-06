@@ -11,7 +11,7 @@ ruby '2.6.0'
 gem 'rails', '~> 5.2.2'
 # Use postgresql as the database for Active Record
 
-gem 'rails-html-sanitizer', '~> 1.0.4'
+gem 'rails-html-sanitizer', '~> 1.4.3'
 
 gem 'pg', '~> 0.18'
 # Use Puma as the app server
